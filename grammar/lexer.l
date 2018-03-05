@@ -31,6 +31,17 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 %{
 
+// Necessary types for flexgo
+type YYtype int
+type YYcontext interface{}
+
+// Global YYtext - each action sets this to the current yytext
+var YYtext string
+
+YY_USER_ACTION(
+  YYtext = string(yytext)
+)
+
 %}
 
 %option reentrant bison-bridge
