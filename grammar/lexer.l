@@ -106,6 +106,25 @@ octdigit      [0-7]
 "contains"              { return _CONTAINS_;    }
 "import"                { return _IMPORT_;      }
 
+"("                     { return _LPAREN_; }
+")"                     { return _RPAREN_; }
+"{"                     { return _LBRACE_; }
+"}"                     { return _RBRACE_; }
+"["                     { return _LBRACKET_; }
+"]"                     { return _RBRACKET_; }
+":"                     { return _COLON_; }
+"."                     { return _DOT_; }
+"="                     { return _EQUAL_SIGN_; }
+","                     { return _COMMA_; }
+"%"                     { return _PERCENT_; }
+"|"                     { return _PIPE_; }
+"^"                     { return _CARAT_; }
+"&"                     { return _AMP_; }
+"+"                     { return _PLUS_; }
+"-"                     { return _MINUS_; }
+"*"                     { return _ASTERISK_; }
+"\\"                    { return _BACKSLASH_; }
+"~"                     { return _TILDE_; }
 
 "/*"                    { BEGIN (comment);       }
 <comment>"*/"           { BEGIN (INITIAL);       }

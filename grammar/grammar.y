@@ -56,17 +56,27 @@
 %token _TRUE_
 %token _FALSE_
 
+%token _LPAREN_ _RPAREN_
+%token _LBRACE_ _RBRACE_
+%token _LBRACKET_ _RBRACKET_
+%token _COLON_
+%token _DOT_
+%token _EQUAL_SIGN_
+%token _COMMA_
+%token _PERCENT_
+
+
 %left _OR_
 %left _AND_
-%left '|'
-%left '^'
-%left '&'
+%left _PIPE_
+%left _CARAT_
+%left _AMP_
 %left _EQ_ _NEQ_
 %left _LT_ _LE_ _GT_ _GE_
 %left _SHIFT_LEFT_ _SHIFT_RIGHT_
-%left '+' '-'
-%left '*' '\\' '%'
-%right _NOT_ '~' UNARY_MINUS
+%left _PLUS_ _MINUS_
+%left _ASTERISK_ _BACKSLASH_ _PERCENT_
+%right _NOT_ _TILDE_ UNARY_MINUS
 
 %type <rule>   rule
 
@@ -135,11 +145,11 @@ rule
       {
         
       }
-      tags '{' meta strings
+      tags _LBRACE_ meta strings
       {
        
       }
-      condition '}'
+      condition _RBRACE_
       {
         
       }
@@ -151,7 +161,7 @@ meta
       {
         
       }
-    | _META_ ':' meta_declarations
+    | _META_ _COLON_ meta_declarations
       {
         
       }
@@ -163,7 +173,7 @@ strings
       {
         
       }
-    | _STRINGS_ ':' string_declarations
+    | _STRINGS_ _COLON_ string_declarations
       {
         
       }
@@ -171,7 +181,7 @@ strings
 
 
 condition
-    : _CONDITION_ ':' boolean_expression
+    : _CONDITION_ _COLON_ boolean_expression
     ;
 
 
@@ -192,7 +202,7 @@ tags
       {
         
       }
-    | ':' tag_list
+    | _COLON_ tag_list
       {
         
       }
@@ -219,23 +229,23 @@ meta_declarations
 
 
 meta_declaration
-    : _IDENTIFIER_ '=' _TEXT_STRING_
+    : _IDENTIFIER_ _EQUAL_SIGN_ _TEXT_STRING_
       {
         
       }
-    | _IDENTIFIER_ '=' _NUMBER_
+    | _IDENTIFIER_ _EQUAL_SIGN_ _NUMBER_
       {
         
       }
-    | _IDENTIFIER_ '=' '-' _NUMBER_
+    | _IDENTIFIER_ _EQUAL_SIGN_ _MINUS_ _NUMBER_
       {
         
       }
-    | _IDENTIFIER_ '=' _TRUE_
+    | _IDENTIFIER_ _EQUAL_SIGN_ _TRUE_
       {
         
       }
-    | _IDENTIFIER_ '=' _FALSE_
+    | _IDENTIFIER_ _EQUAL_SIGN_ _FALSE_
       {
         
       }
@@ -249,7 +259,7 @@ string_declarations
 
 
 string_declaration
-    : _STRING_IDENTIFIER_ '='
+    : _STRING_IDENTIFIER_ _EQUAL_SIGN_
       {
         
       }
@@ -257,7 +267,7 @@ string_declaration
       {
         
       }
-    | _STRING_IDENTIFIER_ '='
+    | _STRING_IDENTIFIER_ _EQUAL_SIGN_
       {
         
       }
@@ -265,7 +275,7 @@ string_declaration
       {
         
       }
-    | _STRING_IDENTIFIER_ '=' _HEX_STRING_
+    | _STRING_IDENTIFIER_ _EQUAL_SIGN_ _HEX_STRING_
       {
         
       }
@@ -291,16 +301,16 @@ identifier
       {
         
       }
-    | identifier '.' _IDENTIFIER_
+    | identifier _DOT_ _IDENTIFIER_
       {
         
       }
-    | identifier '[' primary_expression ']'
+    | identifier _LBRACKET_ primary_expression _RBRACKET_
       {
         
       }
 
-    | identifier '(' arguments ')'
+    | identifier _LPAREN_ arguments _RPAREN_
       {
         
       }
@@ -317,7 +327,7 @@ arguments_list
       {
         
       }
-    | arguments_list ',' expression
+    | arguments_list _COMMA_ expression
       {
         
       }
@@ -376,15 +386,15 @@ expression
       {
         
       }
-      '(' boolean_expression ')'
+      _LPAREN_ boolean_expression _RPAREN_
       {
         
       }
-    | _FOR_ for_expression _OF_ string_set ':'
+    | _FOR_ for_expression _OF_ string_set _COLON_
       {
         
       }
-      '(' boolean_expression ')'
+      _LPAREN_ boolean_expression _RPAREN_
       {
         
       }
@@ -440,7 +450,7 @@ expression
       {
         
       }
-    |'(' expression ')'
+    |_LPAREN_ expression _RPAREN_
       {
         
       }
@@ -448,13 +458,13 @@ expression
 
 
 integer_set
-    : '(' integer_enumeration ')'  { }
+    : _LPAREN_ integer_enumeration _RPAREN_  { }
     | range                        { }
     ;
 
 
 range
-    : '(' primary_expression _DOT_DOT_  primary_expression ')'
+    : _LPAREN_ primary_expression _DOT_DOT_  primary_expression _RPAREN_
       {
         
       }
@@ -466,7 +476,7 @@ integer_enumeration
       {
         
       }
-    | integer_enumeration ',' primary_expression
+    | integer_enumeration _COMMA_ primary_expression
       {
         
       }
@@ -474,11 +484,11 @@ integer_enumeration
 
 
 string_set
-    : '('
+    : _LPAREN_
       {
         
       }
-      string_enumeration ')'
+      string_enumeration _RPAREN_
     | _THEM_
       {
         
@@ -488,7 +498,7 @@ string_set
 
 string_enumeration
     : string_enumeration_item
-    | string_enumeration ',' string_enumeration_item
+    | string_enumeration _COMMA_ string_enumeration_item
     ;
 
 
@@ -518,7 +528,7 @@ for_expression
 
 
 primary_expression
-    : '(' primary_expression ')'
+    : _LPAREN_ primary_expression _RPAREN_
       {
         
       }
@@ -530,7 +540,7 @@ primary_expression
       {
         
       }
-    | _INTEGER_FUNCTION_ '(' primary_expression ')'
+    | _INTEGER_FUNCTION_ _LPAREN_ primary_expression _RPAREN_
       {
         
       }
@@ -550,7 +560,7 @@ primary_expression
       {
         
       }
-    | _STRING_OFFSET_ '[' primary_expression ']'
+    | _STRING_OFFSET_ _LBRACKET_ primary_expression _RBRACKET_
       {
         
       }
@@ -558,7 +568,7 @@ primary_expression
       {
         
       }
-    | _STRING_LENGTH_ '[' primary_expression ']'
+    | _STRING_LENGTH_ _LBRACKET_ primary_expression _RBRACKET_
       {
         
       }
@@ -570,43 +580,43 @@ primary_expression
       {
         
       }
-    | '-' primary_expression %prec UNARY_MINUS
+    | _MINUS_ primary_expression %prec UNARY_MINUS
       {
         
       }
-    | primary_expression '+' primary_expression
+    | primary_expression _PLUS_ primary_expression
       {
         
       }
-    | primary_expression '-' primary_expression
+    | primary_expression _MINUS_ primary_expression
       {
         
       }
-    | primary_expression '*' primary_expression
+    | primary_expression _ASTERISK_ primary_expression
       {
         
       }
-    | primary_expression '\\' primary_expression
+    | primary_expression _BACKSLASH_ primary_expression
       {
         
       }
-    | primary_expression '%' primary_expression
+    | primary_expression _PERCENT_ primary_expression
       {
         
       }
-    | primary_expression '^' primary_expression
+    | primary_expression _CARAT_ primary_expression
       {
         
       }
-    | primary_expression '&' primary_expression
+    | primary_expression _AMP_ primary_expression
       {
         
       }
-    | primary_expression '|' primary_expression
+    | primary_expression _PIPE_ primary_expression
       {
         
       }
-    | '~' primary_expression
+    | _TILDE_ primary_expression
       {
         
       }
