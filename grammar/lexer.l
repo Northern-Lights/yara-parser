@@ -32,8 +32,15 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 %top{
 package grammar
 
+import (
+    "io"
+    "log"
+    "os"
+    "strings"
+)
+
 // Necessary types for flexgo
-type YYtype int
+type YYtype interface{}
 type YYcontext interface{}
 
 // Global YYtext - each action sets this to the current yytext
@@ -43,6 +50,10 @@ var YYtext string
 var collect bool
 var conditionBuilder strings.Builder
 
+}
+
+%{
+
 YY_USER_ACTION(
   YYtext = string(yytext)
 
@@ -50,10 +61,6 @@ YY_USER_ACTION(
     conditionBuilder.Write(yytext)
   }
 )
-
-%}
-
-%{
 
 // Define a constant for end-of-file
 const eof = 0
@@ -67,8 +74,6 @@ var err error // Actually, this is global for lexer action access.
 %}
 
 %option reentrant bison-bridge
-%option nounistd
-%option noinput
 %option nounput
 %option never-interactive
 %option yylineno
@@ -98,8 +103,7 @@ octdigit      [0-7]
 }
 
 <cond>"}" {
-
-    BEGIN initial
+    BEGIN (INITIAL)
     return _RBRACKET_
 }
 
