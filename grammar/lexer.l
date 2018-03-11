@@ -57,6 +57,8 @@ var conditionBuilder strings.Builder
 YY_USER_ACTION(
   YYtext = string(yytext)
 
+  // For condition, the last '}' is going to be collected.
+  // Use strings.TrimSuffix(conditionBuilder.String(), "}") to kill it
   if collect {
     conditionBuilder.Write(yytext)
   }
@@ -104,7 +106,7 @@ octdigit      [0-7]
 
 <cond>"}" {
     BEGIN (INITIAL)
-    return _RBRACKET_
+    return _RBRACE_
 }
 
 ".."                    { return _DOT_DOT_;     }
