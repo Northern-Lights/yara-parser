@@ -2,21 +2,6 @@
 
 %}
 
-
-%expect 1   // expect 1 shift/reduce conflicts
-
-// Uncomment this line to print parsing information that can be useful to
-// debug YARA's grammar.
-
-// %debug
-
-%name-prefix "yara_yy"
-%pure-parser
-%parse-param {void *yyscanner}
-%parse-param {YR_COMPILER* compiler}
-%lex-param {yyscan_t yyscanner}
-%lex-param {YR_COMPILER* compiler}
-
 %token _DOT_DOT_
 %token _RULE_
 %token _PRIVATE_
