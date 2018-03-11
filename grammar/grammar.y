@@ -1,7 +1,11 @@
 %{
 package grammar
 
-var ParsedRuleset data.Ruleset
+import (
+    "yara-parser/data"
+)
+
+var ParsedRuleset data.RuleSet
 %}
 
 %token _DOT_DOT_
@@ -95,14 +99,14 @@ var ParsedRuleset data.Ruleset
 %type <c_string> arguments_list
 
 %union {
-  EXPRESSION      expression;
-  SIZED_STRING*   sized_string;
-  char*           c_string;
-  int64_t         integer;
-  double          double_;
-  YR_STRING*      string;
-  YR_META*        meta;
-  YR_RULE*        rule;
+  expression string
+  sized_string string
+  c_string string
+  integer string
+  double_ string
+  string string
+  meta string
+  rule string
 }
 
 
