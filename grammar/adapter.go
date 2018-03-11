@@ -6,21 +6,30 @@ package grammar
 import (
 	"fmt"
 	"io"
+
+	"yara-parser/data"
 )
+
+var errParser error
 
 func init() {
 	xxErrorVerbose = true
 }
 
 // Parse takes an input source and an output and initiates parsing
-func Parse(input io.Reader, output io.Writer) int {
+func Parse(input io.Reader, output io.Writer) (data.RuleSet, error) {
 	lexer := Lexer{
 		lexer: *NewScanner(),
 	}
 	lexer.lexer.In = input
 	lexer.lexer.Out = output
 
-	return xxParse(&lexer)
+	result := xxParse(&lexer)
+	if result != 0 {
+		errParser = fmt.Errorf(`Parser result: "%d" %s`, result, errParser)
+	}
+
+	return ParsedRuleset, errParser
 }
 
 // Lexer is an adapter that fits the flexgo lexer ("Scanner") into goyacc
@@ -40,5 +49,5 @@ func (l *Lexer) Lex(lval *xxSymType) int {
 // Error satisfies the interface expected of the goyacc parser.
 // Here, it simply writes the error to stdout.
 func (l *Lexer) Error(e string) {
-	fmt.Println("Error:", e)
+	errParser = fmt.Errorf(`Lexical error: "%s"`, e)
 }

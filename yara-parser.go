@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"yara-parser/grammar"
@@ -12,8 +13,10 @@ func main() {
 		log.Fatalf("Error: %s\n", err)
 	}
 
-	result := grammar.Parse(input, os.Stdout)
-	log.Printf("Result: %d\n", result)
+	ruleset, err := grammar.Parse(input, os.Stdout)
+	if err != nil {
+		log.Fatalf(`Parsing failed: "%s"`, err)
+	}
 
-	log.Printf("RuleSet: %v\n", grammar.ParsedRuleset)
+	fmt.Printf("Ruleset:\n%v", ruleset)
 }
