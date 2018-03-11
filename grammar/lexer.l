@@ -117,6 +117,7 @@ octdigit      [0-7]
 "="                     { return _EQUAL_SIGN_; }
 ","                     { return _COMMA_; }
 "%"                     { return _PERCENT_; }
+"include"               { return _INCLUDE_; }
 "|"                     { return _PIPE_; }
 "^"                     { return _CARAT_; }
 "&"                     { return _AMP_; }

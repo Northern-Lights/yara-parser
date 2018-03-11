@@ -48,8 +48,7 @@
 %token _DOT_
 %token _EQUAL_SIGN_
 %token _COMMA_
-%token _PERCENT_
-
+%token _INCLUDE_
 
 %left _OR_
 %left _AND_
@@ -113,7 +112,7 @@ rules
     | rules import
     | rules error rule      /* on error skip until next rule..*/
     | rules error import    /* .. or import statement */
-    | rules error "include" /* .. or include statement */
+    | rules error _INCLUDE_ /* .. or include statement */
     ;
 
 
