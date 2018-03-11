@@ -38,8 +38,16 @@ type YYcontext interface{}
 // Global YYtext - each action sets this to the current yytext
 var YYtext string
 
+// An accumulator for when we want to gather text for a feature
+var collect bool
+var conditionBuilder strings.Builder
+
 YY_USER_ACTION(
   YYtext = string(yytext)
+
+  if collect {
+    conditionBuilder.Write(yytext)
+  }
 )
 
 %}
@@ -69,6 +77,7 @@ var err error // Actually, this is global for lexer action access.
 %option verbose
 %option warn
 
+%s cond
 %x str
 %x regexp
 %x include
@@ -80,6 +89,19 @@ hexdigit      [a-fA-F0-9]
 octdigit      [0-7]
 
 %%
+
+"condition" {
+    collect = true
+    conditionBuilder.Reset()
+    BEGIN cond
+    return _CONDITION_
+}
+
+<cond>"}" {
+
+    BEGIN initial
+    return _RBRACKET_
+}
 
 ".."                    { return _DOT_DOT_;     }
 "<"                     { return _LT_;          }
@@ -99,7 +121,6 @@ octdigit      [0-7]
 "wide"                  { return _WIDE_;        }
 "fullword"              { return _FULLWORD_;    }
 "nocase"                { return _NOCASE_;      }
-"condition"             { return _CONDITION_;   }
 "true"                  { return _TRUE_;        }
 "false"                 { return _FALSE_;       }
 "not"                   { return _NOT_;         }
