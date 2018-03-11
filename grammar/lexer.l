@@ -65,7 +65,6 @@ var err error // Actually, this is global for lexer action access.
 %option never-interactive
 %option yylineno
 %option prefix="yara_yy"
-%option outfile="lex.yy.go"
 
 %option verbose
 %option warn
