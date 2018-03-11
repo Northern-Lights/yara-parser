@@ -29,7 +29,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 /* Lexical analyzer for YARA */
 
-top%{
+%top{
 
 // Necessary types for flexgo
 type YYtype int
