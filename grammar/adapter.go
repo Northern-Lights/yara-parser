@@ -3,7 +3,21 @@
 
 package grammar
 
-import "fmt"
+import (
+	"fmt"
+	"io"
+)
+
+// Parse takes an input source and an output and initiates parsing
+func Parse(input io.Reader, output io.Writer) int {
+	lexer := Lexer{
+		lexer: *NewScanner(),
+	}
+	lexer.lexer.In = input
+	lexer.lexer.Out = output
+
+	return xxParse(&lexer)
+}
 
 // Lexer is an adapter that fits the flexgo lexer ("Scanner") into goyacc
 type Lexer struct {
