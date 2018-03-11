@@ -8,6 +8,10 @@ import (
 	"io"
 )
 
+func init() {
+	xxErrorVerbose = true
+}
+
 // Parse takes an input source and an output and initiates parsing
 func Parse(input io.Reader, output io.Writer) int {
 	lexer := Lexer{
