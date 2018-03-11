@@ -1,0 +1,4 @@
+rule rule {
+condition:
+    true
+}
