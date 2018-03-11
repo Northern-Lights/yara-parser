@@ -29,7 +29,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 /* Lexical analyzer for YARA */
 
-%{
+top%{
 
 // Necessary types for flexgo
 type YYtype int
@@ -41,6 +41,19 @@ var YYtext string
 YY_USER_ACTION(
   YYtext = string(yytext)
 )
+
+%}
+
+%{
+
+// Define a constant for end-of-file
+const eof = 0
+
+// These globals must be accessible to the goyacc parser.
+// Bear in mind that the xx prefix is used because the parser is generated
+// with this prefix in order to avoid name collisions.
+var yylval *xxSymType
+var err error // Actually, this is global for lexer action access.
 
 %}
 
