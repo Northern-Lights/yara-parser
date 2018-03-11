@@ -30,6 +30,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /* Lexical analyzer for YARA */
 
 %top{
+package grammar
 
 // Necessary types for flexgo
 type YYtype int
@@ -66,7 +67,6 @@ var err error // Actually, this is global for lexer action access.
 %}
 
 %option reentrant bison-bridge
-%option noyywrap
 %option nounistd
 %option noinput
 %option nounput

@@ -1,5 +1,7 @@
 %{
+package grammar
 
+var ParsedRuleset data.Ruleset
 %}
 
 %token _DOT_DOT_
