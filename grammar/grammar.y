@@ -68,45 +68,7 @@ var ParsedRuleset data.RuleSet
 %left _ASTERISK_ _BACKSLASH_ _PERCENT_
 %right _NOT_ _TILDE_ UNARY_MINUS
 
-%type <rule>   rule
-
-%type <string> strings
-%type <string> string_declaration
-%type <string> string_declarations
-
-%type <meta> meta
-%type <meta> meta_declaration
-%type <meta> meta_declarations
-
-%type <c_string> tags
-%type <c_string> tag_list
-
-%type <integer> string_modifier
-%type <integer> string_modifiers
-
-%type <integer> integer_set
-
-%type <integer> rule_modifier
-%type <integer> rule_modifiers
-
-%type <expression> primary_expression
-%type <expression> boolean_expression
-%type <expression> expression
-%type <expression> identifier
-%type <expression> regexp
-
-%type <c_string> arguments
-%type <c_string> arguments_list
-
 %union {
-  expression string
-  sized_string string
-  c_string string
-  integer string
-  double_ string
-  string string
-  meta string
-  rule string
 }
 
 
@@ -141,7 +103,7 @@ rule
       }
       condition _RBRACE_
       {
-        
+
       }
     ;
 
