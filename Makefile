@@ -10,4 +10,4 @@ main:
 all: parser lexer main
 
 clean:
-	rm grammar/lexer.go grammar/parser.go grammar/y.output yara-parser
+	rm grammar/lexer.go grammar/parser.go y.output yara-parser
