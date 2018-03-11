@@ -185,7 +185,7 @@ include[ \t]+\"         {
 <include>\"             { BEGIN (INITIAL);}
 
 
-<<EOF>> { }
+<<EOF>> { return eof }
 
 
 $({letter}|{digit}|_)*"*"  {
