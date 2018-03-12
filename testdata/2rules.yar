@@ -1,9 +1,9 @@
-rule _true {
+rule RULE1 {
 condition:
     true
 }
 
-rule _false {
+rule RULE2 {
 condition:
     false
 }
