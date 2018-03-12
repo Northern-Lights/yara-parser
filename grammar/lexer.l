@@ -194,6 +194,7 @@ $({letter}|{digit}|_)*"*"  {
 
 
 $({letter}|{digit}|_)*  {
+  yylval.s = string(yytext)
   return _STRING_IDENTIFIER_;
 }
 
@@ -219,6 +220,7 @@ u?int(8|16|32)(be)? {
 
 
 ({letter}|_)({letter}|{digit}|_)*  {
+  yylval.s = string(yytext)
   return _IDENTIFIER_;
 }
 
