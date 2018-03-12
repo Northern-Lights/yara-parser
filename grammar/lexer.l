@@ -62,8 +62,11 @@ var (
 YY_USER_ACTION(
   YYtext = string(yytext)
 
-  // For condition, the last '}' is going to be collected.
-  // Use strings.TrimSuffix(conditionBuilder.String(), "}") to kill it
+
+  // This comment applies to the YY_USER_ACTION macro, which is having
+  // a problem with comments...
+  // For condition, the colons and whitespace will be collected in the
+  // prefix and the right brace for the suffix. Use strings.TrimLeft/Right
   if collect {
     conditionBuilder.Write(yytext)
   }
