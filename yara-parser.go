@@ -18,5 +18,5 @@ func main() {
 		log.Fatalf(`Parsing failed: "%s"`, err)
 	}
 
-	fmt.Printf("Ruleset:\n%v", ruleset)
+	fmt.Printf("Ruleset:\n%v\n", ruleset)
 }
