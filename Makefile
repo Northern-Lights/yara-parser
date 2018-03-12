@@ -1,3 +1,5 @@
+all: parser lexer main
+
 parser:
 	goyacc -p xx -o grammar/parser.go grammar/grammar.y
 
@@ -6,8 +8,6 @@ lexer:
 
 main:
 	go build
-
-all: parser lexer main
 
 clean:
 	rm grammar/lexer.go grammar/parser.go y.output yara-parser
