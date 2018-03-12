@@ -3,6 +3,7 @@ package data
 // RuleSet represents the contents of a yara file
 type RuleSet struct {
 	Modules   []string
+	Imports   []string
 	Includes  []string
 	Namespace string
 	Rules     []Rule
