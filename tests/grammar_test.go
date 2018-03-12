@@ -4,8 +4,9 @@ import (
 	"log"
 	"os"
 	"testing"
-	"yara-parser/data"
-	"yara-parser/grammar"
+
+	"github.com/Northern-Lights/yara-parser/data"
+	"github.com/Northern-Lights/yara-parser/grammar"
 )
 
 const testfile = "../testdata/ruleset.yar"

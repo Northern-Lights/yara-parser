@@ -4,7 +4,7 @@ package grammar
 import (
     "strings"
 
-    "yara-parser/data"
+    "github.com/Northern-Lights/yara-parser/data"
 )
 
 var (

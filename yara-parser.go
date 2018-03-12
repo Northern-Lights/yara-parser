@@ -4,7 +4,8 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"yara-parser/grammar"
+
+	"github.com/Northern-Lights/yara-parser/grammar"
 )
 
 func main() {

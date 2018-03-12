@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"io"
 
-	"yara-parser/data"
+	"github.com/Northern-Lights/yara-parser/data"
 )
 
 var errParser error
