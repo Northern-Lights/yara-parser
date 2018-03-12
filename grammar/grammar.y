@@ -6,6 +6,7 @@ import (
 )
 
 var ParsedRuleset data.RuleSet
+var currRule data.Rule
 %}
 
 %token _DOT_DOT_
@@ -13,20 +14,20 @@ var ParsedRuleset data.RuleSet
 %token _PRIVATE_
 %token _GLOBAL_
 %token _META_
-%token <string> _STRINGS_
+%token _STRINGS_
 %token _CONDITION_
-%token <c_string> _IDENTIFIER_
-%token <c_string> _STRING_IDENTIFIER_
-%token <c_string> _STRING_COUNT_
-%token <c_string> _STRING_OFFSET_
-%token <c_string> _STRING_LENGTH_
-%token <c_string> _STRING_IDENTIFIER_WITH_WILDCARD_
-%token <integer> _NUMBER_
-%token <double_> _DOUBLE_
-%token <integer> _INTEGER_FUNCTION_
-%token <sized_string> _TEXT_STRING_
-%token <sized_string> _HEX_STRING_
-%token <sized_string> _REGEXP_
+%token <s> _IDENTIFIER_
+%token <s> _STRING_IDENTIFIER_
+%token _STRING_COUNT_
+%token _STRING_OFFSET_
+%token _STRING_LENGTH_
+%token _STRING_IDENTIFIER_WITH_WILDCARD_
+%token _NUMBER_
+%token _DOUBLE_
+%token _INTEGER_FUNCTION_
+%token _TEXT_STRING_
+%token _HEX_STRING_
+%token _REGEXP_
 %token _ASCII_
 %token _WIDE_
 %token _NOCASE_
@@ -68,7 +69,13 @@ var ParsedRuleset data.RuleSet
 %left _ASTERISK_ _BACKSLASH_ _PERCENT_
 %right _NOT_ _TILDE_ UNARY_MINUS
 
+%type <yr> rule
+%type <ys> string_declaration
+
 %union {
+    s string
+    ys data.String
+    yr data.Rule
 }
 
 
@@ -95,7 +102,8 @@ import
 rule
     : rule_modifiers _RULE_ _IDENTIFIER_
       {
-        
+          currRule.Identifier = $3
+          ParsedRuleset.Rules = append(ParsedRuleset.Rules, currRule)
       }
       tags _LBRACE_ meta strings
       {
@@ -103,7 +111,7 @@ rule
       }
       condition _RBRACE_
       {
-
+          currRule = data.Rule{}
       }
     ;
 
@@ -213,11 +221,11 @@ string_declarations
 string_declaration
     : _STRING_IDENTIFIER_ _EQUAL_SIGN_
       {
-        
+
       }
       _TEXT_STRING_ string_modifiers
       {
-        
+
       }
     | _STRING_IDENTIFIER_ _EQUAL_SIGN_
       {
