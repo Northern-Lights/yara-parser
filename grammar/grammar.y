@@ -2,11 +2,16 @@
 package grammar
 
 import (
+    "strings"
+
     "yara-parser/data"
 )
 
-var ParsedRuleset data.RuleSet
-var currRule data.Rule
+var (
+    ParsedRuleset data.RuleSet
+    currRule      data.Rule
+    ruleModifiers data.RuleModifiers
+)
 %}
 
 %token _DOT_DOT_
@@ -71,11 +76,14 @@ var currRule data.Rule
 
 %type <yr> rule
 %type <ys> string_declaration
+%type <rm> rule_modifiers
 
 %union {
     s string
+
+    rm data.RuleModifiers
     ys data.String
-    yr data.Rule
+    yr *data.Rule
 }
 
 
@@ -83,9 +91,15 @@ var currRule data.Rule
 
 rules
     : /* empty */
-    | rules rule
+    | rules rule {
+          ParsedRuleset.Rules = append(ParsedRuleset.Rules, *$2)
+          currRule = data.Rule{}
+    }
     | rules import
-    | rules error rule      /* on error skip until next rule..*/
+    | rules error rule {
+          ParsedRuleset.Rules = append(ParsedRuleset.Rules, *$3)
+          currRule = data.Rule{}
+    }
     | rules error import    /* .. or import statement */
     | rules error _INCLUDE_ /* .. or include statement */
     ;
@@ -102,16 +116,22 @@ import
 rule
     : rule_modifiers _RULE_ _IDENTIFIER_
       {
+          currRule.Modifiers = $1
           currRule.Identifier = $3
-          ParsedRuleset.Rules = append(ParsedRuleset.Rules, currRule)
       }
       tags _LBRACE_ meta strings
       {
-       
+          // $$.Tags = $4
+          // $$.Meta = $6
+          // $$.Strings = $7
       }
       condition _RBRACE_
       {
-          currRule = data.Rule{}
+          c := conditionBuilder.String()
+          c = strings.TrimLeft(c, ":\n\r\t ")
+          c = strings.TrimRight(c, "}\n\r\t ")
+          currRule.Condition = c
+          $$ = &currRule
       }
     ;
 
@@ -146,14 +166,20 @@ condition
 
 
 rule_modifiers
-    : /* empty */                      { }
-    | rule_modifiers rule_modifier     { }
+    : /* empty */                      {
+      $$ = ruleModifiers
+      ruleModifiers = data.RuleModifiers{}
+    }
+    | rule_modifiers rule_modifier     {
+        $$ = ruleModifiers
+        ruleModifiers = data.RuleModifiers{}
+    }
     ;
 
 
 rule_modifier
-    : _PRIVATE_      { }
-    | _GLOBAL_       { }
+    : _PRIVATE_      { ruleModifiers.Private = true }
+    | _GLOBAL_       { ruleModifiers.Global = true }
     ;
 
 
