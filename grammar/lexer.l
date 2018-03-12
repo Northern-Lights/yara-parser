@@ -84,7 +84,6 @@ var err error // Actually, this is global for lexer action access.
 %option verbose
 %option warn
 
-%s cond
 %x str
 %x regexp
 %x include
@@ -100,13 +99,7 @@ octdigit      [0-7]
 "condition" {
     collect = true
     conditionBuilder.Reset()
-    BEGIN cond
     return _CONDITION_
-}
-
-<cond>"}" {
-    BEGIN (INITIAL)
-    return _RBRACE_
 }
 
 ".."                    { return _DOT_DOT_;     }
@@ -148,7 +141,12 @@ octdigit      [0-7]
 "("                     { return _LPAREN_; }
 ")"                     { return _RPAREN_; }
 "{"                     { return _LBRACE_; }
-"}"                     { return _RBRACE_; }
+"}"                     { 
+                          if collect {
+                            collect = false
+                          }
+                          return _RBRACE_;
+                        }
 "["                     { return _LBRACKET_; }
 "]"                     { return _RBRACKET_; }
 ":"                     { return _COLON_; }
