@@ -26,7 +26,7 @@ type RuleModifiers struct {
 }
 
 // Metas is a map which should only be used with values of type
-// int, float (64 or 32?), string, bool.
+// int, string, bool.
 type Metas map[string]interface{}
 
 // String is a string, regex, or byte pair sequence
