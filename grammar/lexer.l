@@ -46,9 +46,14 @@ type YYcontext interface{}
 // Global YYtext - each action sets this to the current yytext
 var YYtext string
 
-// An accumulator for when we want to gather text for a feature
-var collect bool
-var conditionBuilder strings.Builder
+// Accumulators for gathering groups of tokens as text because text collection
+// is like an "inclusive" start condition while the lexer requires "exclusive"
+var (
+    collect           bool  // condition text
+    conditionBuilder  strings.Builder
+    collectText       bool  // string/regex/etc text
+    textBuilder       strings.Builder
+)
 
 }
 
@@ -61,6 +66,10 @@ YY_USER_ACTION(
   // Use strings.TrimSuffix(conditionBuilder.String(), "}") to kill it
   if collect {
     conditionBuilder.Write(yytext)
+  }
+
+  if collectText {
+    textBuilder.Write(yytext)
   }
 )
 
@@ -242,6 +251,10 @@ u?int(8|16|32)(be)? {
 
 <str>\"   {     /* saw closing quote - all done */
 
+  // NOTE: textBuilder.String() will end with `"` char
+  collectText = false
+  yylval.s = strings.TrimSuffix(textBuilder.String(), `"`)
+
   BEGIN (INITIAL);
 
   return _TEXT_STRING_;
@@ -282,6 +295,10 @@ u?int(8|16|32)(be)? {
 
 
 <regexp>\/i?s?  {
+  // TODO: need a regexp type to pull 'i' or 's'
+  // NOTE: textBuilder.String() will end with `"` char
+  collectText = false
+
   BEGIN (INITIAL);
   return _REGEXP_;
 }
@@ -304,11 +321,15 @@ u?int(8|16|32)(be)? {
 
 
 \"  {
+  collectText = true
+  textBuilder.Reset()
   BEGIN (str);
 }
 
 
 "/"  {
+  collectText = true
+  textBuilder.Reset()
   BEGIN (regexp);
 }
 
@@ -316,6 +337,11 @@ u?int(8|16|32)(be)? {
 \{(({hexdigit}|[ \-|\?\[\]\(\)\n\r\t]|\/\*[^*]*\*\/)+|\/\/.*)+\}  {
   // Match hex-digits with whitespace or comments. The latter are stripped
   // out by hex_lexer.l
+
+  // NOTE: The above comment may not apply. We plan to not use hex_lexer.l
+
+  // No need to collect like str and regexp start conditions
+  yylval.s = string(yytext)
 
   return _HEX_STRING_;
 }
