@@ -196,6 +196,7 @@ include[ \t]+\"         {
 
 
 $({letter}|{digit}|_)*"*"  {
+  yylval.s = string(yytext)
   return _STRING_IDENTIFIER_WITH_WILDCARD_;
 }
 
