@@ -30,7 +30,7 @@ var (
 %token _NUMBER_
 %token _DOUBLE_
 %token _INTEGER_FUNCTION_
-%token _TEXT_STRING_
+%token <s> _TEXT_STRING_
 %token _HEX_STRING_
 %token _REGEXP_
 %token _ASCII_
@@ -74,9 +74,10 @@ var (
 %left _ASTERISK_ _BACKSLASH_ _PERCENT_
 %right _NOT_ _TILDE_ UNARY_MINUS
 
-%type <yr> rule
-%type <ys> string_declaration
-%type <rm> rule_modifiers
+%type <yr>  rule
+%type <s>   import
+%type <ys>  string_declaration
+%type <rm>  rule_modifiers
 
 %union {
     s string
@@ -95,7 +96,9 @@ rules
           ParsedRuleset.Rules = append(ParsedRuleset.Rules, *$2)
           currRule = data.Rule{}
     }
-    | rules import
+    | rules import {
+        ParsedRuleset.Imports = append(ParsedRuleset.Imports, $2)
+    }
     | rules error rule {
           ParsedRuleset.Rules = append(ParsedRuleset.Rules, *$3)
           currRule = data.Rule{}
@@ -108,7 +111,7 @@ rules
 import
     : _IMPORT_ _TEXT_STRING_
       {
-        
+          $$ = $2
       }
     ;
 

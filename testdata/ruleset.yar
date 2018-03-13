@@ -1,6 +1,7 @@
 include "../others.yar"
 
 import "pe"
+import "math"
 
 rule BASIC_BOOL {
 condition:
