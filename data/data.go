@@ -2,27 +2,26 @@ package data
 
 // RuleSet represents the contents of a yara file
 type RuleSet struct {
-	Modules   []string
-	Imports   []string
+	Imports   []string `json:"imports"`
 	Includes  []string
 	Namespace string
-	Rules     []Rule
+	Rules     []Rule `json:"rules"`
 }
 
 // A Rule is a single yara rule
 type Rule struct {
-	Modifiers  RuleModifiers
-	Identifier string
-	Tags       []string
+	Modifiers  RuleModifiers `json:"modifiers"`
+	Identifier string        `json:"identifier"`
+	Tags       []string      `json:"tags"`
 	Meta       Metas
 	Strings    map[string]*String
-	Condition  string
+	Condition  string `json:"condition"`
 }
 
 // RuleModifiers denote whether a Rule is global, private, neither, or both.
 type RuleModifiers struct {
-	Global  bool
-	Private bool
+	Global  bool `json:"global"`
+	Private bool `json:"private"`
 }
 
 // Metas is a map which should only be used with values of type
