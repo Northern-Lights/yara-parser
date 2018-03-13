@@ -11,7 +11,6 @@ var (
     ParsedRuleset data.RuleSet
     currRule      data.Rule
     ruleModifiers data.RuleModifiers
-    tagList       []string
 )
 %}
 
@@ -78,6 +77,7 @@ var (
 %type <s>   import
 %type <yr>  rule
 %type <ss>  tags
+%type <ss>  tag_list
 %type <ys>  string_declaration
 %type <rm>  rule_modifiers
 
@@ -130,7 +130,6 @@ rule
           // $4 is the rule created in above action
           // Can we access using $<rule>4?
           currRule.Tags = $5
-          tagList = make([]string, 0, 10)
           // $$.Meta = $6
           // $$.Strings = $7
       }
@@ -195,11 +194,11 @@ rule_modifier
 tags
     : /* empty */
       {
-          $$ = tagList
+          $$ = []string{}
       }
     | _COLON_ tag_list
       {
-          $$ = tagList
+          $$ = $2
       }
     ;
 
@@ -207,11 +206,11 @@ tags
 tag_list
     : _IDENTIFIER_
       {
-          tagList = append(tagList, $1)
+          $$ = []string{$1}
       }
     | tag_list _IDENTIFIER_
       {
-          tagList = append(tagList, $2)
+          $$ = append($1, $2)
       }
     ;
 
