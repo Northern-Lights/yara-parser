@@ -55,6 +55,12 @@ var (
     textBuilder       strings.Builder
 )
 
+  // This comment applies to the YY_USER_ACTION macro, which is having
+  // a problem with comments...
+  // For condition, the colons and whitespace will be collected in the
+  // prefix and the right brace for the suffix. Use strings.TrimLeft/Right
+
+
 }
 
 %{
@@ -62,11 +68,6 @@ var (
 YY_USER_ACTION(
   YYtext = string(yytext)
 
-
-  // This comment applies to the YY_USER_ACTION macro, which is having
-  // a problem with comments...
-  // For condition, the colons and whitespace will be collected in the
-  // prefix and the right brace for the suffix. Use strings.TrimLeft/Right
   if collect {
     conditionBuilder.Write(yytext)
   }
