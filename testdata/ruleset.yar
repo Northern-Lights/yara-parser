@@ -40,6 +40,11 @@ condition:
     $s1
 }
 
+rule TAGS : tag1 tag2 tag3 {
+condition:
+    true
+}
+
 global rule GLOBAL {
 condition:
     true
