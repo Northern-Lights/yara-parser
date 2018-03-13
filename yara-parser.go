@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"os"
@@ -19,5 +20,9 @@ func main() {
 		log.Fatalf(`Parsing failed: "%s"`, err)
 	}
 
-	fmt.Printf("Ruleset:\n%v\n", ruleset)
+	j, err := json.MarshalIndent(&ruleset, "", "   ")
+	if err != nil {
+		log.Fatalf("JSON error: %s\n", err)
+	}
+	fmt.Printf("JSON:\n%s\n", string(j))
 }
