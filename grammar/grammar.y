@@ -11,6 +11,7 @@ var (
     ParsedRuleset data.RuleSet
     currRule      data.Rule
     ruleModifiers data.RuleModifiers
+    tagList       []string
 )
 %}
 
@@ -74,17 +75,19 @@ var (
 %left _ASTERISK_ _BACKSLASH_ _PERCENT_
 %right _NOT_ _TILDE_ UNARY_MINUS
 
-%type <yr>  rule
 %type <s>   import
+%type <yr>  rule
+%type <ss>  tags
 %type <ys>  string_declaration
 %type <rm>  rule_modifiers
 
 %union {
-    s string
+    s             string
+    ss            []string
 
-    rm data.RuleModifiers
-    ys data.String
-    yr *data.Rule
+    rm            data.RuleModifiers
+    ys            data.String
+    yr            *data.Rule
 }
 
 
@@ -124,7 +127,10 @@ rule
       }
       tags _LBRACE_ meta strings
       {
-          // $$.Tags = $4
+          // $4 is the rule created in above action
+          // Can we access using $<rule>4?
+          currRule.Tags = $5
+          tagList = make([]string, 0, 10)
           // $$.Meta = $6
           // $$.Strings = $7
       }
@@ -189,11 +195,11 @@ rule_modifier
 tags
     : /* empty */
       {
-        
+          $$ = tagList
       }
     | _COLON_ tag_list
       {
-        
+          $$ = tagList
       }
     ;
 
@@ -201,11 +207,11 @@ tags
 tag_list
     : _IDENTIFIER_
       {
-        
+          tagList = append(tagList, $1)
       }
     | tag_list _IDENTIFIER_
       {
-        
+          tagList = append(tagList, $2)
       }
     ;
 
