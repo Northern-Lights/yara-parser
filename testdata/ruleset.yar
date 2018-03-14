@@ -13,6 +13,22 @@ condition:
     false
 }
 
+rule REGEX1 {
+strings:
+    $r1 = /first regex/
+condition:
+    $r1
+}
+
+rule REGEX2 {
+strings:
+    $r1 = /regex with mod i/i
+    $r2 = /regex with mod s/s
+condition:
+    $r1
+    or $r2
+}
+
 rule STRING1 {
 strings:
     $s1 = "ABCDEFG"
