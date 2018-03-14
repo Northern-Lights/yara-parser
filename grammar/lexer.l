@@ -39,6 +39,8 @@ import (
     "math"
     "strconv"
     "strings"
+
+    "github.com/Northern-Lights/yara-parser/data"
 )
 
 // Necessary types for flexgo
@@ -334,9 +336,35 @@ u?int(8|16|32)(be)? {
 
 
 <regexp>\/i?s?  {
-  // TODO: need a regexp type to pull 'i' or 's'
-  // NOTE: textBuilder.String() will end with `"` char
+  // TODO: need an intermediate type to pull 'i' or 's'
+  // NOTE: textBuilder.String() will end with `/i?s?` char
   collectText = false
+
+  s := textBuilder.String()
+  txt := strings.TrimRight(s, "/is")
+  
+  var mods data.StringModifiers
+
+  for _, c := range []rune(YYtext) {
+      switch c {
+      case 'i':
+          mods.I = true
+      
+      case 's':
+          mods.S = true
+      
+      case '/':
+          // Ignore
+      
+      default:
+          // TODO: Error
+      }
+  }
+
+  yylval.reg = regexPair {
+      txt,
+      mods,
+  }
 
   BEGIN (INITIAL);
   return _REGEXP_;

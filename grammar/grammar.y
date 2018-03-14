@@ -18,6 +18,11 @@ type metaPair struct {
     val interface{}
 }
 
+type regexPair struct {
+    text string
+    mods data.StringModifiers
+}
+
 %}
 
 %token _DOT_DOT_
@@ -38,11 +43,11 @@ type metaPair struct {
 %token _INTEGER_FUNCTION_
 %token <s> _TEXT_STRING_
 %token _HEX_STRING_
-%token _REGEXP_
-%token _ASCII_
-%token _WIDE_
-%token _NOCASE_
-%token _FULLWORD_
+%token <reg> _REGEXP_
+%token <mod> _ASCII_
+%token <mod> _WIDE_
+%token <mod> _NOCASE_
+%token <mod> _FULLWORD_
 %token _AT_
 %token _FILESIZE_
 %token _ENTRYPOINT_
@@ -87,7 +92,11 @@ type metaPair struct {
 %type <m>   meta
 %type <mps> meta_declarations
 %type <mp>  meta_declaration
+%type <yss> strings
+%type <yss> string_declarations
 %type <ys>  string_declaration
+%type <mod> string_modifier
+%type <mod> string_modifiers
 %type <rm>  rule_modifiers
 
 %union {
@@ -99,8 +108,11 @@ type metaPair struct {
     rm            data.RuleModifiers
     m             map[string]interface{}
     mp            metaPair
-    mps            []metaPair
+    mps           []metaPair
+    mod           data.StringModifiers
+    reg           regexPair
     ys            data.String
+    yss           []data.String
     yr            *data.Rule
 }
 
@@ -145,7 +157,14 @@ rule
           // Can we access using $<rule>4?
           currRule.Tags = $5
           currRule.Meta = $7
-          // $$.Strings = $8
+          currRule.Strings = make(map[string]*data.String)
+          for _, s := range $8 {
+              if _, had := currRule.Strings[s.ID]; had {
+                  // TODO: ERROR: duplicate string
+              }
+              s := s
+              currRule.Strings[s.ID] = &s
+          }
       }
       condition _RBRACE_
       {
@@ -179,11 +198,11 @@ meta
 strings
     : /* empty */
       {
-        
+          $$ = []data.String{}
       }
     | _STRINGS_ _COLON_ string_declarations
       {
-        
+          $$ = $3
       }
     ;
 
@@ -267,27 +286,39 @@ meta_declaration
 
 
 string_declarations
-    : string_declaration                      { }
-    | string_declarations string_declaration  { }
+    : string_declaration                      { $$ = []data.String{$1} }
+    | string_declarations string_declaration  { $$ = append($1, $2) }
     ;
 
 
 string_declaration
     : _STRING_IDENTIFIER_ _EQUAL_SIGN_
       {
-
+          $$.Type = data.TypeString
+          $$.ID = $1
       }
       _TEXT_STRING_ string_modifiers
       {
+          $<ys>3.Text = $4
+          $<ys>3.Modifiers = $5
 
+          $$ = $<ys>3
       }
     | _STRING_IDENTIFIER_ _EQUAL_SIGN_
       {
-        
+          $$.Type = data.TypeRegex
+          $$.ID = $1
       }
       _REGEXP_ string_modifiers
       {
-        
+          $<ys>3.Text = $4.text
+
+          $5.I = $4.mods.I
+          $5.S = $4.mods.S
+
+          $<ys>3.Modifiers = $5
+
+          $$ = $<ys>3
       }
     | _STRING_IDENTIFIER_ _EQUAL_SIGN_ _HEX_STRING_
       {
@@ -298,15 +329,22 @@ string_declaration
 
 string_modifiers
     : /* empty */                         { }
-    | string_modifiers string_modifier    { }
+    | string_modifiers string_modifier    {
+          $$ = data.StringModifiers {
+              Wide: $1.Wide || $2.Wide,
+              ASCII: $1.ASCII || $2.ASCII,
+              Nocase: $1.Nocase || $2.Nocase,
+              Fullword: $1.Fullword || $2.Fullword,
+          }
+    }
     ;
 
 
 string_modifier
-    : _WIDE_        { }
-    | _ASCII_       { }
-    | _NOCASE_      { }
-    | _FULLWORD_    { }
+    : _WIDE_        { $$.Wide = true }
+    | _ASCII_       { $$.ASCII = true }
+    | _NOCASE_      { $$.Nocase = true }
+    | _FULLWORD_    { $$.Fullword = true }
     ;
 
 
