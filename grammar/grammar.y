@@ -167,6 +167,9 @@ meta
       {
           $$ = make(map[string]interface{})
           for _, mpair := range $3 {
+              if _, had := $$[mpair.key]; had {
+                  // TODO: ERROR duplicate meta
+              }
               $$[mpair.key] = mpair.val
           }
       }
