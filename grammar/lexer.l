@@ -36,6 +36,8 @@ import (
     "io"
     "log"
     "os"
+    "math"
+    "strconv"
     "strings"
 )
 
@@ -238,6 +240,26 @@ u?int(8|16|32)(be)? {
 
 
 {digit}+(MB|KB){0,1}  {
+  var err error
+  s := strings.TrimRight(YYtext, "MKB")
+  yylval.i64, err = strconv.ParseInt(s, 10, 64)
+  if err != nil {
+      // TODO:
+  }
+
+  if strings.HasSuffix(YYtext, "KB") {
+      if yylval.i64 > math.MaxInt64 / 1024 {
+          // TODO: ERROR INTEGER OVERFLOW
+      } else {
+          yylval.i64 *= 1024
+      }
+  } else if strings.HasSuffix(YYtext, "MB") {
+      if yylval.i64 > math.MaxInt64 / 1048576 {
+          // TODO: ERROR INTEGER OVERFLOW
+      } else {
+          yylval.i64 *= 1048576
+      }
+  }
   return _NUMBER_;
 }
 
@@ -246,10 +268,22 @@ u?int(8|16|32)(be)? {
 }
 
 0x{hexdigit}+  {
+  var err error
+  yylval.i64, err = strconv.ParseInt(YYtext, 0, 64)
+  if err != nil {
+      // TODO:
+  }
+
   return _NUMBER_;
 }
 
 0o{octdigit}+  {
+  var err error
+  s := strings.TrimLeft(YYtext, "0o")
+  yylval.i64, err = strconv.ParseInt(s, 8, 64)
+  if err != nil {
+      // TODO:
+  }
   return _NUMBER_;
 }
 

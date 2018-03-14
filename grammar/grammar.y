@@ -12,6 +12,12 @@ var (
     currRule      data.Rule
     ruleModifiers data.RuleModifiers
 )
+
+type metaPair struct {
+    key string
+    val interface{}
+}
+
 %}
 
 %token _DOT_DOT_
@@ -27,7 +33,7 @@ var (
 %token _STRING_OFFSET_
 %token _STRING_LENGTH_
 %token _STRING_IDENTIFIER_WITH_WILDCARD_
-%token _NUMBER_
+%token <i64> _NUMBER_
 %token _DOUBLE_
 %token _INTEGER_FUNCTION_
 %token <s> _TEXT_STRING_
@@ -50,8 +56,8 @@ var (
 %token _CONTAINS_
 %token _IMPORT_
 
-%token _TRUE_
-%token _FALSE_
+%token <b> _TRUE_
+%token <b> _FALSE_
 
 %token _LPAREN_ _RPAREN_
 %token _LBRACE_ _RBRACE_
@@ -78,14 +84,22 @@ var (
 %type <yr>  rule
 %type <ss>  tags
 %type <ss>  tag_list
+%type <m>   meta
+%type <mps> meta_declarations
+%type <mp>  meta_declaration
 %type <ys>  string_declaration
 %type <rm>  rule_modifiers
 
 %union {
+    b             bool
+    i64           int64
     s             string
     ss            []string
 
     rm            data.RuleModifiers
+    m             map[string]interface{}
+    mp            metaPair
+    mps            []metaPair
     ys            data.String
     yr            *data.Rule
 }
@@ -130,8 +144,8 @@ rule
           // $4 is the rule created in above action
           // Can we access using $<rule>4?
           currRule.Tags = $5
-          // $$.Meta = $6
-          // $$.Strings = $7
+          currRule.Meta = $7
+          // $$.Strings = $8
       }
       condition _RBRACE_
       {
@@ -151,7 +165,10 @@ meta
       }
     | _META_ _COLON_ meta_declarations
       {
-        
+          $$ = make(map[string]interface{})
+          for _, mpair := range $3 {
+              $$[mpair.key] = mpair.val
+          }
       }
     ;
 
@@ -217,31 +234,31 @@ tag_list
 
 
 meta_declarations
-    : meta_declaration                    { }
-    | meta_declarations meta_declaration  { }
+    : meta_declaration                    { $$ = []metaPair{$1} }
+    | meta_declarations meta_declaration  { $$ = append($$, $2)}
     ;
 
 
 meta_declaration
     : _IDENTIFIER_ _EQUAL_SIGN_ _TEXT_STRING_
       {
-        
+          $$ = metaPair{$1, $3}
       }
     | _IDENTIFIER_ _EQUAL_SIGN_ _NUMBER_
       {
-        
+          $$ = metaPair{$1, $3}
       }
     | _IDENTIFIER_ _EQUAL_SIGN_ _MINUS_ _NUMBER_
       {
-        
+          $$ = metaPair{$1, -$4}
       }
     | _IDENTIFIER_ _EQUAL_SIGN_ _TRUE_
       {
-        
+          $$ = metaPair{$1, $3}
       }
     | _IDENTIFIER_ _EQUAL_SIGN_ _FALSE_
       {
-        
+          $$ = metaPair{$1, $3}
       }
     ;
 
@@ -346,7 +363,7 @@ boolean_expression
 expression
     : _TRUE_
       {
-        
+          
       }
     | _FALSE_
       {
