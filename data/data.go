@@ -13,7 +13,7 @@ type Rule struct {
 	Modifiers  RuleModifiers `json:"modifiers"`
 	Identifier string        `json:"identifier"`
 	Tags       []string      `json:"tags"`
-	Meta       Metas
+	Meta       Metas         `json:"meta"`
 	Strings    map[string]*String
 	Condition  string `json:"condition"`
 }
