@@ -2,10 +2,9 @@ package data
 
 // RuleSet represents the contents of a yara file
 type RuleSet struct {
-	Imports   []string `json:"imports"`
-	Includes  []string `json:"includes"`
-	Namespace string
-	Rules     []Rule `json:"rules"`
+	Imports  []string `json:"imports"`
+	Includes []string `json:"includes"`
+	Rules    []Rule   `json:"rules"`
 }
 
 // A Rule is a single yara rule
