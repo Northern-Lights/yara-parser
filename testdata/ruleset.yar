@@ -1,4 +1,4 @@
-include "../others.yar"
+include "./true.yar"
 
 import "pe"
 import "math"
@@ -11,6 +11,14 @@ condition:
 rule BASIC_BOOL2 {
 condition:
     false
+}
+
+rule HEX_STRING {
+strings:
+    $h1 = {01 23 45 67 89 ab}
+    $h2 = {cd ef 01 23 45 67}
+condition:
+    any of ($h*)
 }
 
 rule REGEX1 {
