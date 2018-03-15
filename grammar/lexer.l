@@ -188,18 +188,6 @@ octdigit      [0-7]
 
 "//"[^\n]*              { /* skip single-line comments */ }
 
-
-include[ \t]+\"         {
-                          BEGIN (include);
-                        }
-
-
-<include>[^\"]+         { }
-
-
-<include>\"             { BEGIN (INITIAL);}
-
-
 <<EOF>> { return eof }
 
 

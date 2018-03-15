@@ -127,12 +127,17 @@ rules
     | rules import {
         ParsedRuleset.Imports = append(ParsedRuleset.Imports, $2)
     }
+    | rules _INCLUDE_ _TEXT_STRING_ {
+        ParsedRuleset.Includes = append(ParsedRuleset.Includes, $3)
+    }
     | rules error rule {
           ParsedRuleset.Rules = append(ParsedRuleset.Rules, *$3)
           currRule = data.Rule{}
     }
     | rules error import    /* .. or import statement */
-    | rules error _INCLUDE_ /* .. or include statement */
+    | rules error _INCLUDE_ _TEXT_STRING_ {
+          ParsedRuleset.Includes = append(ParsedRuleset.Includes, $4)
+    }
     ;
 
 
