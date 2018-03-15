@@ -61,8 +61,8 @@ type regexPair struct {
 %token _CONTAINS_
 %token _IMPORT_
 
-%token <b> _TRUE_
-%token <b> _FALSE_
+%token _TRUE_
+%token _FALSE_
 
 %token _LPAREN_ _RPAREN_
 %token _LBRACE_ _RBRACE_
@@ -100,7 +100,6 @@ type regexPair struct {
 %type <rm>  rule_modifiers
 
 %union {
-    b             bool
     i64           int64
     s             string
     ss            []string
@@ -276,11 +275,11 @@ meta_declaration
       }
     | _IDENTIFIER_ _EQUAL_SIGN_ _TRUE_
       {
-          $$ = metaPair{$1, $3}
+          $$ = metaPair{$1, true}
       }
     | _IDENTIFIER_ _EQUAL_SIGN_ _FALSE_
       {
-          $$ = metaPair{$1, $3}
+          $$ = metaPair{$1, false}
       }
     ;
 
