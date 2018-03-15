@@ -3,7 +3,7 @@ package data
 // RuleSet represents the contents of a yara file
 type RuleSet struct {
 	Imports   []string `json:"imports"`
-	Includes  []string
+	Includes  []string `json:"includes"`
 	Namespace string
 	Rules     []Rule `json:"rules"`
 }
@@ -30,10 +30,10 @@ type Metas map[string]interface{}
 
 // String is a string, regex, or byte pair sequence
 type String struct {
-	ID        string
-	Type      StringType
-	Text      string
-	Modifiers StringModifiers
+	ID        string          `json:"id"`
+	Type      StringType      `json:"type"`
+	Text      string          `json:"text"`
+	Modifiers StringModifiers `json:"modifiers"`
 }
 
 // StringType is used to differentiate between string, hex bytes, and regex
@@ -48,10 +48,10 @@ const (
 
 // StringModifiers denote the status of the possible modifiers for strings
 type StringModifiers struct {
-	Nocase   bool
-	ASCII    bool
-	Wide     bool
-	Fullword bool
-	I        bool // for regex
-	S        bool // for regex
+	Nocase   bool `json:"nocase"`
+	ASCII    bool `json:"ascii"`
+	Wide     bool `json:"wide"`
+	Fullword bool `json:"fullword"`
+	I        bool `json:"i"` // for regex
+	S        bool `json:"s"` // for regex
 }
