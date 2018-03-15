@@ -121,8 +121,8 @@ type regexPair struct {
 rules
     : /* empty */
     | rules rule {
-          ParsedRuleset.Rules = append(ParsedRuleset.Rules, *$2)
-          currRule = data.Rule{}
+        ParsedRuleset.Rules = append(ParsedRuleset.Rules, *$2)
+        currRule = data.Rule{}
     }
     | rules import {
         ParsedRuleset.Imports = append(ParsedRuleset.Imports, $2)
@@ -131,12 +131,14 @@ rules
         ParsedRuleset.Includes = append(ParsedRuleset.Includes, $3)
     }
     | rules error rule {
-          ParsedRuleset.Rules = append(ParsedRuleset.Rules, *$3)
-          currRule = data.Rule{}
+        ParsedRuleset.Rules = append(ParsedRuleset.Rules, *$3)
+        currRule = data.Rule{}
     }
-    | rules error import    /* .. or import statement */
+    | rules error import {
+        ParsedRuleset.Imports = append(ParsedRuleset.Imports, $3)
+    }
     | rules error _INCLUDE_ _TEXT_STRING_ {
-          ParsedRuleset.Includes = append(ParsedRuleset.Includes, $4)
+        ParsedRuleset.Includes = append(ParsedRuleset.Includes, $4)
     }
     ;
 
