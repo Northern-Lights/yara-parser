@@ -9,7 +9,6 @@ import (
 
 var (
     ParsedRuleset data.RuleSet
-    currRule      data.Rule
     ruleModifiers data.RuleModifiers
 )
 
@@ -112,7 +111,7 @@ type regexPair struct {
     reg           regexPair
     ys            data.String
     yss           []data.String
-    yr            *data.Rule
+    yr            data.Rule
 }
 
 
@@ -121,8 +120,7 @@ type regexPair struct {
 rules
     : /* empty */
     | rules rule {
-        ParsedRuleset.Rules = append(ParsedRuleset.Rules, *$2)
-        currRule = data.Rule{}
+        ParsedRuleset.Rules = append(ParsedRuleset.Rules, $2)
     }
     | rules import {
         ParsedRuleset.Imports = append(ParsedRuleset.Imports, $2)
@@ -131,8 +129,7 @@ rules
         ParsedRuleset.Includes = append(ParsedRuleset.Includes, $3)
     }
     | rules error rule {
-        ParsedRuleset.Rules = append(ParsedRuleset.Rules, *$3)
-        currRule = data.Rule{}
+        ParsedRuleset.Rules = append(ParsedRuleset.Rules, $3)
     }
     | rules error import {
         ParsedRuleset.Imports = append(ParsedRuleset.Imports, $3)
@@ -154,22 +151,22 @@ import
 rule
     : rule_modifiers _RULE_ _IDENTIFIER_
       {
-          currRule.Modifiers = $1
-          currRule.Identifier = $3
+          $$.Modifiers = $1
+          $$.Identifier = $3
       }
       tags _LBRACE_ meta strings
       {
           // $4 is the rule created in above action
           // Can we access using $<rule>4?
-          currRule.Tags = $5
-          currRule.Meta = $7
-          currRule.Strings = make(map[string]*data.String)
+          $<yr>4.Tags = $5
+          $<yr>4.Meta = $7
+          $<yr>4.Strings = make(map[string]*data.String)
           for _, s := range $8 {
-              if _, had := currRule.Strings[s.ID]; had {
+              if _, had := $<yr>4.Strings[s.ID]; had {
                   // TODO: ERROR: duplicate string
               }
               s := s
-              currRule.Strings[s.ID] = &s
+              $<yr>4.Strings[s.ID] = &s
           }
       }
       condition _RBRACE_
@@ -177,8 +174,8 @@ rule
           c := conditionBuilder.String()
           c = strings.TrimLeft(c, ":\n\r\t ")
           c = strings.TrimRight(c, "}\n\r\t ")
-          currRule.Condition = c
-          $$ = &currRule
+          $<yr>4.Condition = c
+          $$ = $<yr>4
       }
     ;
 
