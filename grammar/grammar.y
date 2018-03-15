@@ -9,7 +9,6 @@ import (
 
 var (
     ParsedRuleset data.RuleSet
-    ruleModifiers data.RuleModifiers
 )
 
 type metaPair struct {
@@ -96,6 +95,7 @@ type regexPair struct {
 %type <ys>  string_declaration
 %type <mod> string_modifier
 %type <mod> string_modifiers
+%type <rm>  rule_modifier
 %type <rm>  rule_modifiers
 
 %union {
@@ -216,20 +216,17 @@ condition
 
 
 rule_modifiers
-    : /* empty */                      {
-      $$ = ruleModifiers
-      ruleModifiers = data.RuleModifiers{}
-    }
+    : /* empty */ { $$ = data.RuleModifiers{} }
     | rule_modifiers rule_modifier     {
-        $$ = ruleModifiers
-        ruleModifiers = data.RuleModifiers{}
+        $$.Private = $$.Private || $2.Private
+        $$.Global = $$.Global || $2.Global
     }
     ;
 
 
 rule_modifier
-    : _PRIVATE_      { ruleModifiers.Private = true }
-    | _GLOBAL_       { ruleModifiers.Global = true }
+    : _PRIVATE_      { $$.Private = true }
+    | _GLOBAL_       { $$.Global = true }
     ;
 
 
