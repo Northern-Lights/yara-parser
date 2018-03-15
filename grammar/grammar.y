@@ -42,7 +42,7 @@ type regexPair struct {
 %token _DOUBLE_
 %token _INTEGER_FUNCTION_
 %token <s> _TEXT_STRING_
-%token _HEX_STRING_
+%token <s> _HEX_STRING_
 %token <reg> _REGEXP_
 %token <mod> _ASCII_
 %token <mod> _WIDE_
@@ -321,7 +321,9 @@ string_declaration
       }
     | _STRING_IDENTIFIER_ _EQUAL_SIGN_ _HEX_STRING_
       {
-        
+          $$.Type = data.TypeHexString
+          $$.ID = $1
+          $$.Text = $3
       }
     ;
 

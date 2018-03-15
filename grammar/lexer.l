@@ -410,7 +410,7 @@ u?int(8|16|32)(be)? {
   // NOTE: The above comment may not apply. We plan to not use hex_lexer.l
 
   // No need to collect like str and regexp start conditions
-  yylval.s = string(yytext)
+  yylval.s = strings.Trim(YYtext, "{}")
 
   return _HEX_STRING_;
 }
