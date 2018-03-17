@@ -33,6 +33,7 @@ func Parse(input io.Reader, output io.Writer) (rs data.RuleSet, err error) {
 	}
 
 	rs = ParsedRuleset
+	ParsedRuleset = data.RuleSet{} // "Reset"...
 
 	return
 }
