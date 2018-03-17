@@ -4,9 +4,8 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"os"
-	"path/filepath"
 	"strings"
 
 	"github.com/Northern-Lights/yara-parser/grammar"
@@ -41,16 +40,6 @@ func getopt() options {
 
 	o.Infile = flag.Args()[0]
 
-	if o.Outfile == "" {
-		fname := strings.Replace(
-			filepath.Base(o.Infile),
-			filepath.Ext(o.Infile),
-			"",
-			1)
-
-		o.Outfile = fmt.Sprintf("%s.json", fname)
-	}
-
 	return o
 }
 
@@ -59,6 +48,7 @@ func handleErr(f func() error) {
 	err := f()
 	if err != nil {
 		perror(`Error: %s`, err)
+		os.Exit(127)
 	}
 }
 
@@ -68,25 +58,40 @@ func main() {
 	yaraFile, err := os.Open(opts.Infile)
 	if err != nil {
 		perror(`Couldn't open YARA file "%s": %s`, opts.Infile, err)
-		os.Exit(1)
+		os.Exit(2)
 	}
 	defer handleErr(yaraFile.Close)
 
 	ruleset, err := grammar.Parse(yaraFile, os.Stdout)
 	if err != nil {
 		perror(`Couldn't parse YARA ruleset: %s`, err)
-		os.Exit(1)
+		os.Exit(3)
 	}
 	ruleset.File = opts.Infile
 
 	jdata, err := json.MarshalIndent(&ruleset, "", "   ")
 	if err != nil {
 		perror(`Couldn't marshal ruleset to JSON: %s`, err)
-		os.Exit(1)
+		os.Exit(4)
 	}
 
-	err = ioutil.WriteFile(opts.Outfile, jdata, os.FileMode(0644))
+	// Set output to stdout if not specified; otherwise file
+	var out io.Writer
+	if opts.Outfile == "" {
+		out = os.Stdout
+	} else {
+		f, err := os.Create(opts.Outfile)
+		if err != nil {
+			perror(`Couldn't create output file "%s"`, opts.Outfile)
+			os.Exit(5)
+		}
+		defer handleErr(f.Close)
+		out = f
+	}
+
+	_, err = out.Write(jdata)
 	if err != nil {
 		perror(`Couldn't write JSON data to "%s"`, opts.Outfile)
+		os.Exit(6)
 	}
 }
