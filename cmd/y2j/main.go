@@ -20,6 +20,13 @@ type options struct {
 	Outfile string
 }
 
+func perror(s string, a ...interface{}) {
+	var sb strings.Builder
+	sb.WriteString(fmt.Sprintf(s, a...))
+	sb.WriteRune('\n')
+	os.Stderr.WriteString(sb.String())
+}
+
 func getopt() options {
 	var o options
 
@@ -28,7 +35,7 @@ func getopt() options {
 	flag.Parse()
 
 	if n := flag.NArg(); n != 1 {
-		fmt.Printf("Expected 1 input file; found %d\n", n)
+		perror("Expected 1 input file; found %d", n)
 		os.Exit(1)
 	}
 
@@ -51,7 +58,7 @@ func getopt() options {
 func handleErr(f func() error) {
 	err := f()
 	if err != nil {
-		fmt.Printf(`Error: %s`, err)
+		perror(`Error: %s`, err)
 	}
 }
 
@@ -60,26 +67,26 @@ func main() {
 
 	yaraFile, err := os.Open(opts.Infile)
 	if err != nil {
-		fmt.Printf(`Couldn't open YARA file "%s": %s\n`, opts.Infile, err)
+		perror(`Couldn't open YARA file "%s": %s`, opts.Infile, err)
 		os.Exit(1)
 	}
 	defer handleErr(yaraFile.Close)
 
 	ruleset, err := grammar.Parse(yaraFile, os.Stdout)
 	if err != nil {
-		fmt.Printf(`Couldn't parse YARA ruleset: %s\n`, err)
+		perror(`Couldn't parse YARA ruleset: %s`, err)
 		os.Exit(1)
 	}
 	ruleset.File = opts.Infile
 
 	jdata, err := json.MarshalIndent(&ruleset, "", "   ")
 	if err != nil {
-		fmt.Printf(`Couldn't marshal ruleset to JSON: %s\n`, err)
+		perror(`Couldn't marshal ruleset to JSON: %s`, err)
 		os.Exit(1)
 	}
 
 	err = ioutil.WriteFile(opts.Outfile, jdata, os.FileMode(0644))
 	if err != nil {
-		fmt.Printf(`Couldn't write JSON data to "%s"\n`, opts.Outfile)
+		perror(`Couldn't write JSON data to "%s"`, opts.Outfile)
 	}
 }
