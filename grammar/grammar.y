@@ -2,6 +2,7 @@
 package grammar
 
 import (
+    "fmt"
     "strings"
 
     "github.com/Northern-Lights/yara-parser/data"
@@ -163,7 +164,8 @@ rule
           $<yr>4.Strings = make(map[string]*data.String)
           for _, s := range $8 {
               if _, had := $<yr>4.Strings[s.ID]; had {
-                  // TODO: ERROR: duplicate string
+                  err := fmt.Errorf(`duplicated string identifier "%s"`, s.ID)
+                  panic(err)
               }
               s := s
               $<yr>4.Strings[s.ID] = &s
@@ -189,9 +191,7 @@ meta
       {
           $$ = make(map[string]interface{})
           for _, mpair := range $3 {
-              if _, had := $$[mpair.key]; had {
-                  // TODO: ERROR duplicate meta
-              }
+              // YARA is ok with duplicate keys; we follow suit
               $$[mpair.key] = mpair.val
           }
       }

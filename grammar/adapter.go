@@ -17,7 +17,9 @@ func init() {
 }
 
 // Parse takes an input source and an output and initiates parsing
-func Parse(input io.Reader, output io.Writer) (data.RuleSet, error) {
+func Parse(input io.Reader, output io.Writer) (rs data.RuleSet, err error) {
+	defer recoverParse(&err)
+
 	lexer := Lexer{
 		lexer: *NewScanner(),
 	}
@@ -26,10 +28,13 @@ func Parse(input io.Reader, output io.Writer) (data.RuleSet, error) {
 
 	result := xxParse(&lexer)
 	if result != 0 {
-		errParser = fmt.Errorf(`Parser result: "%d" %s`, result, errParser)
+
+		err = fmt.Errorf(`Parser result: "%d" %s`, result, errParser)
 	}
 
-	return ParsedRuleset, errParser
+	rs = ParsedRuleset
+
+	return
 }
 
 // Lexer is an adapter that fits the flexgo lexer ("Scanner") into goyacc

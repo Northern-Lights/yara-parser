@@ -33,6 +33,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package grammar
 
 import (
+    "fmt"
     "io"
     "log"
     "os"
@@ -234,18 +235,22 @@ u?int(8|16|32)(be)? {
   s := strings.TrimRight(YYtext, "MKB")
   yylval.i64, err = strconv.ParseInt(s, 10, 64)
   if err != nil {
-      // TODO:
+      panic(fmt.Errorf("Number conversion error: %s", err))
   }
 
   if strings.HasSuffix(YYtext, "KB") {
       if yylval.i64 > math.MaxInt64 / 1024 {
-          // TODO: ERROR INTEGER OVERFLOW
+          err := fmt.Errorf("Integer overflow: %s; max %d",
+              YYtext, math.MaxInt64)
+          panic(err)
       } else {
           yylval.i64 *= 1024
       }
   } else if strings.HasSuffix(YYtext, "MB") {
       if yylval.i64 > math.MaxInt64 / 1048576 {
-          // TODO: ERROR INTEGER OVERFLOW
+          err := fmt.Errorf("Integer overflow: %s; max %d",
+              YYtext, math.MaxInt64)
+          panic(err)
       } else {
           yylval.i64 *= 1048576
       }
@@ -261,7 +266,7 @@ u?int(8|16|32)(be)? {
   var err error
   yylval.i64, err = strconv.ParseInt(YYtext, 0, 64)
   if err != nil {
-      // TODO:
+      panic(fmt.Errorf("Number conversion error: %s", err))
   }
 
   return _NUMBER_;
@@ -272,7 +277,7 @@ u?int(8|16|32)(be)? {
   s := strings.TrimLeft(YYtext, "0o")
   yylval.i64, err = strconv.ParseInt(s, 8, 64)
   if err != nil {
-      // TODO:
+      panic(fmt.Errorf("Number conversion error: %s", err))
   }
   return _NUMBER_;
 }
@@ -324,8 +329,6 @@ u?int(8|16|32)(be)? {
 
 
 <regexp>\/i?s?  {
-  // TODO: need an intermediate type to pull 'i' or 's'
-  // NOTE: textBuilder.String() will end with `/i?s?` char
   collectText = false
 
   s := textBuilder.String()
@@ -335,7 +338,7 @@ u?int(8|16|32)(be)? {
   
   var mods data.StringModifiers
 
-  for _, c := range []rune(YYtext) {
+  for _, c := range YYtext {
       switch c {
       case 'i':
           mods.I = true
@@ -347,7 +350,9 @@ u?int(8|16|32)(be)? {
           // Ignore
       
       default:
-          // TODO: Error
+          // Should be impossible
+          err := fmt.Errorf("Invalid regex modifier: %c", c)
+          panic(err)
       }
   }
 
