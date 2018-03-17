@@ -9,8 +9,8 @@ import (
 )
 
 const (
-	dupmeta = "../testdata/duplicate-meta.yar"
-	dupstr  = "../testdata/duplicate-strings.yar"
+	dupmeta = "duplicate-meta.yar"
+	dupstr  = "duplicate-strings.yar"
 )
 
 func TestDuplicateMeta(t *testing.T) {

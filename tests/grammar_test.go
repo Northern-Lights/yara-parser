@@ -9,7 +9,7 @@ import (
 	"github.com/Northern-Lights/yara-parser/grammar"
 )
 
-const testfile = "../testdata/ruleset.yar"
+const testfile = "ruleset.yar"
 
 var ruleset *data.RuleSet
 
