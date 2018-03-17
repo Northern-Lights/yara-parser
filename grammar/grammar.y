@@ -105,7 +105,7 @@ type regexPair struct {
     ss            []string
 
     rm            data.RuleModifiers
-    m             map[string]interface{}
+    m             data.Metas
     mp            metaPair
     mps           []metaPair
     mod           data.StringModifiers
@@ -189,10 +189,10 @@ meta
       }
     | _META_ _COLON_ meta_declarations
       {
-          $$ = make(map[string]interface{})
+          $$ = make(map[string][]interface{})
           for _, mpair := range $3 {
               // YARA is ok with duplicate keys; we follow suit
-              $$[mpair.key] = mpair.val
+              $$[mpair.key] = append($$[mpair.key], mpair.val)
           }
       }
     ;

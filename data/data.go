@@ -25,8 +25,9 @@ type RuleModifiers struct {
 }
 
 // Metas is a map which should only be used with values of type
-// int, string, bool.
-type Metas map[string]interface{}
+// int, string, bool.  Duplicate keys are allowed in YARA,
+// so the values will be appended to the slice of interfaces.
+type Metas map[string][]interface{}
 
 // String is a string, regex, or byte pair sequence
 type String struct {
