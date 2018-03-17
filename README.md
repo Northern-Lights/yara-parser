@@ -1,27 +1,41 @@
 # yara-parser
 
-`yara-parser` is a Go tool for manipulating YARA rulesets.  Its key feature is that it uses the same grammar and lexer files as the original libyara to ensure that no YARA feature is missed.
-
-Currently, the tool is very much in an under-development state.
+`yara-parser` is a Go library for manipulating YARA rulesets.  Its key feature is that it uses the same grammar and lexer files as the original libyara to ensure that lexing and parsing work exactly like YARA.  The grammar and lexer files have been modified to fill Go data structures for ruleset manipulation instead of compiling rulesets for data matching.
 
 Using `yara-parser`, one will be able to read YARA rulesets to programatically change metadata, rule names, rule modifiers, tags, strings, and more.
 
-The ability to serialize to JSON for rule manipulation in other languages will be provided, as well.
+The ability to serialize rulesets to JSON for rule manipulation in other languages is provided with the `y2j` tool.
 
 ## Installation
 
-The installation process/methodology is not yet complete.  Currently, there is a `Makefile` which will build the parser, lexer, and main application.  For this to work, the following are needed:
+### `y2j`: YARA to JSON
+
+Use the following command to install the `y2j` command for converting YARA rulesets to JSON.
+
+`go get -u github.com/Northern-Lights/yara-parser/cmd/y2j`
+
+Of course, this will install `y2j` to `$GOPATH/bin`, so ensure that the latter is in your `$PATH`.
+
+The grammar and lexer files are frozen so that building them with `goyacc` and `flexgo` are not necessary.
+
+### Grammar Library
+
+Use the following command to install the grammar library for deserializing YARA rulesets without installing `y2j`.
+
+`go get -u github.com/Northern-Lights/yara-parser/grammar`
+
+## Development
+
+Currently, there is a `Makefile` which will build the parser, lexer, and main application.  For this to work, the following are needed:
 
 | Command | Source (`go get`) |
 | - | - |
 | `goyacc` | `golang.org/x/tools/cmd/goyacc` |
-| `flexgo` | `github.com/pebbe/flexgo` (May require gcc/C build tools)|
+| `flexgo` | `github.com/pebbe/flexgo` (Tool must be built manually)|
 
-In the future, the `parser.go` and `lexer.go` files will be frozen and included in the repository when releases are tagged.  This way, a user will not need to build these components.
+## Go Usage
 
-## Usage
-
-Sample usage looks like the following:
+Sample usage for working with rulesets in Go looks like the following:
 
 ```go
 package main
