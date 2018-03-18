@@ -57,8 +57,14 @@ func TestString(t *testing.T) {
 		stringID = "$s1"
 	)
 	for _, rule := range ruleset.Rules {
-		if rule.Identifier == ruleName && rule.Strings[stringID] != nil {
-			return
+		if rule.Identifier == ruleName {
+			for _, s := range rule.Strings {
+				if s.ID == stringID {
+					return
+				}
+			}
+			t.Fatalf(`Ruleset "%s" rule "%s" has no string "%s"`,
+				testfile, ruleName, stringID)
 		}
 	}
 
@@ -106,22 +112,22 @@ func TestMeta(t *testing.T) {
 	const ruleName = "META"
 	for _, rule := range ruleset.Rules {
 		if rule.Identifier == ruleName {
-			if rule.Meta != nil {
-				var (
-					_, s  = rule.Meta["meta_str"]
-					_, i  = rule.Meta["meta_int"]
-					_, n  = rule.Meta["meta_neg"]
-					_, tr = rule.Meta["meta_true"]
-					_, f  = rule.Meta["meta_false"]
-				)
-				if s && i && n && tr && f {
-					return
-				}
-				t.Fatalf(`Ruleset "%s" rule "%s" does not contain all metas`,
-					testfile, ruleName)
+			checklist := make(map[string]bool)
+			for _, kvp := range rule.Meta {
+				checklist[kvp.Key] = true
 			}
-			t.Fatalf(`Ruleset "%s" rule "%s" has no metadata`,
-				testfile, ruleName)
+
+			expecteds := []string{
+				"meta_str", "meta_int", "meta_neg", "meta_true", "meta_false",
+			}
+
+			for _, expected := range expecteds {
+				if !checklist[expected] {
+					t.Errorf(`Ruleset "%s" rule "%s" missing expected meta "%s"`,
+						testfile, rule.Identifier, expected)
+				}
+			}
+			return
 		}
 	}
 

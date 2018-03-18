@@ -8,14 +8,7 @@ import (
     "github.com/Northern-Lights/yara-parser/data"
 )
 
-var (
-    ParsedRuleset data.RuleSet
-)
-
-type metaPair struct {
-    key string
-    val interface{}
-}
+var ParsedRuleset data.RuleSet
 
 type regexPair struct {
     text string
@@ -106,12 +99,12 @@ type regexPair struct {
 
     rm            data.RuleModifiers
     m             data.Metas
-    mp            metaPair
-    mps           []metaPair
+    mp            data.Meta
+    mps           data.Metas
     mod           data.StringModifiers
     reg           regexPair
     ys            data.String
-    yss           []data.String
+    yss           data.Strings
     yr            data.Rule
 }
 
@@ -158,17 +151,24 @@ rule
       tags _LBRACE_ meta strings
       {
           // $4 is the rule created in above action
-          // Can we access using $<rule>4?
           $<yr>4.Tags = $5
           $<yr>4.Meta = $7
-          $<yr>4.Strings = make(map[string]*data.String)
+          $<yr>4.Strings = $8
+
+          // Forbid duplicate string IDs, except `$` (anonymous)
+          idx := make(map[string]struct{})
           for _, s := range $8 {
-              if _, had := $<yr>4.Strings[s.ID]; had {
-                  err := fmt.Errorf(`duplicated string identifier "%s"`, s.ID)
-                  panic(err)
+              if s.ID == "$" {
+                  continue
               }
-              s := s
-              $<yr>4.Strings[s.ID] = &s
+              if _, had := idx[s.ID]; had {
+                  msg := fmt.Sprintf(
+                    `grammar: Rule "%s" has duplicated string "%s"`,
+                    $<yr>4.Identifier,
+                    s.ID)
+                  panic(msg)
+              }
+              idx[s.ID] = struct{}{}
           }
       }
       condition _RBRACE_
@@ -189,10 +189,10 @@ meta
       }
     | _META_ _COLON_ meta_declarations
       {
-          $$ = make(map[string][]interface{})
+          $$ = make(data.Metas, 0, len($3))
           for _, mpair := range $3 {
               // YARA is ok with duplicate keys; we follow suit
-              $$[mpair.key] = append($$[mpair.key], mpair.val)
+              $$ = append($$, mpair)
           }
       }
     ;
@@ -201,7 +201,7 @@ meta
 strings
     : /* empty */
       {
-          $$ = []data.String{}
+          $$ = data.Strings{}
       }
     | _STRINGS_ _COLON_ string_declarations
       {
@@ -256,7 +256,7 @@ tag_list
 
 
 meta_declarations
-    : meta_declaration                    { $$ = []metaPair{$1} }
+    : meta_declaration                    { $$ = data.Metas{$1} }
     | meta_declarations meta_declaration  { $$ = append($$, $2)}
     ;
 
@@ -264,29 +264,29 @@ meta_declarations
 meta_declaration
     : _IDENTIFIER_ _EQUAL_SIGN_ _TEXT_STRING_
       {
-          $$ = metaPair{$1, $3}
+          $$ = data.Meta{$1, $3}
       }
     | _IDENTIFIER_ _EQUAL_SIGN_ _NUMBER_
       {
-          $$ = metaPair{$1, $3}
+          $$ = data.Meta{$1, $3}
       }
     | _IDENTIFIER_ _EQUAL_SIGN_ _MINUS_ _NUMBER_
       {
-          $$ = metaPair{$1, -$4}
+          $$ = data.Meta{$1, -$4}
       }
     | _IDENTIFIER_ _EQUAL_SIGN_ _TRUE_
       {
-          $$ = metaPair{$1, true}
+          $$ = data.Meta{$1, true}
       }
     | _IDENTIFIER_ _EQUAL_SIGN_ _FALSE_
       {
-          $$ = metaPair{$1, false}
+          $$ = data.Meta{$1, false}
       }
     ;
 
 
 string_declarations
-    : string_declaration                      { $$ = []data.String{$1} }
+    : string_declaration                      { $$ = data.Strings{$1} }
     | string_declarations string_declaration  { $$ = append($1, $2) }
     ;
 

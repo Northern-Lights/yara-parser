@@ -9,8 +9,9 @@ import (
 )
 
 const (
-	dupmeta = "duplicate-meta.yar"
-	dupstr  = "duplicate-strings.yar"
+	dupmeta    = "duplicate-meta.yar"
+	dupstr     = "duplicate-strings.yar"
+	dupstranon = "duplicate-strings-anon.yar"
 )
 
 func TestDuplicateMeta(t *testing.T) {
@@ -32,14 +33,19 @@ func TestDuplicateMeta(t *testing.T) {
 	var (
 		rule  = ruleset.Rules[0]
 		key   = "description"
-		vals  = rule.Meta[key]
-		nvals = len(vals)
+		nvals = len(rule.Meta)
 	)
-	const expectedVals = 3
+	const expectedVals = 4
 
 	if nvals != expectedVals {
 		t.Fatalf(`Rule "%s" in ruleset "%s" has %d metas for key "%s"; expected %d`,
 			rule.Identifier, dupmeta, nvals, key, expectedVals)
+	}
+
+	for _, meta := range rule.Meta {
+		if meta.Key != key {
+			t.Errorf(`Expecting all keys to be "%s"; found "%s"`, key, meta.Key)
+		}
 	}
 }
 

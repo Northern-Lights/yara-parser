@@ -10,12 +10,12 @@ type RuleSet struct {
 
 // A Rule is a single yara rule
 type Rule struct {
-	Modifiers  RuleModifiers      `json:"modifiers"`
-	Identifier string             `json:"identifier"`
-	Tags       []string           `json:"tags"`
-	Meta       Metas              `json:"meta"`
-	Strings    map[string]*String `json:"strings"`
-	Condition  string             `json:"condition"`
+	Modifiers  RuleModifiers `json:"modifiers"`
+	Identifier string        `json:"identifier"`
+	Tags       []string      `json:"tags"`
+	Meta       Metas         `json:"meta"`
+	Strings    Strings       `json:"strings"`
+	Condition  string        `json:"condition"`
 }
 
 // RuleModifiers denote whether a Rule is global, private, neither, or both.
@@ -24,10 +24,19 @@ type RuleModifiers struct {
 	Private bool `json:"private"`
 }
 
-// Metas is a map which should only be used with values of type
-// int, string, bool.  Duplicate keys are allowed in YARA,
-// so the values will be appended to the slice of interfaces.
-type Metas map[string][]interface{}
+// Metas are slices of Meta. A single Meta may be duplicated within Metas.
+type Metas []Meta
+
+// A Meta is a simple key/value pair. Val should be restricted to
+// int, string, and bool.
+type Meta struct {
+	Key string
+	Val interface{}
+}
+
+// Strings are slices of String. No two String structs may have the same
+// identifier within a Strings, except for the $ anonymous identifier.
+type Strings []String
 
 // String is a string, regex, or byte pair sequence
 type String struct {

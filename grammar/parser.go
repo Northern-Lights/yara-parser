@@ -11,21 +11,14 @@ import (
 	"github.com/Northern-Lights/yara-parser/data"
 )
 
-var (
-	ParsedRuleset data.RuleSet
-)
-
-type metaPair struct {
-	key string
-	val interface{}
-}
+var ParsedRuleset data.RuleSet
 
 type regexPair struct {
 	text string
 	mods data.StringModifiers
 }
 
-//line grammar/grammar.y:102
+//line grammar/grammar.y:95
 type xxSymType struct {
 	yys int
 	i64 int64
@@ -34,12 +27,12 @@ type xxSymType struct {
 
 	rm  data.RuleModifiers
 	m   data.Metas
-	mp  metaPair
-	mps []metaPair
+	mp  data.Meta
+	mps data.Metas
 	mod data.StringModifiers
 	reg regexPair
 	ys  data.String
-	yss []data.String
+	yss data.Strings
 	yr  data.Rule
 }
 
@@ -737,69 +730,76 @@ xxdefault:
 
 	case 2:
 		xxDollar = xxS[xxpt-2 : xxpt+1]
-		//line grammar/grammar.y:123
+		//line grammar/grammar.y:116
 		{
 			ParsedRuleset.Rules = append(ParsedRuleset.Rules, xxDollar[2].yr)
 		}
 	case 3:
 		xxDollar = xxS[xxpt-2 : xxpt+1]
-		//line grammar/grammar.y:126
+		//line grammar/grammar.y:119
 		{
 			ParsedRuleset.Imports = append(ParsedRuleset.Imports, xxDollar[2].s)
 		}
 	case 4:
 		xxDollar = xxS[xxpt-3 : xxpt+1]
-		//line grammar/grammar.y:129
+		//line grammar/grammar.y:122
 		{
 			ParsedRuleset.Includes = append(ParsedRuleset.Includes, xxDollar[3].s)
 		}
 	case 5:
 		xxDollar = xxS[xxpt-3 : xxpt+1]
-		//line grammar/grammar.y:132
+		//line grammar/grammar.y:125
 		{
 			ParsedRuleset.Rules = append(ParsedRuleset.Rules, xxDollar[3].yr)
 		}
 	case 6:
 		xxDollar = xxS[xxpt-3 : xxpt+1]
-		//line grammar/grammar.y:135
+		//line grammar/grammar.y:128
 		{
 			ParsedRuleset.Imports = append(ParsedRuleset.Imports, xxDollar[3].s)
 		}
 	case 7:
 		xxDollar = xxS[xxpt-4 : xxpt+1]
-		//line grammar/grammar.y:138
+		//line grammar/grammar.y:131
 		{
 			ParsedRuleset.Includes = append(ParsedRuleset.Includes, xxDollar[4].s)
 		}
 	case 8:
 		xxDollar = xxS[xxpt-2 : xxpt+1]
-		//line grammar/grammar.y:146
+		//line grammar/grammar.y:139
 		{
 			xxVAL.s = xxDollar[2].s
 		}
 	case 9:
 		xxDollar = xxS[xxpt-3 : xxpt+1]
-		//line grammar/grammar.y:154
+		//line grammar/grammar.y:147
 		{
 			xxVAL.yr.Modifiers = xxDollar[1].rm
 			xxVAL.yr.Identifier = xxDollar[3].s
 		}
 	case 10:
 		xxDollar = xxS[xxpt-8 : xxpt+1]
-		//line grammar/grammar.y:159
+		//line grammar/grammar.y:152
 		{
 			// $4 is the rule created in above action
-			// Can we access using $<rule>4?
 			xxDollar[4].yr.Tags = xxDollar[5].ss
 			xxDollar[4].yr.Meta = xxDollar[7].m
-			xxDollar[4].yr.Strings = make(map[string]*data.String)
+			xxDollar[4].yr.Strings = xxDollar[8].yss
+
+			// Forbid duplicate string IDs, except `$` (anonymous)
+			idx := make(map[string]struct{})
 			for _, s := range xxDollar[8].yss {
-				if _, had := xxDollar[4].yr.Strings[s.ID]; had {
-					err := fmt.Errorf(`duplicated string identifier "%s"`, s.ID)
-					panic(err)
+				if s.ID == "$" {
+					continue
 				}
-				s := s
-				xxDollar[4].yr.Strings[s.ID] = &s
+				if _, had := idx[s.ID]; had {
+					msg := fmt.Sprintf(
+						`grammar: Rule "%s" has duplicated string "%s"`,
+						xxDollar[4].yr.Identifier,
+						s.ID)
+					panic(msg)
+				}
+				idx[s.ID] = struct{}{}
 			}
 		}
 	case 11:
@@ -822,17 +822,17 @@ xxdefault:
 		xxDollar = xxS[xxpt-3 : xxpt+1]
 		//line grammar/grammar.y:191
 		{
-			xxVAL.m = make(map[string][]interface{})
+			xxVAL.m = make(data.Metas, 0, len(xxDollar[3].mps))
 			for _, mpair := range xxDollar[3].mps {
 				// YARA is ok with duplicate keys; we follow suit
-				xxVAL.m[mpair.key] = append(xxVAL.m[mpair.key], mpair.val)
+				xxVAL.m = append(xxVAL.m, mpair)
 			}
 		}
 	case 14:
 		xxDollar = xxS[xxpt-0 : xxpt+1]
 		//line grammar/grammar.y:203
 		{
-			xxVAL.yss = []data.String{}
+			xxVAL.yss = data.Strings{}
 		}
 	case 15:
 		xxDollar = xxS[xxpt-3 : xxpt+1]
@@ -893,7 +893,7 @@ xxdefault:
 		xxDollar = xxS[xxpt-1 : xxpt+1]
 		//line grammar/grammar.y:259
 		{
-			xxVAL.mps = []metaPair{xxDollar[1].mp}
+			xxVAL.mps = data.Metas{xxDollar[1].mp}
 		}
 	case 26:
 		xxDollar = xxS[xxpt-2 : xxpt+1]
@@ -905,37 +905,37 @@ xxdefault:
 		xxDollar = xxS[xxpt-3 : xxpt+1]
 		//line grammar/grammar.y:266
 		{
-			xxVAL.mp = metaPair{xxDollar[1].s, xxDollar[3].s}
+			xxVAL.mp = data.Meta{xxDollar[1].s, xxDollar[3].s}
 		}
 	case 28:
 		xxDollar = xxS[xxpt-3 : xxpt+1]
 		//line grammar/grammar.y:270
 		{
-			xxVAL.mp = metaPair{xxDollar[1].s, xxDollar[3].i64}
+			xxVAL.mp = data.Meta{xxDollar[1].s, xxDollar[3].i64}
 		}
 	case 29:
 		xxDollar = xxS[xxpt-4 : xxpt+1]
 		//line grammar/grammar.y:274
 		{
-			xxVAL.mp = metaPair{xxDollar[1].s, -xxDollar[4].i64}
+			xxVAL.mp = data.Meta{xxDollar[1].s, -xxDollar[4].i64}
 		}
 	case 30:
 		xxDollar = xxS[xxpt-3 : xxpt+1]
 		//line grammar/grammar.y:278
 		{
-			xxVAL.mp = metaPair{xxDollar[1].s, true}
+			xxVAL.mp = data.Meta{xxDollar[1].s, true}
 		}
 	case 31:
 		xxDollar = xxS[xxpt-3 : xxpt+1]
 		//line grammar/grammar.y:282
 		{
-			xxVAL.mp = metaPair{xxDollar[1].s, false}
+			xxVAL.mp = data.Meta{xxDollar[1].s, false}
 		}
 	case 32:
 		xxDollar = xxS[xxpt-1 : xxpt+1]
 		//line grammar/grammar.y:289
 		{
-			xxVAL.yss = []data.String{xxDollar[1].ys}
+			xxVAL.yss = data.Strings{xxDollar[1].ys}
 		}
 	case 33:
 		xxDollar = xxS[xxpt-2 : xxpt+1]
