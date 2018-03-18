@@ -152,11 +152,25 @@ rule
       {
           // $4 is the rule created in above action
           $<yr>4.Tags = $5
+
+          // Forbid duplicate tags
+          idx := make(map[string]struct{})
+          for _, t := range $5 {
+              if _, had := idx[t]; had {
+                  msg := fmt.Sprintf(`grammar: Rule "%s" has duplicate tag "%s"`,
+                      $<yr>4.Identifier,
+                      t)
+                  panic(msg)
+              }
+              idx[t] = struct{}{}
+          }
+
           $<yr>4.Meta = $7
+
           $<yr>4.Strings = $8
 
           // Forbid duplicate string IDs, except `$` (anonymous)
-          idx := make(map[string]struct{})
+          idx = make(map[string]struct{})
           for _, s := range $8 {
               if s.ID == "$" {
                   continue
