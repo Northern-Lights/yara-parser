@@ -12,6 +12,7 @@ const (
 	dupmeta    = "duplicate-meta.yar"
 	dupstr     = "duplicate-strings.yar"
 	dupstranon = "duplicate-strings-anon.yar"
+	duptag     = "duplicate-tags.yar"
 )
 
 func TestDuplicateMeta(t *testing.T) {
@@ -60,5 +61,31 @@ func TestDuplicateStrings(t *testing.T) {
 		t.Fatalf(`Parsing ruleset "%s" should have failed with duplicate strings`, dupstr)
 	} else if !strings.Contains(err.Error(), "duplicate") {
 		t.Fatalf(`Parsing ruleset "%s" yielded non-duplicate string error: %s`, dupstr, err)
+	}
+}
+
+func TestDuplicateStringsAnonymous(t *testing.T) {
+	f, err := os.Open(dupstranon)
+	if err != nil {
+		t.Fatalf(`Couldn't open str anon ruleset "%s": %s`, dupstranon, err)
+	}
+
+	_, err = grammar.Parse(f, os.Stderr)
+	if err != nil {
+		t.Fatalf(`Parsing ruleset "%s" failed: %s`, dupstranon, err)
+	}
+}
+
+func TestDuplicateTags(t *testing.T) {
+	f, err := os.Open(duptag)
+	if err != nil {
+		t.Fatalf(`Couldn't open dup tag ruleset "%s": %s`, duptag, err)
+	}
+
+	_, err = grammar.Parse(f, os.Stderr)
+	if err == nil {
+		t.Fatalf(`Parsing ruleset "%s" should have failed with duplicate tags`, duptag)
+	} else if !strings.Contains(err.Error(), "duplicate") {
+		t.Fatalf(`Parsing ruleset "%s" yielded non-duplicate tag error: %s`, duptag, err)
 	}
 }
