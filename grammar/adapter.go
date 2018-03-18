@@ -55,5 +55,6 @@ func (l *Lexer) Lex(lval *xxSymType) int {
 // Error satisfies the interface expected of the goyacc parser.
 // Here, it simply writes the error to stdout.
 func (l *Lexer) Error(e string) {
-	errParser = fmt.Errorf(`Lexical error: "%s"`, e)
+	errParser = fmt.Errorf(`grammar: lexical error @%d: "%s"`,
+		l.lexer.Lineno, e)
 }
