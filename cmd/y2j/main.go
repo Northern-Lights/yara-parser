@@ -28,12 +28,6 @@ func main() {
 	}
 	ruleset.File = opts.Infile
 
-	jdata, err := json.MarshalIndent(&ruleset, "", "   ")
-	if err != nil {
-		perror(`Couldn't marshal ruleset to JSON: %s`, err)
-		os.Exit(4)
-	}
-
 	// Set output to stdout if not specified; otherwise file
 	var out io.Writer
 	if opts.Outfile == "" {
@@ -48,9 +42,12 @@ func main() {
 		out = f
 	}
 
-	_, err = out.Write(jdata)
+	enc := json.NewEncoder(out)
+	enc.SetEscapeHTML(false)
+	enc.SetIndent("", "   ")
+	err = enc.Encode(&ruleset)
 	if err != nil {
-		perror(`Couldn't write JSON data to "%s"`, opts.Outfile)
+		perror(`Error writing JSON: %s`, err)
 		os.Exit(6)
 	}
 }
