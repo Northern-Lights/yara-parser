@@ -138,6 +138,14 @@ rule
       {
           $$.Modifiers = $1
           $$.Identifier = $3
+
+          // Forbid duplicate rules
+          for _, r := range ParsedRuleset.Rules {
+              if $3 == r.Identifier {
+                  err := fmt.Errorf(`Duplicate rule "%s"`, $3)
+                  panic(err)
+              }
+          }
       }
       tags _LBRACE_ meta strings
       {
