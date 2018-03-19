@@ -122,15 +122,6 @@ rules
     | rules _INCLUDE_ _TEXT_STRING_ {
         ParsedRuleset.Includes = append(ParsedRuleset.Includes, $3)
     }
-    | rules error rule {
-        ParsedRuleset.Rules = append(ParsedRuleset.Rules, $3)
-    }
-    | rules error import {
-        ParsedRuleset.Imports = append(ParsedRuleset.Imports, $3)
-    }
-    | rules error _INCLUDE_ _TEXT_STRING_ {
-        ParsedRuleset.Includes = append(ParsedRuleset.Includes, $4)
-    }
     ;
 
 
