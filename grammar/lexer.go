@@ -2265,16 +2265,14 @@ case 90:
 //line grammar/lexer.l:414
 {
 
-  /*
-  if (yytext[0] >= 32 && yytext[0] < 127)
-  {
-    return yytext[0];
+  r := int(yytext[0])
+
+  if r >= 32 && r < 127 {
+    return r
   }
-  else
-  {
-    syntax_error("non-ascii character");
-  }
-  */
+
+  err := fmt.Errorf("non-ascii byte '%d'", r)
+  panic(err)
 }
 case 91:
 
@@ -2290,9 +2288,9 @@ case 91:
   }
 
 
-//line grammar/lexer.l:428
+//line grammar/lexer.l:426
 yyout.Write(yytext) 
-//line grammar/lexer.go:2296
+//line grammar/lexer.go:2294
 // SKEL ----------------------------------------------------------------
 
 		case yyEndOfBuffer:
@@ -2753,7 +2751,7 @@ func YYmain(filenames ...string) (interface{}, error) {
 }
 
 // END OF SKELL --------------------------------------------------------
-//line grammar/lexer.l:428
+//line grammar/lexer.l:426
 
 
 

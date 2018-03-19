@@ -413,16 +413,14 @@ u?int(8|16|32)(be)? {
 
 .   {
 
-  /*
-  if (yytext[0] >= 32 && yytext[0] < 127)
-  {
-    return yytext[0];
+  r := int(yytext[0])
+
+  if r >= 32 && r < 127 {
+    return r
   }
-  else
-  {
-    syntax_error("non-ascii character");
-  }
-  */
+
+  err := fmt.Errorf("non-ascii byte '%d'", r)
+  panic(err)
 }
 
 %%
