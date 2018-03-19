@@ -13,7 +13,24 @@ const (
 	dupstr     = "duplicate-strings.yar"
 	dupstranon = "duplicate-strings-anon.yar"
 	duptag     = "duplicate-tags.yar"
+	duprule    = "duplicate-rules.yar"
 )
+
+func TestDuplicateRules(t *testing.T) {
+	f, err := os.Open(duprule)
+	if err != nil {
+		t.Fatalf(`Couldn't open dup rules ruleset "%s": %s`, duprule, err)
+	}
+
+	_, err = grammar.Parse(f, os.Stderr)
+	if err == nil {
+		t.Fatalf(`Parsing ruleset "%s" should have failed with duplicate rules`,
+			duprule)
+	} else if !strings.Contains(strings.ToLower(err.Error()), "duplicate") {
+		t.Fatalf(`Parsing ruleset "%s" failed with error other than duplicate rules: %s`,
+			duprule, err)
+	}
+}
 
 func TestDuplicateMeta(t *testing.T) {
 	f, err := os.Open(dupmeta)
