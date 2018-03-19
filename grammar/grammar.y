@@ -56,26 +56,20 @@ type regexPair struct {
 %token _TRUE_
 %token _FALSE_
 
-%token _LPAREN_ _RPAREN_
 %token _LBRACE_ _RBRACE_
-%token _LBRACKET_ _RBRACKET_
-%token _COLON_
-%token _DOT_
-%token _EQUAL_SIGN_
-%token _COMMA_
 %token _INCLUDE_
 
 %left _OR_
 %left _AND_
-%left _PIPE_
-%left _CARAT_
-%left _AMP_
+%left '|'
+%left '^'
+%left '&'
 %left _EQ_ _NEQ_
 %left _LT_ _LE_ _GT_ _GE_
 %left _SHIFT_LEFT_ _SHIFT_RIGHT_
-%left _PLUS_ _MINUS_
-%left _ASTERISK_ _BACKSLASH_ _PERCENT_
-%right _NOT_ _TILDE_ UNARY_MINUS
+%left '+' '-'
+%left '*' '\\' '%'
+%right _NOT_ '~' UNARY_MINUS
 
 %type <s>   import
 %type <yr>  rule
@@ -200,7 +194,7 @@ meta
       {
         
       }
-    | _META_ _COLON_ meta_declarations
+    | _META_ ':' meta_declarations
       {
           $$ = make(data.Metas, 0, len($3))
           for _, mpair := range $3 {
@@ -216,7 +210,7 @@ strings
       {
           $$ = data.Strings{}
       }
-    | _STRINGS_ _COLON_ string_declarations
+    | _STRINGS_ ':' string_declarations
       {
           $$ = $3
       }
@@ -224,7 +218,7 @@ strings
 
 
 condition
-    : _CONDITION_ _COLON_ boolean_expression
+    : _CONDITION_ ':' boolean_expression
     ;
 
 
@@ -248,7 +242,7 @@ tags
       {
           $$ = []string{}
       }
-    | _COLON_ tag_list
+    | ':' tag_list
       {
           $$ = $2
       }
@@ -275,23 +269,23 @@ meta_declarations
 
 
 meta_declaration
-    : _IDENTIFIER_ _EQUAL_SIGN_ _TEXT_STRING_
+    : _IDENTIFIER_ '=' _TEXT_STRING_
       {
           $$ = data.Meta{$1, $3}
       }
-    | _IDENTIFIER_ _EQUAL_SIGN_ _NUMBER_
+    | _IDENTIFIER_ '=' _NUMBER_
       {
           $$ = data.Meta{$1, $3}
       }
-    | _IDENTIFIER_ _EQUAL_SIGN_ _MINUS_ _NUMBER_
+    | _IDENTIFIER_ '=' '-' _NUMBER_
       {
           $$ = data.Meta{$1, -$4}
       }
-    | _IDENTIFIER_ _EQUAL_SIGN_ _TRUE_
+    | _IDENTIFIER_ '=' _TRUE_
       {
           $$ = data.Meta{$1, true}
       }
-    | _IDENTIFIER_ _EQUAL_SIGN_ _FALSE_
+    | _IDENTIFIER_ '=' _FALSE_
       {
           $$ = data.Meta{$1, false}
       }
@@ -305,7 +299,7 @@ string_declarations
 
 
 string_declaration
-    : _STRING_IDENTIFIER_ _EQUAL_SIGN_
+    : _STRING_IDENTIFIER_ '='
       {
           $$.Type = data.TypeString
           $$.ID = $1
@@ -317,7 +311,7 @@ string_declaration
 
           $$ = $<ys>3
       }
-    | _STRING_IDENTIFIER_ _EQUAL_SIGN_
+    | _STRING_IDENTIFIER_ '='
       {
           $$.Type = data.TypeRegex
           $$.ID = $1
@@ -333,7 +327,7 @@ string_declaration
 
           $$ = $<ys>3
       }
-    | _STRING_IDENTIFIER_ _EQUAL_SIGN_ _HEX_STRING_
+    | _STRING_IDENTIFIER_ '=' _HEX_STRING_
       {
           $$.Type = data.TypeHexString
           $$.ID = $1
@@ -368,16 +362,16 @@ identifier
       {
         
       }
-    | identifier _DOT_ _IDENTIFIER_
+    | identifier '.' _IDENTIFIER_
       {
         
       }
-    | identifier _LBRACKET_ primary_expression _RBRACKET_
+    | identifier '[' primary_expression ']'
       {
         
       }
 
-    | identifier _LPAREN_ arguments _RPAREN_
+    | identifier '(' arguments ')'
       {
         
       }
@@ -394,7 +388,7 @@ arguments_list
       {
         
       }
-    | arguments_list _COMMA_ expression
+    | arguments_list ',' expression
       {
         
       }
@@ -453,19 +447,19 @@ expression
       {
         
       }
-      integer_set _COLON_
+      integer_set ':'
       {
         
       }
-      _LPAREN_ boolean_expression _RPAREN_
+      '(' boolean_expression ')'
       {
         
       }
-    | _FOR_ for_expression _OF_ string_set _COLON_
+    | _FOR_ for_expression _OF_ string_set ':'
       {
         
       }
-      _LPAREN_ boolean_expression _RPAREN_
+      '(' boolean_expression ')'
       {
         
       }
@@ -521,7 +515,7 @@ expression
       {
         
       }
-    |_LPAREN_ expression _RPAREN_
+    |'(' expression ')'
       {
         
       }
@@ -529,13 +523,13 @@ expression
 
 
 integer_set
-    : _LPAREN_ integer_enumeration _RPAREN_  { }
+    : '(' integer_enumeration ')'  { }
     | range                        { }
     ;
 
 
 range
-    : _LPAREN_ primary_expression _DOT_DOT_  primary_expression _RPAREN_
+    : '(' primary_expression _DOT_DOT_  primary_expression ')'
       {
         
       }
@@ -547,7 +541,7 @@ integer_enumeration
       {
         
       }
-    | integer_enumeration _COMMA_ primary_expression
+    | integer_enumeration ',' primary_expression
       {
         
       }
@@ -555,11 +549,11 @@ integer_enumeration
 
 
 string_set
-    : _LPAREN_
+    : '('
       {
         
       }
-      string_enumeration _RPAREN_
+      string_enumeration ')'
     | _THEM_
       {
         
@@ -569,7 +563,7 @@ string_set
 
 string_enumeration
     : string_enumeration_item
-    | string_enumeration _COMMA_ string_enumeration_item
+    | string_enumeration ',' string_enumeration_item
     ;
 
 
@@ -599,7 +593,7 @@ for_expression
 
 
 primary_expression
-    : _LPAREN_ primary_expression _RPAREN_
+    : '(' primary_expression ')'
       {
         
       }
@@ -611,7 +605,7 @@ primary_expression
       {
         
       }
-    | _INTEGER_FUNCTION_ _LPAREN_ primary_expression _RPAREN_
+    | _INTEGER_FUNCTION_ '(' primary_expression ')'
       {
         
       }
@@ -631,7 +625,7 @@ primary_expression
       {
         
       }
-    | _STRING_OFFSET_ _LBRACKET_ primary_expression _RBRACKET_
+    | _STRING_OFFSET_ '[' primary_expression ']'
       {
         
       }
@@ -639,7 +633,7 @@ primary_expression
       {
         
       }
-    | _STRING_LENGTH_ _LBRACKET_ primary_expression _RBRACKET_
+    | _STRING_LENGTH_ '[' primary_expression ']'
       {
         
       }
@@ -651,43 +645,43 @@ primary_expression
       {
         
       }
-    | _MINUS_ primary_expression %prec UNARY_MINUS
+    | '-' primary_expression %prec UNARY_MINUS
       {
         
       }
-    | primary_expression _PLUS_ primary_expression
+    | primary_expression '+' primary_expression
       {
         
       }
-    | primary_expression _MINUS_ primary_expression
+    | primary_expression '-' primary_expression
       {
         
       }
-    | primary_expression _ASTERISK_ primary_expression
+    | primary_expression '*' primary_expression
       {
         
       }
-    | primary_expression _BACKSLASH_ primary_expression
+    | primary_expression '\\' primary_expression
       {
         
       }
-    | primary_expression _PERCENT_ primary_expression
+    | primary_expression '%' primary_expression
       {
         
       }
-    | primary_expression _CARAT_ primary_expression
+    | primary_expression '^' primary_expression
       {
         
       }
-    | primary_expression _AMP_ primary_expression
+    | primary_expression '&' primary_expression
       {
         
       }
-    | primary_expression _PIPE_ primary_expression
+    | primary_expression '|' primary_expression
       {
         
       }
-    | _TILDE_ primary_expression
+    | '~' primary_expression
       {
         
       }
