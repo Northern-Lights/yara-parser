@@ -454,6 +454,10 @@ expression
       {
         
       }
+      integer_set _COLON_
+      {
+        
+      }
       _LPAREN_ boolean_expression _RPAREN_
       {
         
