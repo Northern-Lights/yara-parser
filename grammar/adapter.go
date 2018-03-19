@@ -20,6 +20,9 @@ func init() {
 func Parse(input io.Reader, output io.Writer) (rs data.RuleSet, err error) {
 	defer recoverParse(&err)
 
+	// "Reset" the global ParsedRuleset
+	ParsedRuleset = data.RuleSet{}
+
 	lexer := Lexer{
 		lexer: *NewScanner(),
 	}
@@ -33,7 +36,6 @@ func Parse(input io.Reader, output io.Writer) (rs data.RuleSet, err error) {
 	}
 
 	rs = ParsedRuleset
-	ParsedRuleset = data.RuleSet{} // "Reset"...
 
 	return
 }
