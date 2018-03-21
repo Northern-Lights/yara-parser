@@ -24,14 +24,137 @@ Use the following command to install the grammar library for deserializing YARA 
 
 `go get -u github.com/Northern-Lights/yara-parser/grammar`
 
-## Development
+## `y2j` Usage
 
-Currently, there is a `Makefile` which will build the parser, lexer, and main application.  For this to work, the following are needed:
+Command line usage for `y2j` looks like the following:
 
-| Command | Source (`go get`) |
+```
+$ y2j --help            
+Usage of y2j: y2j [options] file.yar
+
+options:
+
+  -o string               
+        JSON output file
+```
+
+In action, `y2j` would convert the following ruleset:
+
+```yara
+import "pe"
+import "cuckoo"
+
+include "other.yar"
+
+global rule demo : tag1 {
+meta:
+    description = "This is a demo rule"
+    version = 1
+    production = false
+    description = "because we can"
+strings:
+    $string = "this is a string" nocase wide
+    $regex = /this is a regex/i ascii fullword
+    $hex = { 01 23 45 67 89 ab cd ef [0-5] ?1 ?2 ?3 }
+condition:
+    $string or $regex or $hex
+}
+```
+
+to this JSON output:
+
+```json
+{
+   "file": "sample.yar",
+   "imports": [
+      "pe",
+      "cuckoo"
+   ],
+   "includes": [
+      "other.yar"
+   ],
+   "rules": [
+      {
+         "modifiers": {
+            "global": true,
+            "private": false
+         },
+         "identifier": "demo",
+         "tags": [
+            "tag1"
+         ],
+         "meta": [
+            {
+               "Key": "description",
+               "Val": "This is a demo rule"
+            },
+            {
+               "Key": "version",
+               "Val": 1
+            },
+            {
+               "Key": "production",
+               "Val": false
+            },
+            {
+               "Key": "description",
+               "Val": "because we can"
+            }
+         ],
+         "strings": [
+            {
+               "id": "$string",
+               "type": 0,
+               "text": "this is a string",
+               "modifiers": {
+                  "nocase": true,
+                  "ascii": false,
+                  "wide": true,
+                  "fullword": false,
+                  "i": false,
+                  "s": false
+               }
+            },
+            {
+               "id": "$regex",
+               "type": 2,
+               "text": "this is a regex",
+               "modifiers": {
+                  "nocase": false,
+                  "ascii": true,
+                  "wide": true,
+                  "fullword": true,
+                  "i": true,
+                  "s": false
+               }
+            },
+            {
+               "id": "$hex",
+               "type": 1,
+               "text": " 01 23 45 67 89 ab cd ef [0-5] ?1 ?2 ?3 ",
+               "modifiers": {
+                  "nocase": false,
+                  "ascii": false,
+                  "wide": false,
+                  "fullword": false,
+                  "i": false,
+                  "s": false
+               }
+            }
+         ],
+         "condition": "$string or $regex or $hex"
+      }
+   ]
+}
+```
+
+Note that the string types are as follows:
+
+| String type `int` code | Designation |
 | - | - |
-| `goyacc` | `golang.org/x/tools/cmd/goyacc` |
-| `flexgo` | `github.com/pebbe/flexgo` (Tool must be built manually)|
+| 0 | string |
+| 1 | hex pair bytes |
+| 2 | regex |
 
 ## Go Usage
 
@@ -68,6 +191,15 @@ func main() {
     rule.Modifiers.Private = false
 }
 ```
+
+## Development
+
+Currently, there is a `Makefile` which will build the parser, lexer, and main application.  For this to work, the following are needed:
+
+| Command | Source (`go get`) |
+| - | - |
+| `goyacc` | `golang.org/x/tools/cmd/goyacc` |
+| `flexgo` | `github.com/pebbe/flexgo` (Tool must be built manually)|
 
 ## Limitations
 
