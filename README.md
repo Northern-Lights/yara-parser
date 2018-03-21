@@ -8,6 +8,8 @@ The ability to serialize rulesets to JSON for rule manipulation in other languag
 
 ## Installation
 
+For the following `go get` commands, if you experience any issues, they are likely due to outdated versions of Go.  The project uses features introduced in Go 1.10.  Installation should proceed normally after an update.
+
 ### `y2j`: YARA to JSON
 
 Use the following command to install the `y2j` command for converting YARA rulesets to JSON.
