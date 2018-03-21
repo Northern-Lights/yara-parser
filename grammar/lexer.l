@@ -315,9 +315,7 @@ u?int(8|16|32)(be)? {
   collectText = false
 
   s := textBuilder.String()
-  // Trim in 2 steps, otherwise "abcs/is", -> "abc"
-  txt := strings.TrimRight(s, "is")
-  txt = strings.TrimRight(txt, "/")
+  txt := strings.TrimSuffix(s, YYtext)
   
   var mods data.StringModifiers
 

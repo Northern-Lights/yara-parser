@@ -1786,9 +1786,7 @@ case 64:
   collectText = false
 
   s := textBuilder.String()
-  // Trim in 2 steps, otherwise "abcs/is", -> "abc"
-  txt := strings.TrimRight(s, "is")
-  txt = strings.TrimRight(txt, "/")
+  txt := strings.TrimSuffix(s, YYtext)
   
   var mods data.StringModifiers
 
@@ -1832,7 +1830,7 @@ case 65:
   }
 
 
-//line grammar/lexer.l:352
+//line grammar/lexer.l:350
 {
 }
 case 66:
@@ -1849,7 +1847,7 @@ case 66:
   }
 
 
-//line grammar/lexer.l:356
+//line grammar/lexer.l:354
 {
 }
 case 67:
@@ -1866,7 +1864,7 @@ case 67:
   }
 
 
-//line grammar/lexer.l:360
+//line grammar/lexer.l:358
 { }
 case 68:
 /* rule 68 can match eol */
@@ -1883,7 +1881,7 @@ case 68:
   }
 
 
-//line grammar/lexer.l:363
+//line grammar/lexer.l:361
 {
   /* syntax_error("unterminated regular expression"); */
 }
@@ -1901,7 +1899,7 @@ case 69:
   }
 
 
-//line grammar/lexer.l:368
+//line grammar/lexer.l:366
 {
   collectText = true
   textBuilder.Reset()
@@ -1921,7 +1919,7 @@ case 70:
   }
 
 
-//line grammar/lexer.l:375
+//line grammar/lexer.l:373
 {
   collectText = true
   textBuilder.Reset()
@@ -1942,7 +1940,7 @@ case 71:
   }
 
 
-//line grammar/lexer.l:382
+//line grammar/lexer.l:380
 {
   // Match hex-digits with whitespace or comments. The latter are stripped
   // out by hex_lexer.l
@@ -1969,7 +1967,7 @@ case 72:
   }
 
 
-//line grammar/lexer.l:395
+//line grammar/lexer.l:393
 /* skip whitespace */
 case 73:
 
@@ -1985,7 +1983,7 @@ case 73:
   }
 
 
-//line grammar/lexer.l:397
+//line grammar/lexer.l:395
 {
 
   r := int(yytext[0])
@@ -2011,9 +2009,9 @@ case 74:
   }
 
 
-//line grammar/lexer.l:409
+//line grammar/lexer.l:407
 yyout.Write(yytext) 
-//line grammar/lexer.go:2017
+//line grammar/lexer.go:2015
 // SKEL ----------------------------------------------------------------
 
 		case yyEndOfBuffer:
@@ -2474,7 +2472,7 @@ func YYmain(filenames ...string) (interface{}, error) {
 }
 
 // END OF SKELL --------------------------------------------------------
-//line grammar/lexer.l:409
+//line grammar/lexer.l:407
 
 
 
