@@ -337,7 +337,9 @@ string_declaration
 
 
 string_modifiers
-    : /* empty */                         { }
+    : /* empty */                         {
+      $$ = data.StringModifiers{}
+    }
     | string_modifiers string_modifier    {
           $$ = data.StringModifiers {
               Wide: $1.Wide || $2.Wide,

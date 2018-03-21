@@ -122,7 +122,7 @@ to this JSON output:
                "modifiers": {
                   "nocase": false,
                   "ascii": true,
-                  "wide": true,
+                  "wide": false,
                   "fullword": true,
                   "i": true,
                   "s": false
