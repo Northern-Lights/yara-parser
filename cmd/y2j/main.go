@@ -44,7 +44,7 @@ func main() {
 
 	enc := json.NewEncoder(out)
 	enc.SetEscapeHTML(false)
-	enc.SetIndent("", "   ")
+	enc.SetIndent("", opts.Indent)
 	err = enc.Encode(&ruleset)
 	if err != nil {
 		perror(`Error writing JSON: %s`, err)

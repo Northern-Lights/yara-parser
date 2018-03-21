@@ -35,7 +35,8 @@ $ y2j --help
 Usage of y2j: y2j [options] file.yar
 
 options:
-
+  -indent int
+        Set number of indent spaces (default 2)
   -o string               
         JSON output file
 ```
