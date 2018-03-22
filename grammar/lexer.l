@@ -302,22 +302,19 @@ u?int(8|16|32)(be)? {
 
 
 <str>\n  {
-  /* syntax_error("unterminated string"); */
+  panic(fmt.Errorf("unterminated string"))
 }
 
 
 <str>\\(.|\n) {
-  /* syntax_error("illegal escape sequence"); */
+  panic(fmt.Errorf("illegal escape sequence"))
 }
 
 
 <regexp>\/i?s?  {
   collectText = false
 
-  s := textBuilder.String()
-  // Trim in 2 steps, otherwise "abcs/is", -> "abc"
-  txt := strings.TrimRight(s, "is")
-  txt = strings.TrimRight(txt, "/")
+  txt := strings.TrimSuffix(textBuilder.String(), YYtext)
   
   var mods data.StringModifiers
 
@@ -334,8 +331,7 @@ u?int(8|16|32)(be)? {
       
       default:
           // Should be impossible
-          err := fmt.Errorf("Invalid regex modifier: %c", c)
-          panic(err)
+          panic(fmt.Errorf("Invalid regex modifier: %c", c))
       }
   }
 
@@ -361,7 +357,7 @@ u?int(8|16|32)(be)? {
 
 
 <regexp>\n  {
-  /* syntax_error("unterminated regular expression"); */
+  panic(fmt.Errorf("unterminated regular expression"))
 }
 
 
@@ -402,8 +398,7 @@ u?int(8|16|32)(be)? {
     return r
   }
 
-  err := fmt.Errorf("non-ascii byte '%d'", r)
-  panic(err)
+  panic(fmt.Errorf("non-ascii byte '%d'", r))
 }
 
 %%
