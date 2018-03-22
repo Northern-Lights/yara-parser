@@ -1746,7 +1746,7 @@ case 62:
 
 //line grammar/lexer.l:304
 {
-  /* syntax_error("unterminated string"); */
+  panic(fmt.Errorf("unterminated string"))
 }
 case 63:
 /* rule 63 can match eol */
@@ -1765,7 +1765,7 @@ case 63:
 
 //line grammar/lexer.l:309
 {
-  /* syntax_error("illegal escape sequence"); */
+  panic(fmt.Errorf("illegal escape sequence"))
 }
 case 64:
 
@@ -1785,8 +1785,7 @@ case 64:
 {
   collectText = false
 
-  s := textBuilder.String()
-  txt := strings.TrimSuffix(s, YYtext)
+  txt := strings.TrimSuffix(textBuilder.String(), YYtext)
   
   var mods data.StringModifiers
 
@@ -1830,7 +1829,7 @@ case 65:
   }
 
 
-//line grammar/lexer.l:350
+//line grammar/lexer.l:349
 {
 }
 case 66:
@@ -1847,7 +1846,7 @@ case 66:
   }
 
 
-//line grammar/lexer.l:354
+//line grammar/lexer.l:353
 {
 }
 case 67:
@@ -1864,7 +1863,7 @@ case 67:
   }
 
 
-//line grammar/lexer.l:358
+//line grammar/lexer.l:357
 { }
 case 68:
 /* rule 68 can match eol */
@@ -1881,9 +1880,9 @@ case 68:
   }
 
 
-//line grammar/lexer.l:361
+//line grammar/lexer.l:360
 {
-  /* syntax_error("unterminated regular expression"); */
+  panic(fmt.Errorf("unterminated regular expression"))
 }
 case 69:
 
@@ -1899,7 +1898,7 @@ case 69:
   }
 
 
-//line grammar/lexer.l:366
+//line grammar/lexer.l:365
 {
   collectText = true
   textBuilder.Reset()
@@ -1919,7 +1918,7 @@ case 70:
   }
 
 
-//line grammar/lexer.l:373
+//line grammar/lexer.l:372
 {
   collectText = true
   textBuilder.Reset()
@@ -1940,7 +1939,7 @@ case 71:
   }
 
 
-//line grammar/lexer.l:380
+//line grammar/lexer.l:379
 {
   // Match hex-digits with whitespace or comments. The latter are stripped
   // out by hex_lexer.l
@@ -1967,7 +1966,7 @@ case 72:
   }
 
 
-//line grammar/lexer.l:393
+//line grammar/lexer.l:392
 /* skip whitespace */
 case 73:
 
@@ -1983,7 +1982,7 @@ case 73:
   }
 
 
-//line grammar/lexer.l:395
+//line grammar/lexer.l:394
 {
 
   r := int(yytext[0])
@@ -2009,9 +2008,9 @@ case 74:
   }
 
 
-//line grammar/lexer.l:407
+//line grammar/lexer.l:406
 yyout.Write(yytext) 
-//line grammar/lexer.go:2015
+//line grammar/lexer.go:2014
 // SKEL ----------------------------------------------------------------
 
 		case yyEndOfBuffer:
@@ -2472,7 +2471,7 @@ func YYmain(filenames ...string) (interface{}, error) {
 }
 
 // END OF SKELL --------------------------------------------------------
-//line grammar/lexer.l:407
+//line grammar/lexer.l:406
 
 
 
