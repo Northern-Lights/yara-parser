@@ -30,8 +30,8 @@ type Metas []Meta
 // A Meta is a simple key/value pair. Val should be restricted to
 // int, string, and bool.
 type Meta struct {
-	Key string
-	Val interface{}
+	Key string      `json:"key"`
+	Val interface{} `json:"val"`
 }
 
 // Strings are slices of String. No two String structs may have the same
