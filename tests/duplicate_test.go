@@ -1,51 +1,46 @@
 package tests
 
 import (
-	"os"
 	"strings"
 	"testing"
-
-	"github.com/Northern-Lights/yara-parser/grammar"
-)
-
-const (
-	dupmeta    = "duplicate-meta.yar"
-	dupstr     = "duplicate-strings.yar"
-	dupstranon = "duplicate-strings-anon.yar"
-	duptag     = "duplicate-tags.yar"
-	duprule    = "duplicate-rules.yar"
 )
 
 func TestDuplicateRules(t *testing.T) {
-	f, err := os.Open(duprule)
-	if err != nil {
-		t.Fatalf(`Couldn't open dup rules ruleset "%s": %s`, duprule, err)
-	}
+	const rs = `rule dup {
+condition:
+	true
+}
 
-	_, err = grammar.Parse(f, os.Stderr)
+rule dup {
+condition:
+	false
+}`
+	_, err := parseRuleStr(rs)
 	if err == nil {
-		t.Fatalf(`Parsing ruleset "%s" should have failed with duplicate rules`,
-			duprule)
+		t.Fatalf(`Parsing succeeded; should have failed`)
 	} else if !strings.Contains(strings.ToLower(err.Error()), "duplicate") {
-		t.Fatalf(`Parsing ruleset "%s" failed with error other than duplicate rules: %s`,
-			duprule, err)
+		t.Fatalf(`Error did not mention "duplicate": %s`, err)
 	}
 }
 
 func TestDuplicateMeta(t *testing.T) {
-	f, err := os.Open(dupmeta)
+	const rs = `rule dup {
+meta:
+	description = "d1"
+	description = "d2"
+	description = 5
+	description = "d1"
+condition:
+	true
+}`
+	ruleset, err := parseRuleStr(rs)
 	if err != nil {
-		t.Fatalf(`Couldn't open meta ruleset "%s": %s`, dupmeta, err)
-	}
-
-	ruleset, err := grammar.Parse(f, os.Stderr)
-	if err != nil {
-		t.Fatalf(`Parsing ruleset "%s" failed: %s`, dupmeta, err)
+		t.Fatalf(`Failed to parse ruleset w/ duplicate metas: %s`, err)
 	}
 
 	const nrules = 1
 	if l := len(ruleset.Rules); l != nrules {
-		t.Fatalf(`Ruleset "%s" has %d rules; expected %d`, dupmeta, l, nrules)
+		t.Fatalf(`Expected %d rules; found %d`, nrules, l)
 	}
 
 	var (
@@ -56,53 +51,55 @@ func TestDuplicateMeta(t *testing.T) {
 	const expectedVals = 4
 
 	if nvals != expectedVals {
-		t.Fatalf(`Rule "%s" in ruleset "%s" has %d metas for key "%s"; expected %d`,
-			rule.Identifier, dupmeta, nvals, key, expectedVals)
+		t.Fatalf(`Expected %d metas; found %d`, expectedVals, nvals)
 	}
 
 	for _, meta := range rule.Meta {
 		if meta.Key != key {
-			t.Errorf(`Expecting all keys to be "%s"; found "%s"`, key, meta.Key)
+			t.Errorf(`Expected all meta keys to be "%s"; found "%s"`, key, meta.Key)
 		}
 	}
 }
 
 func TestDuplicateStrings(t *testing.T) {
-	f, err := os.Open(dupstr)
-	if err != nil {
-		t.Fatalf(`Couldn't open str ruleset "%s": %s`, dupstr, err)
-	}
-
-	_, err = grammar.Parse(f, os.Stderr)
+	const rs = `rule dup {
+strings:
+	$s1 = "abc"
+	$s1 = "def"
+condition:
+	any of them
+}`
+	_, err := parseRuleStr(rs)
 	if err == nil {
-		t.Fatalf(`Parsing ruleset "%s" should have failed with duplicate strings`, dupstr)
+		t.Fatalf(`Parsing succeeded; should have failed`)
 	} else if !strings.Contains(err.Error(), "duplicate") {
-		t.Fatalf(`Parsing ruleset "%s" yielded non-duplicate string error: %s`, dupstr, err)
+		t.Fatalf(`Error did not mention "duplicate": %s`, err)
 	}
 }
 
 func TestDuplicateStringsAnonymous(t *testing.T) {
-	f, err := os.Open(dupstranon)
+	const rs = `rule dup {
+strings:
+	$ = "abc"
+	$ = "def"
+condition:
+	any of them
+}`
+	_, err := parseRuleStr(rs)
 	if err != nil {
-		t.Fatalf(`Couldn't open str anon ruleset "%s": %s`, dupstranon, err)
-	}
-
-	_, err = grammar.Parse(f, os.Stderr)
-	if err != nil {
-		t.Fatalf(`Parsing ruleset "%s" failed: %s`, dupstranon, err)
+		t.Fatalf(`Failed to parse: %s`, err)
 	}
 }
 
 func TestDuplicateTags(t *testing.T) {
-	f, err := os.Open(duptag)
-	if err != nil {
-		t.Fatalf(`Couldn't open dup tag ruleset "%s": %s`, duptag, err)
-	}
-
-	_, err = grammar.Parse(f, os.Stderr)
+	const rs = `rule dup : tag1 tag2 tag3 tag1 {
+condition:
+	true
+}`
+	_, err := parseRuleStr(rs)
 	if err == nil {
-		t.Fatalf(`Parsing ruleset "%s" should have failed with duplicate tags`, duptag)
+		t.Fatalf(`Parsing succeeded; should have failed`)
 	} else if !strings.Contains(err.Error(), "duplicate") {
-		t.Fatalf(`Parsing ruleset "%s" yielded non-duplicate tag error: %s`, duptag, err)
+		t.Fatalf(`Error did not mention "duplicate": %s`, err)
 	}
 }
