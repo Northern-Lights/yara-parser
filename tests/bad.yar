@@ -1,4 +1,0 @@
-rule rule {
-condition:
-    true
-}
