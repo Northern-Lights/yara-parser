@@ -1802,8 +1802,7 @@ case 64:
       
       default:
           // Should be impossible
-          err := fmt.Errorf("Invalid regex modifier: %c", c)
-          panic(err)
+          panic(fmt.Errorf("Invalid regex modifier: %c", c))
       }
   }
 
@@ -1829,7 +1828,7 @@ case 65:
   }
 
 
-//line grammar/lexer.l:349
+//line grammar/lexer.l:348
 {
 }
 case 66:
@@ -1846,7 +1845,7 @@ case 66:
   }
 
 
-//line grammar/lexer.l:353
+//line grammar/lexer.l:352
 {
 }
 case 67:
@@ -1863,7 +1862,7 @@ case 67:
   }
 
 
-//line grammar/lexer.l:357
+//line grammar/lexer.l:356
 { }
 case 68:
 /* rule 68 can match eol */
@@ -1880,7 +1879,7 @@ case 68:
   }
 
 
-//line grammar/lexer.l:360
+//line grammar/lexer.l:359
 {
   panic(fmt.Errorf("unterminated regular expression"))
 }
@@ -1898,7 +1897,7 @@ case 69:
   }
 
 
-//line grammar/lexer.l:365
+//line grammar/lexer.l:364
 {
   collectText = true
   textBuilder.Reset()
@@ -1918,7 +1917,7 @@ case 70:
   }
 
 
-//line grammar/lexer.l:372
+//line grammar/lexer.l:371
 {
   collectText = true
   textBuilder.Reset()
@@ -1939,7 +1938,7 @@ case 71:
   }
 
 
-//line grammar/lexer.l:379
+//line grammar/lexer.l:378
 {
   // Match hex-digits with whitespace or comments. The latter are stripped
   // out by hex_lexer.l
@@ -1966,7 +1965,7 @@ case 72:
   }
 
 
-//line grammar/lexer.l:392
+//line grammar/lexer.l:391
 /* skip whitespace */
 case 73:
 
@@ -1982,7 +1981,7 @@ case 73:
   }
 
 
-//line grammar/lexer.l:394
+//line grammar/lexer.l:393
 {
 
   r := int(yytext[0])
@@ -1991,8 +1990,7 @@ case 73:
     return r
   }
 
-  err := fmt.Errorf("non-ascii byte '%d'", r)
-  panic(err)
+  panic(fmt.Errorf("non-ascii byte '%d'", r))
 }
 case 74:
 
@@ -2008,9 +2006,9 @@ case 74:
   }
 
 
-//line grammar/lexer.l:406
+//line grammar/lexer.l:404
 yyout.Write(yytext) 
-//line grammar/lexer.go:2014
+//line grammar/lexer.go:2012
 // SKEL ----------------------------------------------------------------
 
 		case yyEndOfBuffer:
@@ -2471,7 +2469,7 @@ func YYmain(filenames ...string) (interface{}, error) {
 }
 
 // END OF SKELL --------------------------------------------------------
-//line grammar/lexer.l:406
+//line grammar/lexer.l:404
 
 
 
