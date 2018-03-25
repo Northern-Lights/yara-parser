@@ -6,8 +6,8 @@ import (
 	"os"
 	"testing"
 
-	"github.com/Northern-Lights/yara-parser/data"
-	"github.com/Northern-Lights/yara-parser/grammar"
+	"github.com/CapacitorSet/yara-parser/data"
+	"github.com/CapacitorSet/yara-parser/grammar"
 )
 
 // These are just utilities

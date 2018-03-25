@@ -8,7 +8,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/Northern-Lights/yara-parser/data"
+	"github.com/CapacitorSet/yara-parser/data"
 )
 
 var ParsedRuleset data.RuleSet

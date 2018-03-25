@@ -11,7 +11,7 @@ import (
     "strconv"
     "strings"
 
-    "github.com/Northern-Lights/yara-parser/data"
+    "github.com/CapacitorSet/yara-parser/data"
 )
 
 // Necessary types for flexgo
