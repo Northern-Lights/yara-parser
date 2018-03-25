@@ -15,7 +15,7 @@ type Rule struct {
 	Tags       []string      `json:"tags"`
 	Meta       Metas         `json:"meta"`
 	Strings    Strings       `json:"strings"`
-	Condition  string        `json:"condition"`
+	Condition  Expression    `json:"condition"`
 }
 
 // RuleModifiers denote whether a Rule is global, private, neither, or both.
@@ -64,4 +64,72 @@ type StringModifiers struct {
 	Fullword bool `json:"fullword"`
 	I        bool `json:"i"` // for regex
 	S        bool `json:"s"` // for regex
+}
+
+type Keyword struct {
+	Name string
+}
+
+type Expression struct {
+	Left        interface{}
+	Operator    string
+	Right       interface{}
+}
+
+// #Identifier
+type StringCount struct {
+	Identifier string
+}
+
+// $Base[Index]
+type StringOffset struct {
+	Base string
+	Index interface{}
+}
+
+// !Base[Index]
+type StringLength struct {
+	Base string
+	Index interface{}
+}
+
+// One of Expression, Keyword{Name: "all"} or Keyword{Name: "any"}
+type ForExpression struct {
+	Expression
+	Keyword
+}
+
+type ForInExpression struct {
+	ForExpression
+	Identifier string
+	IntegerSet
+	Boolean    Expression
+}
+
+type ForOfExpression struct {
+	ForExpression
+	StringSet
+	Boolean Expression
+}
+
+// One of Range or IntArray
+type IntegerSet struct {
+	Range
+	IntArray []int64
+}
+
+// One of Array or Keyword{Name: "them"}
+type StringSet struct {
+	Array []string
+	Keyword
+}
+
+type Range struct {
+	From Expression
+	To   Expression
+}
+
+// Used during parsing, eventually gets elided?
+type TemporaryString struct {
+	Identifier string
 }

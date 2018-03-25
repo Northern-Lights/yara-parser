@@ -3,7 +3,6 @@ package grammar
 
 import (
     "fmt"
-    "strings"
 
     "github.com/CapacitorSet/yara-parser/data"
 )
@@ -26,13 +25,13 @@ type regexPair struct {
 %token _CONDITION_
 %token <s> _IDENTIFIER_
 %token <s> _STRING_IDENTIFIER_
-%token _STRING_COUNT_
-%token _STRING_OFFSET_
-%token _STRING_LENGTH_
-%token _STRING_IDENTIFIER_WITH_WILDCARD_
+%token <strcnt> _STRING_COUNT_
+%token <strlen> _STRING_LENGTH_
+%token <stroff> _STRING_OFFSET_
+%token <s> _STRING_IDENTIFIER_WITH_WILDCARD_
 %token <i64> _NUMBER_
-%token _DOUBLE_
-%token _INTEGER_FUNCTION_
+%token <f64> _DOUBLE_
+%token <s> _INTEGER_FUNCTION_
 %token <s> _TEXT_STRING_
 %token <s> _HEX_STRING_
 %token <reg> _REGEXP_
@@ -71,35 +70,57 @@ type regexPair struct {
 %left '*' '\\' '%'
 %right _NOT_ '~' UNARY_MINUS
 
-%type <s>   import
-%type <yr>  rule
-%type <ss>  tags
-%type <ss>  tag_list
-%type <m>   meta
-%type <mps> meta_declarations
-%type <mp>  meta_declaration
-%type <yss> strings
-%type <yss> string_declarations
-%type <ys>  string_declaration
-%type <mod> string_modifier
-%type <mod> string_modifiers
-%type <rm>  rule_modifier
-%type <rm>  rule_modifiers
+%type <s>    import
+%type <s>    string_enumeration_item
+%type <ss>   string_enumeration
+%type <ss>   tag_list
+%type <ss>   tags
+
+%type <expr>   boolean_expression
+%type <expr>   condition
+%type <expr>   expression
+%type <expr>   primary_expression
+%type <fexpr>  for_expression
+%type <intset> integer_set
+%type <m>      meta
+%type <mod>    string_modifier
+%type <mod>    string_modifiers
+%type <mp>     meta_declaration
+%type <mps>    meta_declarations
+%type <r>      range
+%type <reg>    regexp
+%type <rm>     rule_modifier
+%type <rm>     rule_modifiers
+%type <strset> string_set
+%type <yr>     rule
+%type <ys>     string_declaration
+%type <yss>    string_declarations
+%type <yss>    strings
 
 %union {
+    f64           float64
     i64           int64
     s             string
     ss            []string
 
-    rm            data.RuleModifiers
+    expr          data.Expression
+    fexpr         data.ForExpression
+    intset        data.IntegerSet
     m             data.Metas
+    mod           data.StringModifiers
     mp            data.Meta
     mps           data.Metas
-    mod           data.StringModifiers
+    r             data.Range
     reg           regexPair
+    rm            data.RuleModifiers
+    strset        data.StringSet
+    strcnt        data.StringCount
+    strlen        data.StringLength
+    stroff        data.StringOffset
+    unknown       interface{}
+    yr            data.Rule
     ys            data.String
     yss           data.Strings
-    yr            data.Rule
 }
 
 
@@ -180,10 +201,7 @@ rule
       }
       condition _RBRACE_
       {
-          c := conditionBuilder.String()
-          c = strings.TrimLeft(c, ":\n\r\t ")
-          c = strings.TrimRight(c, "}\n\r\t ")
-          $<yr>4.Condition = c
+          $<yr>4.Condition = $<expr>10
           $$ = $<yr>4
       }
     ;
@@ -219,6 +237,9 @@ strings
 
 condition
     : _CONDITION_ ':' boolean_expression
+    {
+      $$ = $<expr>3
+    }
     ;
 
 
@@ -408,118 +429,99 @@ regexp
 boolean_expression
     : expression
       {
-        
+        $$ = $1
       }
     ;
 
 expression
     : _TRUE_
       {
-          
+        $$ = data.Expression{Left:true}
       }
     | _FALSE_
       {
-        
+        $$ = data.Expression{Left:false}
       }
     | primary_expression _MATCHES_ regexp
       {
-        
+        $$ = data.Expression{Left: $1, Operator: "matches", Right: $3}
       }
     | primary_expression _CONTAINS_ primary_expression
       {
-        
+        $$ = data.Expression{Left: $1, Operator: "contains", Right: $3}
       }
     | _STRING_IDENTIFIER_
       {
-        
+        $$ = data.Expression{Left: data.TemporaryString{Identifier: $1}}
       }
     | _STRING_IDENTIFIER_ _AT_ primary_expression
       {
-        
+        $$ = data.Expression{Left: data.TemporaryString{Identifier: $1}, Operator: "at", Right: $3}
       }
     | _STRING_IDENTIFIER_ _IN_ range
       {
-        
+        $$ = data.Expression{Left: $1, Operator: "in", Right: $3}
       }
     | _FOR_ for_expression error
       {
-        
+        // Unused: https://github.com/Northern-Lights/yara-parser/issues/12#issuecomment-376379471
+        // tldr: the "error" is used to help recover from errors, but we don't need this
       }
-    | _FOR_ for_expression _IDENTIFIER_ _IN_
+    | _FOR_ for_expression _IDENTIFIER_ _IN_ integer_set ':' '(' boolean_expression ')'
       {
-        
+        $$ = data.Expression{Left: data.ForInExpression{ForExpression: $2, Identifier: $3, IntegerSet: $5, Boolean: $8}}
       }
-      integer_set ':'
+    | _FOR_ for_expression _OF_ string_set ':' '(' boolean_expression ')'
       {
-        
-      }
-      '(' boolean_expression ')'
-      {
-        
-      }
-    | _FOR_ for_expression _OF_ string_set ':'
-      {
-        
-      }
-      '(' boolean_expression ')'
-      {
-        
+        $$ = data.Expression{Left: data.ForOfExpression{ForExpression: $2, StringSet: $4, Boolean: $7}}
       }
     | for_expression _OF_ string_set
       {
-        
+        //$$ = data.Expression{Left: data.ForOfExpression{ForExpression: $2, StringSet: $4}}
       }
     | _NOT_ boolean_expression
       {
-        
+        $$ = data.Expression{Left: $2, Operator: "not"}
       }
-    | boolean_expression _AND_
+    | boolean_expression _AND_ boolean_expression
       {
-        
+        $$ = data.Expression{Left: $1, Operator: "and", Right: $3}
       }
-      boolean_expression
+    | boolean_expression _OR_ boolean_expression
       {
-        
-      }
-    | boolean_expression _OR_
-      {
-        
-      }
-      boolean_expression
-      {
-        
+        $$ = data.Expression{Left: $1, Operator: "or", Right: $3}
       }
     | primary_expression _LT_ primary_expression
       {
-        
+        $$ = data.Expression{Left: $1, Operator: "<", Right: $3}
       }
     | primary_expression _GT_ primary_expression
       {
-        
+        $$ = data.Expression{Left: $1, Operator: ">", Right: $3}
       }
     | primary_expression _LE_ primary_expression
       {
-        
+        $$ = data.Expression{Left: $1, Operator: "<=", Right: $3}
       }
     | primary_expression _GE_ primary_expression
       {
-        
+        $$ = data.Expression{Left: $1, Operator: ">=", Right: $3}
       }
     | primary_expression _EQ_ primary_expression
       {
-        
+        $$ = data.Expression{Left: $1, Operator: "==", Right: $3}
       }
     | primary_expression _NEQ_ primary_expression
       {
-        
+        $$ = data.Expression{Left: $1, Operator: "!=", Right: $3}
       }
     | primary_expression
       {
-        
+        $$ = $1
       }
     |'(' expression ')'
       {
-        
+        $$ = $2
       }
     ;
 
@@ -533,7 +535,7 @@ integer_set
 range
     : '(' primary_expression _DOT_DOT_  primary_expression ')'
       {
-        
+        $$ = data.Range{From: $2, To: $4}
       }
     ;
 
@@ -551,45 +553,53 @@ integer_enumeration
 
 
 string_set
-    : '('
+    : '(' string_enumeration ')'
       {
-        
+        $$ = data.StringSet{Array: $2}
       }
-      string_enumeration ')'
     | _THEM_
       {
-        
+        $$ = data.StringSet{Keyword: data.Keyword{Name: "them"}}
       }
     ;
 
 
 string_enumeration
     : string_enumeration_item
+      {
+      $$ = []string{$1}
+      }
     | string_enumeration ',' string_enumeration_item
+      {
+      $$ = append($1, $3)
+      }
     ;
 
 
 string_enumeration_item
     : _STRING_IDENTIFIER_
       {
-
+      $$ = $1
       }
     | _STRING_IDENTIFIER_WITH_WILDCARD_
       {
-        
+      $$ = $1        
       }
     ;
 
 
 for_expression
     : primary_expression
+      {
+        $$ = data.ForExpression{Expression: $1}
+      }
     | _ALL_
       {
-        
+        $$ = data.ForExpression{Keyword: data.Keyword{Name: "all"}}
       }
     | _ANY_
       {
-        
+        $$ = data.ForExpression{Keyword: data.Keyword{Name: "any"}}
       }
     ;
 
@@ -597,107 +607,110 @@ for_expression
 primary_expression
     : '(' primary_expression ')'
       {
-        
+        $$ = $2
       }
     | _FILESIZE_
       {
-        
+        $$ = data.Expression{Left: data.Keyword{Name: "filesize"}}
       }
     | _ENTRYPOINT_
       {
-        
+        $$ = data.Expression{Left: data.Keyword{Name: "entrypoint"}}
       }
     | _INTEGER_FUNCTION_ '(' primary_expression ')'
       {
-        
+        // TODO: document custom operator
+        $$ = data.Expression{Left: $1, Operator: "integer_function", Right: $3}
       }
     | _NUMBER_
       {
-        
+        $$ = data.Expression{Left: $1}
       }
     | _DOUBLE_
       {
-        
+        $$ = data.Expression{Left: $1}
       }
     | _TEXT_STRING_
       {
-        
+        $$ = data.Expression{Left: $1}
       }
     | _STRING_COUNT_
       {
-        
+        $$ = data.Expression{Left: $1}
       }
     | _STRING_OFFSET_ '[' primary_expression ']'
       {
-        
+        $1.Index = $3
+        $$ = data.Expression{Left: $1}
       }
     | _STRING_OFFSET_
       {
-        
+        $$ = data.Expression{Left: $1}
       }
     | _STRING_LENGTH_ '[' primary_expression ']'
       {
-        
+        $1.Index = $3
+        $$ = data.Expression{Left: $1}
       }
     | _STRING_LENGTH_
       {
-        
+        $$ = data.Expression{Left: $1}
       }
     | identifier
       {
-        
+        $$ = data.Expression{Left:$<s>1}
       }
     | '-' primary_expression %prec UNARY_MINUS
       {
-        
+        $$ = data.Expression{Left:$2, Operator: "unary-minus"}
       }
     | primary_expression '+' primary_expression
       {
-        
+        $$ = data.Expression{Left: $1, Operator: "+", Right: $3}
       }
     | primary_expression '-' primary_expression
       {
-        
+        $$ = data.Expression{Left: $1, Operator: "-", Right: $3}
       }
     | primary_expression '*' primary_expression
       {
-        
+        $$ = data.Expression{Left: $1, Operator: "*", Right: $3}
       }
     | primary_expression '\\' primary_expression
       {
-        
+        $$ = data.Expression{Left: $1, Operator: "\\", Right: $3}
       }
     | primary_expression '%' primary_expression
       {
-        
+        $$ = data.Expression{Left: $1, Operator: "%", Right: $3}
       }
     | primary_expression '^' primary_expression
       {
-        
+        $$ = data.Expression{Left: $1, Operator: "^", Right: $3}
       }
     | primary_expression '&' primary_expression
       {
-        
+        $$ = data.Expression{Left: $1, Operator: "&", Right: $3}
       }
     | primary_expression '|' primary_expression
       {
-        
+        $$ = data.Expression{Left: $1, Operator: "|", Right: $3}
       }
     | '~' primary_expression
       {
-        
+        $$ = data.Expression{Left: $2, Operator: "~"}
       }
     | primary_expression _SHIFT_LEFT_ primary_expression
       {
-        
+        $$ = data.Expression{Left: $1, Operator: "<<", Right: $3}
       }
     | primary_expression _SHIFT_RIGHT_ primary_expression
       {
-        
+        $$ = data.Expression{Left: $1, Operator: ">>", Right: $3}
       }
     | regexp
       {
-        
+        $$ = data.Expression{Left: $1}
       }
     ;
 
