@@ -55,7 +55,6 @@ var YYtext string
 // is like an "inclusive" start condition while the lexer requires "exclusive"
 var (
     collect           bool  // condition text
-    conditionBuilder  strings.Builder
     collectText       bool  // string/regex/etc text
     textBuilder       strings.Builder
 )
@@ -72,10 +71,6 @@ var (
 
 YY_USER_ACTION(
   YYtext = string(yytext)
-
-  if collect {
-    conditionBuilder.Write(yytext)
-  }
 
   if collectText {
     textBuilder.Write(yytext)
@@ -114,12 +109,7 @@ octdigit      [0-7]
 
 %%
 
-"condition" {
-    collect = true
-    conditionBuilder.Reset()
-    return _CONDITION_
-}
-
+"condition"             { return _CONDITION_;   }
 ".."                    { return _DOT_DOT_;     }
 "<"                     { return _LT_;          }
 ">"                     { return _GT_;          }
@@ -187,22 +177,26 @@ $({letter}|{digit}|_)*  {
 }
 
 
-#({letter}|{digit}|_)*  {
+#({letter}|{digit}|_)+  {
+  yylval.strcnt = data.StringCount{Identifier: YYtext[1:]}
   return _STRING_COUNT_;
 }
 
 
-@({letter}|{digit}|_)*  {
+@({letter}|{digit}|_)+  {
+  yylval.stroff = data.StringOffset{Base: YYtext[1:]}
   return _STRING_OFFSET_;
 }
 
 
 !({letter}|{digit}|_)*  {
+  yylval.strlen = data.StringLength{Base: YYtext[1:]}
   return _STRING_LENGTH_;
 }
 
 
 u?int(8|16|32)(be)? {
+  yylval.s = YYtext
   return _INTEGER_FUNCTION_;
 }
 
@@ -242,6 +236,11 @@ u?int(8|16|32)(be)? {
 }
 
 {digit}+"."{digit}+  {
+  result, err := strconv.ParseFloat(YYtext, 64)
+  if err != nil {
+    panic(err)
+  }
+  yylval.f64 = result
   return _DOUBLE_;
 }
 
