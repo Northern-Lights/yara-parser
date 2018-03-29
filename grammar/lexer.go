@@ -1406,7 +1406,8 @@ case 55:
 
   // NOTE: textBuilder.String() will end with `"` char
   collectText = false
-  yylval.s = strings.TrimSuffix(textBuilder.String(), `"`)
+  yylval.s = "\"" + textBuilder.String()
+  // yylval.s = strings.TrimSuffix(textBuilder.String(), `"`)
 
   yy.start = 1 + 2*  (yyInitial );
 
