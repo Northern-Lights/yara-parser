@@ -7,7 +7,10 @@ import (
     "github.com/Northern-Lights/yara-parser/data"
 )
 
-var ParsedRuleset data.RuleSet
+var (
+    ParsedRuleset data.RuleSet
+    currentRule   *data.Rule
+)
 
 type regexPair struct {
     text string
@@ -199,11 +202,16 @@ rule
               }
               idx[s.ID] = struct{}{}
           }
+
+          // So we can refer to this rule while parsing condition.
+          // Ptr changes in every action, so be careful...
+          currentRule = &$<yr>4
       }
       condition _RBRACE_
       {
           $<yr>4.Condition = $<expr>10
           $$ = $<yr>4
+          currentRule = nil // Done with this rule
       }
     ;
 
@@ -453,6 +461,17 @@ expression
       }
     | _STRING_IDENTIFIER_
       {
+        var declared bool
+        for _, s := range currentRule.Strings {
+            if s.ID == $1 {
+                declared = true
+                break
+            }
+        }
+        if !declared {
+            err := fmt.Errorf(`Undefined string identifier "%s"`, $1)
+            panic(err)
+        }
         $$ = data.Expression{Left: data.TemporaryString{Identifier: $1}}
       }
     | _STRING_IDENTIFIER_ _AT_ primary_expression
