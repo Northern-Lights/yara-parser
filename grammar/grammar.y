@@ -40,14 +40,14 @@ type regexPair struct {
 %token <mod> _NOCASE_
 %token <mod> _FULLWORD_
 %token _AT_
-%token _FILESIZE_
-%token _ENTRYPOINT_
-%token _ALL_
-%token _ANY_
+%token <kw> _FILESIZE_
+%token <kw> _ENTRYPOINT_
+%token <kw> _ALL_
+%token <kw> _ANY_
 %token _IN_
 %token _OF_
 %token _FOR_
-%token _THEM_
+%token <kw> _THEM_
 %token _MATCHES_
 %token _CONTAINS_
 %token _IMPORT_
@@ -106,6 +106,7 @@ type regexPair struct {
     expr          data.Expression
     fexpr         data.ForExpression
     intset        data.IntegerSet
+    kw            data.Keyword
     m             data.Metas
     mod           data.StringModifiers
     mp            data.Meta
@@ -559,7 +560,7 @@ string_set
       }
     | _THEM_
       {
-        $$ = data.StringSet{Keyword: data.Keyword{Name: "them"}}
+        $$ = data.StringSet{Keyword: $1}
       }
     ;
 
@@ -595,11 +596,11 @@ for_expression
       }
     | _ALL_
       {
-        $$ = data.ForExpression{Keyword: data.Keyword{Name: "all"}}
+        $$ = data.ForExpression{Keyword: $1}
       }
     | _ANY_
       {
-        $$ = data.ForExpression{Keyword: data.Keyword{Name: "any"}}
+        $$ = data.ForExpression{Keyword: $1}
       }
     ;
 
@@ -611,16 +612,15 @@ primary_expression
       }
     | _FILESIZE_
       {
-        $$ = data.Expression{Left: data.Keyword{Name: "filesize"}}
+        $$ = data.Expression{Left: $1}
       }
     | _ENTRYPOINT_
       {
-        $$ = data.Expression{Left: data.Keyword{Name: "entrypoint"}}
+        $$ = data.Expression{Left: $1}
       }
     | _INTEGER_FUNCTION_ '(' primary_expression ')'
       {
-        // TODO: document custom operator
-        $$ = data.Expression{Left: $1, Operator: "integer_function", Right: $3}
+        $$ = data.Expression{Left: $1, Operator: data.OperatorIntegerFunction, Right: $3}
       }
     | _NUMBER_
       {
@@ -662,51 +662,51 @@ primary_expression
       }
     | '-' primary_expression %prec UNARY_MINUS
       {
-        $$ = data.Expression{Left:$2, Operator: "unary-minus"}
+        $$ = data.Expression{Left:$2, Operator: data.OperatorUnaryMinus}
       }
     | primary_expression '+' primary_expression
       {
-        $$ = data.Expression{Left: $1, Operator: "+", Right: $3}
+        $$ = data.Expression{Left: $1, Operator: data.OperatorPlus, Right: $3}
       }
     | primary_expression '-' primary_expression
       {
-        $$ = data.Expression{Left: $1, Operator: "-", Right: $3}
+        $$ = data.Expression{Left: $1, Operator: data.OperatorMinus, Right: $3}
       }
     | primary_expression '*' primary_expression
       {
-        $$ = data.Expression{Left: $1, Operator: "*", Right: $3}
+        $$ = data.Expression{Left: $1, Operator: data.OperatorTimes, Right: $3}
       }
     | primary_expression '\\' primary_expression
       {
-        $$ = data.Expression{Left: $1, Operator: "\\", Right: $3}
+        $$ = data.Expression{Left: $1, Operator: data.OperatorDivide, Right: $3}
       }
     | primary_expression '%' primary_expression
       {
-        $$ = data.Expression{Left: $1, Operator: "%", Right: $3}
+        $$ = data.Expression{Left: $1, Operator: data.OperatorModulo, Right: $3}
       }
     | primary_expression '^' primary_expression
       {
-        $$ = data.Expression{Left: $1, Operator: "^", Right: $3}
+        $$ = data.Expression{Left: $1, Operator: data.OperatorXor, Right: $3}
       }
     | primary_expression '&' primary_expression
       {
-        $$ = data.Expression{Left: $1, Operator: "&", Right: $3}
+        $$ = data.Expression{Left: $1, Operator: data.OperatorBitwiseAnd, Right: $3}
       }
     | primary_expression '|' primary_expression
       {
-        $$ = data.Expression{Left: $1, Operator: "|", Right: $3}
+        $$ = data.Expression{Left: $1, Operator: data.OperatorBitwiseOr, Right: $3}
       }
     | '~' primary_expression
       {
-        $$ = data.Expression{Left: $2, Operator: "~"}
+        $$ = data.Expression{Left: $2, Operator: data.OperatorBitwiseNot}
       }
     | primary_expression _SHIFT_LEFT_ primary_expression
       {
-        $$ = data.Expression{Left: $1, Operator: "<<", Right: $3}
+        $$ = data.Expression{Left: $1, Operator: data.OperatorShiftLeft, Right: $3}
       }
     | primary_expression _SHIFT_RIGHT_ primary_expression
       {
-        $$ = data.Expression{Left: $1, Operator: ">>", Right: $3}
+        $$ = data.Expression{Left: $1, Operator: data.OperatorShiftRight, Right: $3}
       }
     | regexp
       {

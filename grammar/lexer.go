@@ -1423,7 +1423,7 @@ case 56:
   }
 
 
-//line grammar/lexer.l:280
+//line grammar/lexer.l:281
 {
 }
 case 57:
@@ -1436,7 +1436,7 @@ case 57:
   }
 
 
-//line grammar/lexer.l:284
+//line grammar/lexer.l:285
 {
 }
 case 58:
@@ -1449,7 +1449,7 @@ case 58:
   }
 
 
-//line grammar/lexer.l:288
+//line grammar/lexer.l:289
 {
 }
 case 59:
@@ -1462,7 +1462,7 @@ case 59:
   }
 
 
-//line grammar/lexer.l:292
+//line grammar/lexer.l:293
 {
 }
 case 60:
@@ -1475,7 +1475,7 @@ case 60:
   }
 
 
-//line grammar/lexer.l:296
+//line grammar/lexer.l:297
 {
 }
 case 61:
@@ -1488,7 +1488,7 @@ case 61:
   }
 
 
-//line grammar/lexer.l:300
+//line grammar/lexer.l:301
 { }
 case 62:
 /* rule 62 can match eol */
@@ -1501,7 +1501,7 @@ case 62:
   }
 
 
-//line grammar/lexer.l:303
+//line grammar/lexer.l:304
 {
   panic(fmt.Errorf("unterminated string"))
 }
@@ -1516,7 +1516,7 @@ case 63:
   }
 
 
-//line grammar/lexer.l:308
+//line grammar/lexer.l:309
 {
   panic(fmt.Errorf("illegal escape sequence"))
 }
@@ -1530,7 +1530,7 @@ case 64:
   }
 
 
-//line grammar/lexer.l:313
+//line grammar/lexer.l:314
 {
   collectText = false
 
@@ -1573,7 +1573,7 @@ case 65:
   }
 
 
-//line grammar/lexer.l:347
+//line grammar/lexer.l:348
 {
 }
 case 66:
@@ -1586,7 +1586,7 @@ case 66:
   }
 
 
-//line grammar/lexer.l:351
+//line grammar/lexer.l:352
 {
 }
 case 67:
@@ -1599,7 +1599,7 @@ case 67:
   }
 
 
-//line grammar/lexer.l:355
+//line grammar/lexer.l:356
 { }
 case 68:
 /* rule 68 can match eol */
@@ -1612,7 +1612,7 @@ case 68:
   }
 
 
-//line grammar/lexer.l:358
+//line grammar/lexer.l:359
 {
   panic(fmt.Errorf("unterminated regular expression"))
 }
@@ -1626,7 +1626,7 @@ case 69:
   }
 
 
-//line grammar/lexer.l:363
+//line grammar/lexer.l:364
 {
   collectText = true
   textBuilder.Reset()
@@ -1642,7 +1642,7 @@ case 70:
   }
 
 
-//line grammar/lexer.l:370
+//line grammar/lexer.l:371
 {
   collectText = true
   textBuilder.Reset()
@@ -1659,7 +1659,7 @@ case 71:
   }
 
 
-//line grammar/lexer.l:377
+//line grammar/lexer.l:378
 {
   // Match hex-digits with whitespace or comments. The latter are stripped
   // out by hex_lexer.l
@@ -1682,7 +1682,7 @@ case 72:
   }
 
 
-//line grammar/lexer.l:390
+//line grammar/lexer.l:391
 /* skip whitespace */
 case 73:
 
@@ -1694,7 +1694,7 @@ case 73:
   }
 
 
-//line grammar/lexer.l:392
+//line grammar/lexer.l:393
 {
 
   r := int(yytext[0])
@@ -1715,9 +1715,9 @@ case 74:
   }
 
 
-//line grammar/lexer.l:403
+//line grammar/lexer.l:404
 yyout.Write(yytext) 
-//line grammar/lexer.go:1720
+//line grammar/lexer.go:1721
 // SKEL ----------------------------------------------------------------
 
 		case yyEndOfBuffer:
@@ -2178,7 +2178,7 @@ func YYmain(filenames ...string) (interface{}, error) {
 }
 
 // END OF SKELL --------------------------------------------------------
-//line grammar/lexer.l:403
+//line grammar/lexer.l:404
 
 
 

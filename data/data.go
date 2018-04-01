@@ -66,14 +66,38 @@ type StringModifiers struct {
 	S        bool `json:"s"` // for regex
 }
 
-type Keyword struct {
-	Name string
-}
+type Keyword string
+
+var (
+	KeywordAll        Keyword = "all"
+	KeywordAny        Keyword = "any"
+	KeywordEntrypoint Keyword = "entrypoint"
+	KeywordFilesize   Keyword = "filesize"
+	KeywordThem       Keyword = "them"
+)
+
+type Operator string
+
+var (
+	OperatorIntegerFunction Operator = "integer_function" // TODO: document custom operator
+	OperatorUnaryMinus      Operator = "unary-minus"
+	OperatorPlus            Operator = "+"
+	OperatorMinus           Operator = "-"
+	OperatorTimes           Operator = "*"
+	OperatorDivide          Operator = "\\"
+	OperatorModulo          Operator = "%"
+	OperatorXor             Operator = "^"
+	OperatorBitwiseAnd      Operator = "&"
+	OperatorBitwiseOr       Operator = "|"
+	OperatorBitwiseNot      Operator = "~"
+	OperatorShiftLeft       Operator = "<<"
+	OperatorShiftRight      Operator = ">>"
+)
 
 type Expression struct {
-	Left        interface{}
-	Operator    string
-	Right       interface{}
+	Left interface{}
+	Operator
+	Right interface{}
 }
 
 // #Identifier
@@ -83,13 +107,13 @@ type StringCount struct {
 
 // $Base[Index]
 type StringOffset struct {
-	Base string
+	Base  string
 	Index interface{}
 }
 
 // !Base[Index]
 type StringLength struct {
-	Base string
+	Base  string
 	Index interface{}
 }
 
@@ -103,7 +127,7 @@ type ForInExpression struct {
 	ForExpression
 	Identifier string
 	IntegerSet
-	Boolean    Expression
+	Boolean Expression
 }
 
 type ForOfExpression struct {
@@ -118,7 +142,7 @@ type IntegerSet struct {
 	IntArray []int64
 }
 
-// One of Array or Keyword{Name: "them"}
+// One of Array or KeywordThem
 type StringSet struct {
 	Array []string
 	Keyword
