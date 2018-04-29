@@ -1,4 +1,5 @@
 // Stringer implementations for each type
+
 package data
 
 import (
@@ -50,18 +51,18 @@ func (s String) String() string {
 }
 
 func (t StringType) String() string {
-        switch t {
-        case TypeString:
-                return "string"
+	switch t {
+	case TypeString:
+		return "string"
 
-        case TypeHexString:
-                return "hex"
+	case TypeHexString:
+		return "hex"
 
-        case TypeRegex:
-                return "regex"
-        }
+	case TypeRegex:
+		return "regex"
+	}
 
-        return "unknown"
+	return "unknown"
 }
 
 // String for StringModifiers returns a string representation of the modifiers
