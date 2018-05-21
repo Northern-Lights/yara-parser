@@ -4,11 +4,15 @@
 
 Using `yara-parser`, one will be able to read YARA rulesets to programatically change metadata, rule names, rule modifiers, tags, strings, and more.
 
-The ability to serialize rulesets to JSON for rule manipulation in other languages is provided with the `y2j` tool.
+The ability to serialize rulesets to JSON for rule manipulation in other languages is provided with the `y2j` tool.  Similarly, `j2y` provides JSON-to-YARA conversion, but do see __Limitations__ below.
 
 ## Installation
 
 For the following `go get` commands, if you experience any issues, they are likely due to outdated versions of Go.  The project uses features introduced in Go 1.10.  Installation should proceed normally after an update.
+
+To install (or update) everything at once, the following command can be used:
+
+`go get -u github.com/Northern-Lights/yara-parser/...`
 
 ### `y2j`: YARA to JSON
 
@@ -19,6 +23,12 @@ Use the following command to install the `y2j` command for converting YARA rules
 Of course, this will install `y2j` to `$GOPATH/bin`, so ensure that the latter is in your `$PATH`.
 
 The grammar and lexer files are frozen so that building them with `goyacc` and `flexgo` are not necessary.
+
+### `j2y`: JSON to YARA
+
+Use the following command to install the `j2y` command for converting JSON to YARA rulesets.
+
+`go get -u github.com/Northern-Ligths/yara-parser/cmd/j2y`
 
 ### Grammar Library
 
