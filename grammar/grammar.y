@@ -47,13 +47,13 @@ type regexPair struct {
 %}
 
 // Token that marks the end of the original file.
-%token _END_OF_FILE_  0                                "end of file"
+%token _END_OF_FILE_  0
 
 // Token that marks the end of included files, we can't use  _END_OF_FILE_
 // because bison stops parsing when it sees _END_OF_FILE_, we want to be
 // be able to identify the point where an included file ends, but continuing
 // parsing any content that follows.
-%token _END_OF_INCLUDED_FILE_                          "end of included file"
+%token _END_OF_INCLUDED_FILE_
 
 %token _DOT_DOT_
 %token _RULE_
@@ -76,7 +76,7 @@ type regexPair struct {
 %token <reg> _REGEXP_
 %token <mod> _ASCII_
 %token <mod> _WIDE_
-%token _XOR_                                           "<xor>"
+%token _XOR_
 %token <mod> _NOCASE_
 %token <mod> _FULLWORD_
 %token _AT_
