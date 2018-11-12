@@ -136,8 +136,10 @@ octdigit      [0-7]
 "strings"               { return _STRINGS_;     }
 "ascii"                 { return _ASCII_;       }
 "wide"                  { return _WIDE_;        }
+"xor"                   { return _XOR_;         }
 "fullword"              { return _FULLWORD_;    }
 "nocase"                { return _NOCASE_;      }
+"condition"             { return _CONDITION_;   }
 "true"                  { return _TRUE_;        }
 "false"                 { return _FALSE_;       }
 "not"                   { return _NOT_;         }
@@ -322,13 +324,13 @@ u?int(8|16|32)(be)? {
       switch c {
       case 'i':
           mods.I = true
-      
+
       case 's':
           mods.S = true
-      
+
       case '/':
           // Ignore
-      
+
       default:
           // Should be impossible
           panic(fmt.Errorf("Invalid regex modifier: %c", c))
