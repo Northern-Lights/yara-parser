@@ -1,10 +1,10 @@
-all: parser lexer y2j
+all: grammar y2j
 
-parser:
-	goyacc -p xx -o grammar/parser.go grammar/grammar.y
+builder:
+	docker build -t yara-parser-builder .
 
-lexer:
-	${GOPATH}/bin/flexgo -G -o grammar/lexer.go grammar/lexer.l
+grammar:
+	docker run --rm -v ${PWD}/grammar:/grammar:Z yara-parser-builder bash -c 'flexgo -G -o /grammar/lexer.go /grammar/lexer.l && goyacc -p xx -o /grammar/parser.go /grammar/grammar.y'
 
 y2j:
 	go build github.com/Northern-Lights/yara-parser/cmd/y2j
