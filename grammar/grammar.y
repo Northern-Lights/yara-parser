@@ -46,9 +46,11 @@ type regexPair struct {
 
 %}
 
+// yara-parser: we have 'const eof = 0' in lexer.l
 // Token that marks the end of the original file.
-%token _END_OF_FILE_  0
+// %token _END_OF_FILE_  0
 
+// TODO: yara-parser: https://github.com/VirusTotal/yara/blob/v3.8.1/libyara/lexer.l#L285
 // Token that marks the end of included files, we can't use  _END_OF_FILE_
 // because bison stops parsing when it sees _END_OF_FILE_, we want to be
 // be able to identify the point where an included file ends, but continuing
