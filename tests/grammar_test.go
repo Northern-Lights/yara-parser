@@ -3,6 +3,7 @@ package tests
 import (
 	"log"
 	"os"
+	"strings"
 	"testing"
 
 	"github.com/Northern-Lights/yara-parser/data"
@@ -132,4 +133,27 @@ func TestMeta(t *testing.T) {
 	}
 
 	t.Fatalf(`Ruleset "%s" has no rule "%s"`, testfile, ruleName)
+}
+
+// TestXor verifies that the xor string modifier works
+func TestXor(t *testing.T) {
+	const ruleName = "XOR"
+	for _, rule := range ruleset.Rules {
+		if rule.Identifier == ruleName {
+			for _, s := range rule.Strings {
+				const strNamePrefix = "$xor"
+				if strings.HasPrefix(s.ID, strNamePrefix) {
+					if !s.Modifiers.Xor {
+						t.Errorf(`Ruleset "%s" rule "%s" string "%s" xor modifier not found`,
+							testfile, rule.Identifier, s.ID)
+					}
+				} else {
+					if s.Modifiers.Xor {
+						t.Errorf(`Ruleset "%s" rule "%s" string "%s" has unexpected xor modifier`,
+							testfile, rule.Identifier, s.ID)
+					}
+				}
+			}
+		}
+	}
 }
