@@ -89,3 +89,14 @@ meta:
 condition:
     true
 }
+
+rule XOR {
+strings:
+    $xor1 = "xor!" xor
+    $xor2 = "xor?" nocase xor
+    $xor3 = /xor_/ xor
+    $no_xor1 = "no xor :(" wide
+    $no_xor2 = "no xor >:(" ascii nocase
+condition:
+    any of them
+}

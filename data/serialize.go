@@ -224,6 +224,9 @@ func (m *StringModifiers) Serialize() (out string, _ error) {
 	if m.Fullword {
 		modifiers = append(modifiers, "fullword")
 	}
+	if m.Xor {
+		modifiers = append(modifiers, "xor")
+	}
 
 	out = strings.Join(modifiers, " ")
 	return

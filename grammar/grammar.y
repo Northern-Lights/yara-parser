@@ -1,3 +1,32 @@
+/*
+Copyright (c) 2007-2013. The YARA Authors. All Rights Reserved.
+
+Redistribution and use in source and binary forms, with or without modification,
+are permitted provided that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice, this
+list of conditions and the following disclaimer.
+
+2. Redistributions in binary form must reproduce the above copyright notice,
+this list of conditions and the following disclaimer in the documentation and/or
+other materials provided with the distribution.
+
+3. Neither the name of the copyright holder nor the names of its contributors
+may be used to endorse or promote products derived from this software without
+specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
+ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/
+
 %{
 package grammar
 
@@ -16,6 +45,17 @@ type regexPair struct {
 }
 
 %}
+
+// yara-parser: we have 'const eof = 0' in lexer.l
+// Token that marks the end of the original file.
+// %token _END_OF_FILE_  0
+
+// TODO: yara-parser: https://github.com/VirusTotal/yara/blob/v3.8.1/libyara/lexer.l#L285
+// Token that marks the end of included files, we can't use  _END_OF_FILE_
+// because bison stops parsing when it sees _END_OF_FILE_, we want to be
+// be able to identify the point where an included file ends, but continuing
+// parsing any content that follows.
+%token _END_OF_INCLUDED_FILE_
 
 %token _DOT_DOT_
 %token _RULE_
@@ -38,6 +78,7 @@ type regexPair struct {
 %token <reg> _REGEXP_
 %token <mod> _ASCII_
 %token <mod> _WIDE_
+%token _XOR_
 %token <mod> _NOCASE_
 %token <mod> _FULLWORD_
 %token _AT_
@@ -116,6 +157,7 @@ rules
     | rules _INCLUDE_ _TEXT_STRING_ {
         ParsedRuleset.Includes = append(ParsedRuleset.Includes, $3)
     }
+    | rules _END_OF_INCLUDED_FILE_ { }
     ;
 
 
@@ -346,6 +388,7 @@ string_modifiers
               ASCII: $1.ASCII || $2.ASCII,
               Nocase: $1.Nocase || $2.Nocase,
               Fullword: $1.Fullword || $2.Fullword,
+              Xor: $1.Xor || $2.Xor,
           }
     }
     ;
@@ -356,6 +399,7 @@ string_modifier
     | _ASCII_       { $$.ASCII = true }
     | _NOCASE_      { $$.Nocase = true }
     | _FULLWORD_    { $$.Fullword = true }
+    | _XOR_         { $$.Xor = true }
     ;
 
 
