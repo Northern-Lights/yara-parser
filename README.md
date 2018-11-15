@@ -28,7 +28,7 @@ The grammar and lexer files are frozen so that building them with `goyacc` and `
 
 Use the following command to install the `j2y` command for converting JSON to YARA rulesets.
 
-`go get -u github.com/Northern-Ligths/yara-parser/cmd/j2y`
+`go get -u github.com/Northern-Lights/yara-parser/cmd/j2y`
 
 ### Grammar Library
 
@@ -124,6 +124,7 @@ to this JSON output:
                   "ascii": false,
                   "wide": true,
                   "fullword": false,
+		  "xor": false,
                   "i": false,
                   "s": false
                }
@@ -137,6 +138,7 @@ to this JSON output:
                   "ascii": true,
                   "wide": false,
                   "fullword": true,
+		  "xor": false,
                   "i": true,
                   "s": false
                }
@@ -150,6 +152,7 @@ to this JSON output:
                   "ascii": false,
                   "wide": false,
                   "fullword": false,
+		  "xor": false,
                   "i": false,
                   "s": false
                }
@@ -207,13 +210,14 @@ func main() {
 
 ## Development
 
-Currently, there is a `Makefile` which will build the parser, lexer, and main application.  For this to work, the following are needed:
+The included Dockerfile will build an image suitable for producing the parser and lexer using goyacc and flexgo.  There is a `builder` target in the `Makefile` to help you quickly get started with this.  Run the following to build the builder image:
 
-| Command | Source (`go get`) |
-| - | - |
-| `goyacc` | `golang.org/x/tools/cmd/goyacc` |
-| `flexgo` | `github.com/pebbe/flexgo` (Tool must be built manually)|
+`make builder`
+
+This will provide you with a Docker image called `yara-parser-builder`.
+
+As you make changes to the grammar, you can then run `make grammar`.  The .go files will be output in the `grammar/` directory.
 
 ## Limitations
 
-Currently, there are no guarantees with the library that modified rules will serialize back into a valid YARA ruleset.  For example, you can set `rule.Identifier = "123"`, but this would be invalid YARA.  Additionally, adding or removing strings may cause a condition to become invalid, and conditions are currently treated only as text.
+Currently, there are no guarantees with the library that modified rules will serialize back into a valid YARA ruleset.  For example, you can set `rule.Identifier = "123"`, but this would be invalid YARA.  Additionally, adding or removing strings may cause a condition to become invalid, and conditions are currently treated only as text.  Comments also cannot be retained.
