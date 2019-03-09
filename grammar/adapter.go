@@ -6,9 +6,12 @@ package grammar
 import (
 	"fmt"
 	"io"
+	"sync"
 
 	"github.com/Northern-Lights/yara-parser/data"
 )
+
+var parserLock sync.Mutex
 
 var errParser error
 
@@ -18,6 +21,8 @@ func init() {
 
 // Parse takes an input source and an output and initiates parsing
 func Parse(input io.Reader, output io.Writer) (rs data.RuleSet, err error) {
+	parserLock.Lock()
+	defer parserLock.Unlock()
 	defer recoverParse(&err)
 
 	// "Reset" the global ParsedRuleset
