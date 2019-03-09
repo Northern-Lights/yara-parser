@@ -28,11 +28,11 @@ func Parse(input io.Reader, output io.Writer) (rs data.RuleSet, err error) {
 	// "Reset" the global ParsedRuleset
 	ParsedRuleset = data.RuleSet{}
 
-	lexer := Lexer{
-		lexer: *NewScanner(),
+	lexer := goyaccLexerAdapter{
+		scanner: *NewScanner(),
 	}
-	lexer.lexer.In = input
-	lexer.lexer.Out = output
+	lexer.scanner.In = input
+	lexer.scanner.Out = output
 
 	result := xxParse(&lexer)
 	if result != 0 {
@@ -45,23 +45,20 @@ func Parse(input io.Reader, output io.Writer) (rs data.RuleSet, err error) {
 	return
 }
 
-// Lexer is an adapter that fits the flexgo lexer ("Scanner") into goyacc
-type Lexer struct {
-	lexer Scanner
+// goyaccLexerAdapter fits the flexgo lexer ("Scanner") into goyacc
+type goyaccLexerAdapter struct {
+	scanner Scanner
 }
 
 // Lex provides the interface expected by the goyacc parser.
-// It sets the global yylval pointer (defined in the lexer file)
-// to the one passed as an argument so that the parser actions
-// can make use of it.
-func (l *Lexer) Lex(lval *xxSymType) int {
+// Allows flexgo's lval to be used by goyacc via the global yylval
+func (l *goyaccLexerAdapter) Lex(lval *xxSymType) int {
 	yylval = lval
-	return l.lexer.Lex().(int)
+	return l.scanner.Lex().(int)
 }
 
-// Error satisfies the interface expected of the goyacc parser.
-// Here, it simply writes the error to stdout.
-func (l *Lexer) Error(e string) {
+// Error satisfies the interface expected by the goyacc parser
+func (l *goyaccLexerAdapter) Error(e string) {
 	errParser = fmt.Errorf(`grammar: lexical error @%d: "%s"`,
-		l.lexer.Lineno, e)
+		l.scanner.Lineno, e)
 }
