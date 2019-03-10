@@ -5,7 +5,7 @@ import (
 	"io"
 	"os"
 
-	"github.com/Northern-Lights/yara-parser/data"
+	"github.com/Northern-Lights/yara-parser/yara"
 )
 
 // global options
@@ -21,7 +21,7 @@ func main() {
 	}
 	defer handleErr(jsonFile.Close)
 
-	var ruleset data.RuleSet
+	var ruleset yara.RuleSet
 	err = json.NewDecoder(jsonFile).Decode(&ruleset)
 	if err != nil {
 		perror(`Couldn't JSON decode file: %s`, err)
@@ -42,7 +42,7 @@ func main() {
 		out = f
 	}
 
-	txt, err := ruleset.Serialize()
+	txt, err := ruleset.RuleString()
 	if err != nil {
 		perror(`Couldn't serialize ruleset: %s`, err)
 		os.Exit(6)

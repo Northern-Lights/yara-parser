@@ -34,14 +34,14 @@ import (
     "fmt"
     "strings"
 
-    "github.com/Northern-Lights/yara-parser/data"
+    "github.com/Northern-Lights/yara-parser/yara"
 )
 
-var ParsedRuleset data.RuleSet
+var ParsedRuleset yara.RuleSet
 
 type regexPair struct {
     text string
-    mods data.StringModifiers
+    mods yara.StringModifiers
 }
 
 %}
@@ -132,15 +132,15 @@ type regexPair struct {
     s             string
     ss            []string
 
-    rm            data.RuleModifiers
-    m             data.Metas
-    mp            data.Meta
-    mps           data.Metas
-    mod           data.StringModifiers
+    rm            yara.RuleModifiers
+    m             yara.Metas
+    mp            yara.Meta
+    mps           yara.Metas
+    mod           yara.StringModifiers
     reg           regexPair
-    ys            data.String
-    yss           data.Strings
-    yr            data.Rule
+    ys            yara.String
+    yss           yara.Strings
+    yr            yara.Rule
 }
 
 
@@ -238,7 +238,7 @@ meta
       }
     | _META_ ':' meta_declarations
       {
-          $$ = make(data.Metas, 0, len($3))
+          $$ = make(yara.Metas, 0, len($3))
           for _, mpair := range $3 {
               // YARA is ok with duplicate keys; we follow suit
               $$ = append($$, mpair)
@@ -250,7 +250,7 @@ meta
 strings
     : /* empty */
       {
-          $$ = data.Strings{}
+          $$ = yara.Strings{}
       }
     | _STRINGS_ ':' string_declarations
       {
@@ -265,7 +265,7 @@ condition
 
 
 rule_modifiers
-    : /* empty */ { $$ = data.RuleModifiers{} }
+    : /* empty */ { $$ = yara.RuleModifiers{} }
     | rule_modifiers rule_modifier     {
         $$.Private = $$.Private || $2.Private
         $$.Global = $$.Global || $2.Global
@@ -305,7 +305,7 @@ tag_list
 
 
 meta_declarations
-    : meta_declaration                    { $$ = data.Metas{$1} }
+    : meta_declaration                    { $$ = yara.Metas{$1} }
     | meta_declarations meta_declaration  { $$ = append($$, $2)}
     ;
 
@@ -313,29 +313,29 @@ meta_declarations
 meta_declaration
     : _IDENTIFIER_ '=' _TEXT_STRING_
       {
-          $$ = data.Meta{$1, $3}
+          $$ = yara.Meta{$1, $3}
       }
     | _IDENTIFIER_ '=' _NUMBER_
       {
-          $$ = data.Meta{$1, $3}
+          $$ = yara.Meta{$1, $3}
       }
     | _IDENTIFIER_ '=' '-' _NUMBER_
       {
-          $$ = data.Meta{$1, -$4}
+          $$ = yara.Meta{$1, -$4}
       }
     | _IDENTIFIER_ '=' _TRUE_
       {
-          $$ = data.Meta{$1, true}
+          $$ = yara.Meta{$1, true}
       }
     | _IDENTIFIER_ '=' _FALSE_
       {
-          $$ = data.Meta{$1, false}
+          $$ = yara.Meta{$1, false}
       }
     ;
 
 
 string_declarations
-    : string_declaration                      { $$ = data.Strings{$1} }
+    : string_declaration                      { $$ = yara.Strings{$1} }
     | string_declarations string_declaration  { $$ = append($1, $2) }
     ;
 
@@ -343,7 +343,7 @@ string_declarations
 string_declaration
     : _STRING_IDENTIFIER_ '='
       {
-          $$.Type = data.TypeString
+          $$.Type = yara.TypeString
           $$.ID = $1
       }
       _TEXT_STRING_ string_modifiers
@@ -355,7 +355,7 @@ string_declaration
       }
     | _STRING_IDENTIFIER_ '='
       {
-          $$.Type = data.TypeRegex
+          $$.Type = yara.TypeRegex
           $$.ID = $1
       }
       _REGEXP_ string_modifiers
@@ -371,7 +371,7 @@ string_declaration
       }
     | _STRING_IDENTIFIER_ '=' _HEX_STRING_
       {
-          $$.Type = data.TypeHexString
+          $$.Type = yara.TypeHexString
           $$.ID = $1
           $$.Text = $3
       }
@@ -380,10 +380,10 @@ string_declaration
 
 string_modifiers
     : /* empty */                         {
-      $$ = data.StringModifiers{}
+      $$ = yara.StringModifiers{}
     }
     | string_modifiers string_modifier    {
-          $$ = data.StringModifiers {
+          $$ = yara.StringModifiers {
               Wide: $1.Wide || $2.Wide,
               ASCII: $1.ASCII || $2.ASCII,
               Nocase: $1.Nocase || $2.Nocase,

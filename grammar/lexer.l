@@ -41,7 +41,7 @@ import (
     "strconv"
     "strings"
 
-    "github.com/Northern-Lights/yara-parser/data"
+    "github.com/Northern-Lights/yara-parser/yara"
 )
 
 // Necessary types for flexgo
@@ -318,7 +318,7 @@ u?int(8|16|32)(be)? {
 
   txt := strings.TrimSuffix(textBuilder.String(), YYtext)
   
-  var mods data.StringModifiers
+  var mods yara.StringModifiers
 
   for _, c := range YYtext {
       switch c {

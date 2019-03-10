@@ -6,13 +6,13 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Northern-Lights/yara-parser/data"
+	"github.com/Northern-Lights/yara-parser/yara"
 	"github.com/Northern-Lights/yara-parser/grammar"
 )
 
 const testfile = "ruleset.yar"
 
-var ruleset *data.RuleSet
+var ruleset *yara.RuleSet
 
 func init() {
 	f, err := os.Open(testfile)

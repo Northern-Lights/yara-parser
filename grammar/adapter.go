@@ -8,7 +8,7 @@ import (
 	"io"
 	"sync"
 
-	"github.com/Northern-Lights/yara-parser/data"
+	"github.com/Northern-Lights/yara-parser/yara"
 )
 
 var parserLock sync.Mutex
@@ -20,13 +20,13 @@ func init() {
 }
 
 // Parse takes an input source and an output and initiates parsing
-func Parse(input io.Reader, output io.Writer) (rs data.RuleSet, err error) {
+func Parse(input io.Reader, output io.Writer) (rs yara.RuleSet, err error) {
 	parserLock.Lock()
 	defer parserLock.Unlock()
 	defer recoverParse(&err)
 
 	// "Reset" the global ParsedRuleset
-	ParsedRuleset = data.RuleSet{}
+	ParsedRuleset = yara.RuleSet{}
 
 	lexer := goyaccLexerAdapter{
 		scanner: *NewScanner(),

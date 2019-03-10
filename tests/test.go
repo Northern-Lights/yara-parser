@@ -6,7 +6,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/Northern-Lights/yara-parser/data"
+	"github.com/Northern-Lights/yara-parser/yara"
 	"github.com/Northern-Lights/yara-parser/grammar"
 )
 
@@ -20,12 +20,12 @@ func openTestFile(t *testing.T, fname string) io.Reader {
 	return f
 }
 
-func parseTestFile(t *testing.T, fname string) (data.RuleSet, error) {
+func parseTestFile(t *testing.T, fname string) (yara.RuleSet, error) {
 	f := openTestFile(t, fname)
 	return grammar.Parse(f, os.Stderr)
 }
 
-func parseRuleStr(s string) (data.RuleSet, error) {
+func parseRuleStr(s string) (yara.RuleSet, error) {
 	buf := bytes.NewBufferString(s)
 	return grammar.Parse(buf, os.Stderr)
 }

@@ -10,14 +10,14 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/Northern-Lights/yara-parser/data"
+	"github.com/Northern-Lights/yara-parser/yara"
 )
 
-var ParsedRuleset data.RuleSet
+var ParsedRuleset yara.RuleSet
 
 type regexPair struct {
 	text string
-	mods data.StringModifiers
+	mods yara.StringModifiers
 }
 
 //line /grammar/grammar.y:130
@@ -27,15 +27,15 @@ type xxSymType struct {
 	s   string
 	ss  []string
 
-	rm  data.RuleModifiers
-	m   data.Metas
-	mp  data.Meta
-	mps data.Metas
-	mod data.StringModifiers
+	rm  yara.RuleModifiers
+	m   yara.Metas
+	mp  yara.Meta
+	mps yara.Metas
+	mod yara.StringModifiers
 	reg regexPair
-	ys  data.String
-	yss data.Strings
-	yr  data.Rule
+	ys  yara.String
+	yss yara.Strings
+	yr  yara.Rule
 }
 
 const _END_OF_INCLUDED_FILE_ = 57346
@@ -830,7 +830,7 @@ xxdefault:
 		xxDollar = xxS[xxpt-3 : xxpt+1]
 //line /grammar/grammar.y:240
 		{
-			xxVAL.m = make(data.Metas, 0, len(xxDollar[3].mps))
+			xxVAL.m = make(yara.Metas, 0, len(xxDollar[3].mps))
 			for _, mpair := range xxDollar[3].mps {
 				// YARA is ok with duplicate keys; we follow suit
 				xxVAL.m = append(xxVAL.m, mpair)
@@ -840,7 +840,7 @@ xxdefault:
 		xxDollar = xxS[xxpt-0 : xxpt+1]
 //line /grammar/grammar.y:252
 		{
-			xxVAL.yss = data.Strings{}
+			xxVAL.yss = yara.Strings{}
 		}
 	case 13:
 		xxDollar = xxS[xxpt-3 : xxpt+1]
@@ -852,7 +852,7 @@ xxdefault:
 		xxDollar = xxS[xxpt-0 : xxpt+1]
 //line /grammar/grammar.y:268
 		{
-			xxVAL.rm = data.RuleModifiers{}
+			xxVAL.rm = yara.RuleModifiers{}
 		}
 	case 16:
 		xxDollar = xxS[xxpt-2 : xxpt+1]
@@ -901,7 +901,7 @@ xxdefault:
 		xxDollar = xxS[xxpt-1 : xxpt+1]
 //line /grammar/grammar.y:308
 		{
-			xxVAL.mps = data.Metas{xxDollar[1].mp}
+			xxVAL.mps = yara.Metas{xxDollar[1].mp}
 		}
 	case 24:
 		xxDollar = xxS[xxpt-2 : xxpt+1]
@@ -913,37 +913,37 @@ xxdefault:
 		xxDollar = xxS[xxpt-3 : xxpt+1]
 //line /grammar/grammar.y:315
 		{
-			xxVAL.mp = data.Meta{xxDollar[1].s, xxDollar[3].s}
+			xxVAL.mp = yara.Meta{xxDollar[1].s, xxDollar[3].s}
 		}
 	case 26:
 		xxDollar = xxS[xxpt-3 : xxpt+1]
 //line /grammar/grammar.y:319
 		{
-			xxVAL.mp = data.Meta{xxDollar[1].s, xxDollar[3].i64}
+			xxVAL.mp = yara.Meta{xxDollar[1].s, xxDollar[3].i64}
 		}
 	case 27:
 		xxDollar = xxS[xxpt-4 : xxpt+1]
 //line /grammar/grammar.y:323
 		{
-			xxVAL.mp = data.Meta{xxDollar[1].s, -xxDollar[4].i64}
+			xxVAL.mp = yara.Meta{xxDollar[1].s, -xxDollar[4].i64}
 		}
 	case 28:
 		xxDollar = xxS[xxpt-3 : xxpt+1]
 //line /grammar/grammar.y:327
 		{
-			xxVAL.mp = data.Meta{xxDollar[1].s, true}
+			xxVAL.mp = yara.Meta{xxDollar[1].s, true}
 		}
 	case 29:
 		xxDollar = xxS[xxpt-3 : xxpt+1]
 //line /grammar/grammar.y:331
 		{
-			xxVAL.mp = data.Meta{xxDollar[1].s, false}
+			xxVAL.mp = yara.Meta{xxDollar[1].s, false}
 		}
 	case 30:
 		xxDollar = xxS[xxpt-1 : xxpt+1]
 //line /grammar/grammar.y:338
 		{
-			xxVAL.yss = data.Strings{xxDollar[1].ys}
+			xxVAL.yss = yara.Strings{xxDollar[1].ys}
 		}
 	case 31:
 		xxDollar = xxS[xxpt-2 : xxpt+1]
@@ -955,7 +955,7 @@ xxdefault:
 		xxDollar = xxS[xxpt-2 : xxpt+1]
 //line /grammar/grammar.y:345
 		{
-			xxVAL.ys.Type = data.TypeString
+			xxVAL.ys.Type = yara.TypeString
 			xxVAL.ys.ID = xxDollar[1].s
 		}
 	case 33:
@@ -971,7 +971,7 @@ xxdefault:
 		xxDollar = xxS[xxpt-2 : xxpt+1]
 //line /grammar/grammar.y:357
 		{
-			xxVAL.ys.Type = data.TypeRegex
+			xxVAL.ys.Type = yara.TypeRegex
 			xxVAL.ys.ID = xxDollar[1].s
 		}
 	case 35:
@@ -991,7 +991,7 @@ xxdefault:
 		xxDollar = xxS[xxpt-3 : xxpt+1]
 //line /grammar/grammar.y:373
 		{
-			xxVAL.ys.Type = data.TypeHexString
+			xxVAL.ys.Type = yara.TypeHexString
 			xxVAL.ys.ID = xxDollar[1].s
 			xxVAL.ys.Text = xxDollar[3].s
 		}
@@ -999,13 +999,13 @@ xxdefault:
 		xxDollar = xxS[xxpt-0 : xxpt+1]
 //line /grammar/grammar.y:382
 		{
-			xxVAL.mod = data.StringModifiers{}
+			xxVAL.mod = yara.StringModifiers{}
 		}
 	case 38:
 		xxDollar = xxS[xxpt-2 : xxpt+1]
 //line /grammar/grammar.y:385
 		{
-			xxVAL.mod = data.StringModifiers{
+			xxVAL.mod = yara.StringModifiers{
 				Wide:     xxDollar[1].mod.Wide || xxDollar[2].mod.Wide,
 				ASCII:    xxDollar[1].mod.ASCII || xxDollar[2].mod.ASCII,
 				Nocase:   xxDollar[1].mod.Nocase || xxDollar[2].mod.Nocase,

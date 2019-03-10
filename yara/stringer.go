@@ -1,6 +1,6 @@
 // Stringer implementations for each type
 
-package data
+package yara
 
 import (
 	"fmt"
