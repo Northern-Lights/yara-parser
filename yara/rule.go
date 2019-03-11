@@ -18,7 +18,7 @@ type Rule struct {
 	Tags       []string      `json:"tags"`
 	Meta       Metas         `json:"meta"`
 	Strings    Strings       `json:"strings"`
-	Condition  string        `json:"condition"`
+	Condition  Expression    `json:"condition"`
 }
 
 // RuleString for Rule builds a YARA rule as a string
@@ -60,9 +60,13 @@ func (r *Rule) RuleString() (out string, err error) {
 	}
 	b.WriteString(strs)
 
+	condition, err := r.Condition.RuleString()
+	if err != nil {
+		return
+	}
 	b.WriteString("condition:\n")
 	b.WriteString("  ") // TODO: Don't assume indent...
-	b.WriteString(r.Condition)
+	b.WriteString(condition)
 	b.WriteString("\n}\n\n")
 
 	out = b.String()

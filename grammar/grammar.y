@@ -32,7 +32,6 @@ package grammar
 
 import (
     "fmt"
-    "strings"
 
     "github.com/Northern-Lights/yara-parser/yara"
 )
@@ -71,7 +70,7 @@ type regexPair struct {
 %token _STRING_LENGTH_
 %token _STRING_IDENTIFIER_WITH_WILDCARD_
 %token <i64> _NUMBER_
-%token _DOUBLE_
+%token <f64> _DOUBLE_
 %token _INTEGER_FUNCTION_
 %token <s> _TEXT_STRING_
 %token <s> _HEX_STRING_
@@ -114,6 +113,8 @@ type regexPair struct {
 
 %type <s>   import
 %type <yr>  rule
+%type <rm>  rule_modifier
+%type <rm>  rule_modifiers
 %type <ss>  tags
 %type <ss>  tag_list
 %type <m>   meta
@@ -124,14 +125,27 @@ type regexPair struct {
 %type <ys>  string_declaration
 %type <mod> string_modifier
 %type <mod> string_modifiers
-%type <rm>  rule_modifier
-%type <rm>  rule_modifiers
+%type <expr> condition
+%type <expr> boolean_expression
+%type <expr> expression
+%type <pexpr> primary_expression
+%type <rng> range
 
 %union {
+    f64           float64
     i64           int64
     s             string
     ss            []string
 
+    fsz           yara.Filesize
+    ent           yara.Entrypoint
+    txt           yara.TextString
+    num           yara.Number
+    dub           yara.Double
+    binex         yara.BinaryExpression
+    rng           yara.Range
+    expr          yara.Expression
+    pexpr         yara.PrimaryExpression
     rm            yara.RuleModifiers
     m             yara.Metas
     mp            yara.Meta
@@ -222,10 +236,7 @@ rule
       }
       condition _RBRACE_
       {
-          c := conditionBuilder.String()
-          c = strings.TrimLeft(c, ":\n\r\t ")
-          c = strings.TrimRight(c, "}\n\r\t ")
-          $<yr>4.Condition = c
+          $<yr>4.Condition = $10
           $$ = $<yr>4
       }
     ;
@@ -261,6 +272,9 @@ strings
 
 condition
     : _CONDITION_ ':' boolean_expression
+      {
+        $$ = $3
+      }
     ;
 
 
@@ -452,18 +466,18 @@ regexp
 boolean_expression
     : expression
       {
-        
+        $$ = $1
       }
     ;
 
 expression
     : _TRUE_
       {
-          
+        $$ = yara.Boolean(true)
       }
     | _FALSE_
       {
-        
+        $$ = yara.Boolean(false)
       }
     | primary_expression _MATCHES_ regexp
       {
@@ -475,15 +489,26 @@ expression
       }
     | _STRING_IDENTIFIER_
       {
-        
+        $$ = yara.StringIdentifier{
+          Identifier: $1,
+        }
       }
     | _STRING_IDENTIFIER_ _AT_ primary_expression
       {
-        
+        sid := yara.StringIdentifier{
+          Identifier: $1,
+        }
+        sid.At($3)
+        $$ = sid
       }
     | _STRING_IDENTIFIER_ _IN_ range
       {
-        
+        sid := yara.StringIdentifier{
+          Identifier: $1,
+        }
+        rangeCopy := $3
+        sid.In(&rangeCopy)
+        $$ = sid
       }
     | _FOR_ for_expression error
       {
@@ -523,7 +548,9 @@ expression
       }
       boolean_expression
       {
-        
+        exp1 := $1
+        exp2 := $4
+        $$ = yara.And(exp1, exp2)
       }
     | boolean_expression _OR_
       {
@@ -531,31 +558,33 @@ expression
       }
       boolean_expression
       {
-        
+        exp1 := $1
+        exp2 := $4
+        $$ = yara.Or(exp1, exp2)
       }
     | primary_expression _LT_ primary_expression
       {
-        
+        $$ = yara.LT($1, $3)
       }
     | primary_expression _GT_ primary_expression
       {
-        
+        $$ = yara.GT($1, $3)
       }
     | primary_expression _LE_ primary_expression
       {
-        
+        $$ = yara.LE($1, $3)
       }
     | primary_expression _GE_ primary_expression
       {
-        
+        $$ = yara.GE($1, $3)
       }
     | primary_expression _EQ_ primary_expression
       {
-        
+        $$ = yara.EQ($1, $3)
       }
     | primary_expression _NEQ_ primary_expression
       {
-        
+        $$ = yara.NEQ($1, $3)
       }
     | primary_expression
       {
@@ -563,7 +592,7 @@ expression
       }
     |'(' expression ')'
       {
-        
+        $$ = $2
       }
     ;
 
@@ -577,7 +606,10 @@ integer_set
 range
     : '(' primary_expression _DOT_DOT_  primary_expression ')'
       {
-        
+        $$ = yara.Range{
+          Start: $2,
+          End: $4,
+        }
       }
     ;
 
@@ -641,15 +673,15 @@ for_expression
 primary_expression
     : '(' primary_expression ')'
       {
-        
+        $$ = $2
       }
     | _FILESIZE_
       {
-        
+        $$ = yara.Filesize{}
       }
     | _ENTRYPOINT_
       {
-        
+        $$ = yara.Entrypoint{}
       }
     | _INTEGER_FUNCTION_ '(' primary_expression ')'
       {
@@ -657,15 +689,15 @@ primary_expression
       }
     | _NUMBER_
       {
-        
+        $$ = yara.Number($1)
       }
     | _DOUBLE_
       {
-        
+        $$ = yara.Double($1)
       }
     | _TEXT_STRING_
       {
-        
+        $$ = yara.TextString($1)
       }
     | _STRING_COUNT_
       {
