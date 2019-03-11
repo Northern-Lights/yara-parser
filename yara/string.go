@@ -60,15 +60,13 @@ func (s *String) RuleString() (out string, err error) {
 
 	case TypeRegex:
 		encapsOpen = "/"
-		var closeBuilder strings.Builder
-		closeBuilder.WriteRune('/')
+		encapsClose = "/"
 		if s.Modifiers.I {
-			closeBuilder.WriteRune('i')
+			encapsClose += "i"
 		}
 		if s.Modifiers.S {
-			closeBuilder.WriteRune('s')
+			encapsClose += "s"
 		}
-		encapsClose = closeBuilder.String()
 
 	default:
 		err = fmt.Errorf("No such string type %d", t)
