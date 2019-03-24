@@ -2,33 +2,25 @@ package yara
 
 import "fmt"
 
-type Filesize struct{}
+type PrimaryExpressionKeyword string
 
-func (px Filesize) RuleString() (out string, err error) {
-	return "filesize", nil
+func (px PrimaryExpressionKeyword) RuleString() (string, error) {
+	// TODO: filter invalid ones
+	return string(px), nil
 }
 
-func (px Filesize) expression() Expression {
+func (px PrimaryExpressionKeyword) expression() Expression {
 	return px
 }
 
-func (px Filesize) primaryExpression() PrimaryExpression {
+func (px PrimaryExpressionKeyword) primaryExpression() PrimaryExpression {
 	return px
 }
 
-type Entrypoint struct{}
-
-func (px Entrypoint) RuleString() (out string, err error) {
-	return "entrypoint", nil
-}
-
-func (px Entrypoint) expression() Expression {
-	return px
-}
-
-func (px Entrypoint) primaryExpression() PrimaryExpression {
-	return px
-}
+const (
+	Filesize   PrimaryExpressionKeyword = "filesize"
+	Entrypoint PrimaryExpressionKeyword = "entrypoint"
+)
 
 // Number -- base info is lost during parsing, so it will only be represented as
 // base-10 when serializing back into YARA Rule text

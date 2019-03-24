@@ -137,8 +137,7 @@ type regexPair struct {
     s             string
     ss            []string
 
-    fsz           yara.Filesize
-    ent           yara.Entrypoint
+    pxkw          yara.PrimaryExpressionKeyword
     txt           yara.TextString
     num           yara.Number
     dub           yara.Double
@@ -677,11 +676,11 @@ primary_expression
       }
     | _FILESIZE_
       {
-        $$ = yara.Filesize{}
+        $$ = yara.Filesize
       }
     | _ENTRYPOINT_
       {
-        $$ = yara.Entrypoint{}
+        $$ = yara.Entrypoint
       }
     | _INTEGER_FUNCTION_ '(' primary_expression ')'
       {
