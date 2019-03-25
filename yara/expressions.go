@@ -65,9 +65,22 @@ func (expr *StringIdentifier) In(r *Range) {
 	expr.at = nil
 }
 
+type BinaryOperator string
+
+const (
+	BinaryOperatorAnd BinaryOperator = "and"
+	BinaryOperatorOr  BinaryOperator = "or"
+	BinaryOperatorLT  BinaryOperator = "<"
+	BinaryOperatorGT  BinaryOperator = ">"
+	BinaryOperatorLE  BinaryOperator = "<="
+	BinaryOperatorGE  BinaryOperator = ">="
+	BinaryOperatorEQ  BinaryOperator = "=="
+	BinaryOperatorNEQ BinaryOperator = "!="
+)
+
 type BinaryExpression struct {
 	Left     Expression
-	Operator string // TODO: make it a type
+	Operator BinaryOperator
 	Right    Expression
 }
 
@@ -94,7 +107,7 @@ func (expr BinaryExpression) expression() Expression {
 	return expr
 }
 
-func makeBinaryExpr(expr1, expr2 Expression, operator string) Expression {
+func makeBinaryExpr(expr1, expr2 Expression, operator BinaryOperator) Expression {
 	return &BinaryExpression{
 		Left:     expr1,
 		Operator: operator,
@@ -103,33 +116,33 @@ func makeBinaryExpr(expr1, expr2 Expression, operator string) Expression {
 }
 
 func And(expr1, expr2 Expression) Expression {
-	return makeBinaryExpr(expr1, expr2, "and")
+	return makeBinaryExpr(expr1, expr2, BinaryOperatorAnd)
 }
 
 func Or(expr1, expr2 Expression) Expression {
-	return makeBinaryExpr(expr1, expr2, "or")
+	return makeBinaryExpr(expr1, expr2, BinaryOperatorOr)
 }
 
 func LT(expr1, expr2 PrimaryExpression) Expression {
-	return makeBinaryExpr(expr1, expr2, "<")
+	return makeBinaryExpr(expr1, expr2, BinaryOperatorLT)
 }
 
 func GT(expr1, expr2 PrimaryExpression) Expression {
-	return makeBinaryExpr(expr1, expr2, ">")
+	return makeBinaryExpr(expr1, expr2, BinaryOperatorGT)
 }
 
 func LE(expr1, expr2 PrimaryExpression) Expression {
-	return makeBinaryExpr(expr1, expr2, "<=")
+	return makeBinaryExpr(expr1, expr2, BinaryOperatorLE)
 }
 
 func GE(expr1, expr2 PrimaryExpression) Expression {
-	return makeBinaryExpr(expr1, expr2, ">=")
+	return makeBinaryExpr(expr1, expr2, BinaryOperatorGE)
 }
 
 func EQ(expr1, expr2 PrimaryExpression) Expression {
-	return makeBinaryExpr(expr1, expr2, "==")
+	return makeBinaryExpr(expr1, expr2, BinaryOperatorEQ)
 }
 
 func NEQ(expr1, expr2 PrimaryExpression) Expression {
-	return makeBinaryExpr(expr1, expr2, "!=")
+	return makeBinaryExpr(expr1, expr2, BinaryOperatorNEQ)
 }
