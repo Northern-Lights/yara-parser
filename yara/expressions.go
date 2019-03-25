@@ -37,7 +37,7 @@ func (expr StringIdentifier) RuleString() (out string, err error) {
 		if err != nil {
 			return
 		}
-		out += fmt.Sprintf(` @ %s`, s)
+		out += fmt.Sprintf(` at %s`, s)
 	} else if expr.in != nil {
 		var s string
 		s, err = expr.in.RuleString()
