@@ -124,15 +124,9 @@ func (m *Meta) Serialize() (out string, err error) {
 		out = fmt.Sprintf(`%s = %v`, m.Key, val)
 
 	case float64:
-		// This is a bit tricky... val is interface{} and JSON unmarshals it
-		// as float64... So ensure decimal part is zero and treat as int64.
-		n := int64(val)
-		check := val - float64(n) // This should be 0.0 if it was int64
-		if check != 0.0 {
-			err = fmt.Errorf(`Unsupported meta value type "%T"`, val)
-			return
-		}
-		out = fmt.Sprintf(`%s = %v`, m.Key, val)
+		// grammar says floats are not allowed, so take JSON's float and make
+		// it an int
+		out = fmt.Sprintf(`%s = "%d"`, m.Key, int64(val))
 
 	default:
 		err = fmt.Errorf(`Unsupported meta value type "%s"`, val)
