@@ -124,6 +124,10 @@ type regexPair struct {
 %type <ys>  string_declaration
 %type <mod> string_modifier
 %type <mod> string_modifiers
+%type <mod> regexp_modifier
+%type <mod> regexp_modifiers
+%type <mod> hex_modifier
+%type <mod> hex_modifiers
 %type <rm>  rule_modifier
 %type <rm>  rule_modifiers
 
@@ -359,7 +363,7 @@ string_declaration
           $$.Type = data.TypeRegex
           $$.ID = $1
       }
-      _REGEXP_ string_modifiers
+      _REGEXP_ regexp_modifiers
       {
           $<ys>3.Text = $4.text
 
@@ -370,11 +374,12 @@ string_declaration
 
           $$ = $<ys>3
       }
-    | _STRING_IDENTIFIER_ '=' _HEX_STRING_
+    | _STRING_IDENTIFIER_ '=' _HEX_STRING_ hex_modifiers
       {
           $$.Type = data.TypeHexString
           $$.ID = $1
           $$.Text = $3
+          $$.Modifiers = $4
       }
     ;
 
@@ -438,6 +443,51 @@ string_modifier
           Max: $5,
         }
       }
+    ;
+
+
+regexp_modifiers
+    : /* empty */
+    {
+      $$ = data.StringModifiers{}
+    }
+    | regexp_modifiers regexp_modifier    {
+          $$ = data.StringModifiers {
+              Wide: $1.Wide || $2.Wide,
+              ASCII: $1.ASCII || $2.ASCII,
+              Nocase: $1.Nocase || $2.Nocase,
+              Fullword: $1.Fullword || $2.Fullword,
+              Private: $1.Private || $2.Private,
+          }
+    }
+    ;
+
+
+regexp_modifier
+    : _WIDE_        { $$.Wide = true }
+    | _ASCII_       { $$.ASCII = true }
+    | _NOCASE_      { $$.Nocase = true }
+    | _FULLWORD_    { $$.Fullword = true }
+    | _PRIVATE_     { $$.Private = true }
+    ;
+
+
+hex_modifiers
+    : /* empty */
+    {
+      $$ = data.StringModifiers{}
+    }
+    | hex_modifiers hex_modifier
+      {
+        $$ = data.StringModifiers {
+          Private: $1.Private || $2.Private,
+        }
+      }
+    ;
+
+
+hex_modifier
+    : _PRIVATE_   { $$.Private = true }
     ;
 
 
