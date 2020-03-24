@@ -107,6 +107,7 @@ strings:
     $xor2 = "xor?" nocase xor(0x5d)
     $xor3 = /xor_/ xor(0xde-0xff)
     $xor4 = /xor_/ xor(127-0xff)
+    $xor5 = "xor?" xor(0x5d-0xff) private
     $no_xor1 = "no xor :(" wide
     $no_xor2 = "no xor >:(" ascii nocase
 condition:

@@ -384,6 +384,11 @@ string_modifiers
       $$ = data.StringModifiers{}
     }
     | string_modifiers string_modifier    {
+          xorRange := $2.XorRange
+          if $1.Xor {
+            xorRange = $1.XorRange
+          }
+
           $$ = data.StringModifiers {
               Wide: $1.Wide || $2.Wide,
               ASCII: $1.ASCII || $2.ASCII,
@@ -391,7 +396,7 @@ string_modifiers
               Fullword: $1.Fullword || $2.Fullword,
               Private: $1.Private || $2.Private,
               Xor: $1.Xor || $2.Xor,
-              XorRange: $2.XorRange,
+              XorRange: xorRange,
           }
     }
     ;

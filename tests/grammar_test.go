@@ -172,6 +172,7 @@ func TestXorRange(t *testing.T) {
 		"$xor2":    xorRangeTest{true, 0x5d, 0x5d, `$xor2 = "xor?" nocase xor(0x5d)`},
 		"$xor3":    xorRangeTest{true, 0xde, 0xff, `$xor3 = /xor_/ xor(0xde-0xff)`},
 		"$xor4":    xorRangeTest{true, 127, 0xff, `$xor4 = /xor_/ xor(127-0xff)`},
+		"$xor5":    xorRangeTest{true, 0x5d, 0xff, `$xor5 = "xor?" private xor(0x5d-0xff)`},
 		"$no_xor1": xorRangeTest{false, 0, 0, `$no_xor1 = "no xor :(" wide`},
 		"$no_xor2": xorRangeTest{false, 0, 0, `$no_xor2 = "no xor >:(" ascii nocase`},
 	}
