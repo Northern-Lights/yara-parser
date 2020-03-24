@@ -157,3 +157,42 @@ func TestXor(t *testing.T) {
 		}
 	}
 }
+
+type xorRangeTest struct {
+	IsXored bool
+	Min     int64
+	Max     int64
+	Text    string
+}
+
+// TestXorRange verifies that the xor string modifier works with bytes range
+func TestXorRange(t *testing.T) {
+	tests := map[string]xorRangeTest{
+		"$xor1":    xorRangeTest{true, 0, 0, `$xor1 = "xor!" xor`},
+		"$xor2":    xorRangeTest{true, 0x5d, 0x5d, `$xor2 = "xor?" nocase xor(0x5d)`},
+		"$xor3":    xorRangeTest{true, 0xde, 0xff, `$xor3 = /xor_/ xor(0xde-0xff)`},
+		"$xor4":    xorRangeTest{true, 127, 0xff, `$xor4 = /xor_/ xor(127-0xff)`},
+		"$no_xor1": xorRangeTest{false, 0, 0, `$no_xor1 = "no xor :(" wide`},
+		"$no_xor2": xorRangeTest{false, 0, 0, `$no_xor2 = "no xor >:(" ascii nocase`},
+	}
+	const ruleName = "XOR_RANGE"
+	for _, rule := range ruleset.Rules {
+		if rule.Identifier == ruleName {
+			for _, s := range rule.Strings {
+				test := tests[s.ID]
+				serialized, _ := s.Serialize()
+				if s.Modifiers.Xor != test.IsXored ||
+					s.Modifiers.XorRange.Min.Val != test.Min ||
+					s.Modifiers.XorRange.Max.Val != test.Max ||
+					serialized != test.Text {
+					t.Errorf(
+						`Ruleset "%s" rule "%s" string "%s" ranged xor modifier incorrectly parsed, got - %v, want -%v`,
+						testfile, rule.Identifier, s.ID,
+						xorRangeTest{s.Modifiers.Xor, s.Modifiers.XorRange.Min.Val, s.Modifiers.XorRange.Max.Val, serialized},
+						test,
+					)
+				}
+			}
+		}
+	}
+}

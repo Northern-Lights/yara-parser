@@ -58,11 +58,34 @@ const (
 
 // StringModifiers denote the status of the possible modifiers for strings
 type StringModifiers struct {
-	Nocase   bool `json:"nocase"`
-	ASCII    bool `json:"ascii"`
-	Wide     bool `json:"wide"`
-	Fullword bool `json:"fullword"`
-	Xor      bool `json:"xor"`
-	I        bool `json:"i"` // for regex
-	S        bool `json:"s"` // for regex
+	Nocase   bool     `json:"nocase"`
+	ASCII    bool     `json:"ascii"`
+	Wide     bool     `json:"wide"`
+	Fullword bool     `json:"fullword"`
+	Xor      bool     `json:"xor"`
+	XorRange XorRange `json:"xor_range"` // makes sense only with XOR modifier
+	I        bool     `json:"i"`         // for regex
+	S        bool     `json:"s"`         // for regex
+}
+
+// NumBase is used to differentiate between hexadecimal, decimal and octal nums
+type NumBase uint8
+
+// Type of number
+const (
+	Hex NumBase = iota
+	Decimal
+	Octal
+)
+
+// Number specifies range bound for strings XOR modifier
+type Number struct {
+	Val  int64   `json:"val"`
+	Base NumBase `json:"base"`
+}
+
+// XorRange contains upper and lower bounds of the XOR modifier
+type XorRange struct {
+	Min Number `json:"min"`
+	Max Number `json:"max"`
 }

@@ -70,7 +70,7 @@ type regexPair struct {
 %token _STRING_OFFSET_
 %token _STRING_LENGTH_
 %token _STRING_IDENTIFIER_WITH_WILDCARD_
-%token <i64> _NUMBER_
+%token <num> _NUMBER_
 %token _DOUBLE_
 %token _INTEGER_FUNCTION_
 %token <s> _TEXT_STRING_
@@ -128,7 +128,7 @@ type regexPair struct {
 %type <rm>  rule_modifiers
 
 %union {
-    i64           int64
+    num           data.Number
     s             string
     ss            []string
 
@@ -321,7 +321,8 @@ meta_declaration
       }
     | _IDENTIFIER_ '=' '-' _NUMBER_
       {
-          $$ = data.Meta{$1, -$4}
+          $4.Val = -$4.Val
+          $$ = data.Meta{$1, $4}
       }
     | _IDENTIFIER_ '=' _TRUE_
       {
@@ -389,6 +390,7 @@ string_modifiers
               Nocase: $1.Nocase || $2.Nocase,
               Fullword: $1.Fullword || $2.Fullword,
               Xor: $1.Xor || $2.Xor,
+              XorRange: $2.XorRange,
           }
     }
     ;
@@ -399,7 +401,36 @@ string_modifier
     | _ASCII_       { $$.ASCII = true }
     | _NOCASE_      { $$.Nocase = true }
     | _FULLWORD_    { $$.Fullword = true }
-    | _XOR_         { $$.Xor = true }
+    | _XOR_         
+      {
+        $$.Xor = true
+      }
+    | _XOR_ '(' _NUMBER_ ')'
+      {
+        if $3.Val < 0 || $3.Val > 255 {
+          msg := fmt.Sprintf("XOR value must be in range between 0 and 255, provided value %d", $3.Val)
+          panic(msg)
+        }
+
+        $$.Xor = true
+        $$.XorRange = data.XorRange{
+          Min: $3,
+          Max: $3,
+        }
+      }
+    | _XOR_ '(' _NUMBER_ '-' _NUMBER_ ')'
+      {
+        if $3.Val < 0 || $5.Val > 255 || $3.Val > $5.Val {
+          msg := fmt.Sprintf("XOR values must be in range between 0 and 255, provided values (%d - %d)", $3.Val, $5.Val)
+          panic(msg)
+        }
+  
+        $$.Xor = true
+        $$.XorRange = data.XorRange{
+          Min: $3,
+          Max: $5,
+        }
+      }
     ;
 
 

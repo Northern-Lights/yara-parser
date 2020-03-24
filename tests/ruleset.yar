@@ -100,3 +100,15 @@ strings:
 condition:
     any of them
 }
+
+rule XOR_RANGE {
+strings:
+    $xor1 = "xor!" xor(0)
+    $xor2 = "xor?" nocase xor(0x5d)
+    $xor3 = /xor_/ xor(0xde-0xff)
+    $xor4 = /xor_/ xor(127-0xff)
+    $no_xor1 = "no xor :(" wide
+    $no_xor2 = "no xor >:(" ascii nocase
+condition:
+    any of them
+}

@@ -139,7 +139,6 @@ octdigit      [0-7]
 "xor"                   { return _XOR_;         }
 "fullword"              { return _FULLWORD_;    }
 "nocase"                { return _NOCASE_;      }
-"condition"             { return _CONDITION_;   }
 "true"                  { return _TRUE_;        }
 "false"                 { return _FALSE_;       }
 "not"                   { return _NOT_;         }
@@ -218,28 +217,30 @@ u?int(8|16|32)(be)? {
 {digit}+(MB|KB){0,1}  {
   var err error
   s := strings.TrimRight(YYtext, "MKB")
-  yylval.i64, err = strconv.ParseInt(s, 10, 64)
+  numVal, err := strconv.ParseInt(s, 10, 64)
   if err != nil {
       panic(fmt.Errorf("Number conversion error: %s", err))
   }
 
   if strings.HasSuffix(YYtext, "KB") {
-      if yylval.i64 > math.MaxInt64 / 1024 {
+      if numVal > math.MaxInt64 / 1024 {
           err := fmt.Errorf("Integer overflow: %s; max %d",
               YYtext, math.MaxInt64)
           panic(err)
       } else {
-          yylval.i64 *= 1024
+          numVal *= 1024
       }
   } else if strings.HasSuffix(YYtext, "MB") {
-      if yylval.i64 > math.MaxInt64 / 1048576 {
+      if numVal > math.MaxInt64 / 1048576 {
           err := fmt.Errorf("Integer overflow: %s; max %d",
               YYtext, math.MaxInt64)
           panic(err)
       } else {
-          yylval.i64 *= 1048576
+          numVal *= 1048576
       }
   }
+  yylval.num = data.Number{Val: numVal, Base: data.Decimal}
+
   return _NUMBER_;
 }
 
@@ -249,10 +250,11 @@ u?int(8|16|32)(be)? {
 
 0x{hexdigit}+  {
   var err error
-  yylval.i64, err = strconv.ParseInt(YYtext, 0, 64)
+  numVal, err := strconv.ParseInt(YYtext, 0, 64)
   if err != nil {
       panic(fmt.Errorf("Number conversion error: %s", err))
   }
+  yylval.num = data.Number{Val: numVal, Base: data.Hex}
 
   return _NUMBER_;
 }
@@ -260,10 +262,12 @@ u?int(8|16|32)(be)? {
 0o{octdigit}+  {
   var err error
   s := strings.TrimLeft(YYtext, "0o")
-  yylval.i64, err = strconv.ParseInt(s, 8, 64)
+  numVal, err := strconv.ParseInt(s, 8, 64)
   if err != nil {
       panic(fmt.Errorf("Number conversion error: %s", err))
   }
+  yylval.num = data.Number{Val: numVal, Base: data.Octal}
+
   return _NUMBER_;
 }
 

@@ -91,3 +91,29 @@ func (m StringModifiers) String() string {
 	}
 	return fmt.Sprintf("%v", mods)
 }
+
+func (n Number) String() string {
+	switch n.Base {
+	case Decimal:
+		return fmt.Sprintf("%d", n.Val)
+
+	case Octal:
+		return fmt.Sprintf("0o%o", n.Val)
+
+	case Hex:
+		return fmt.Sprintf("%#x", n.Val)
+	}
+
+	return fmt.Sprintf("%v", n.Val)
+}
+
+func (x XorRange) String() string {
+	if x.Max.Val == x.Min.Val && x.Max.Val != 0 {
+		return fmt.Sprintf("(%s)", x.Min)
+	}
+	if x.Max.Val != x.Min.Val {
+		return fmt.Sprintf("(%s-%s)", x.Min, x.Max)
+	}
+
+	return ""
+}

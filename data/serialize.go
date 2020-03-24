@@ -120,13 +120,16 @@ func (m *Meta) Serialize() (out string, err error) {
 	case string:
 		out = fmt.Sprintf(`%s = "%s"`, m.Key, val)
 
-	case int64, bool:
+	case bool:
 		out = fmt.Sprintf(`%s = %v`, m.Key, val)
 
 	case float64:
 		// grammar says floats are not allowed, so take JSON's float and make
 		// it an int
 		out = fmt.Sprintf(`%s = "%d"`, m.Key, int64(val))
+
+	case Number:
+		out = fmt.Sprintf(`%s = %s`, m.Key, val)
 
 	default:
 		err = fmt.Errorf(`Unsupported meta value type "%s"`, val)
@@ -219,7 +222,8 @@ func (m *StringModifiers) Serialize() (out string, _ error) {
 		modifiers = append(modifiers, "fullword")
 	}
 	if m.Xor {
-		modifiers = append(modifiers, "xor")
+		xor := fmt.Sprintf("xor%s", m.XorRange)
+		modifiers = append(modifiers, xor)
 	}
 
 	out = strings.Join(modifiers, " ")
