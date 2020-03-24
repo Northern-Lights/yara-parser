@@ -80,6 +80,9 @@ func (m StringModifiers) String() string {
 	if m.Fullword {
 		mods = append(mods, "fullword")
 	}
+	if m.Private {
+		mods = append(mods, "private")
+	}
 	if m.Xor {
 		mods = append(mods, "xor")
 	}

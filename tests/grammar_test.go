@@ -196,3 +196,34 @@ func TestXorRange(t *testing.T) {
 		}
 	}
 }
+
+type privateStrTest struct {
+	IsPrivate bool
+	Text      string
+}
+
+// TestPrivateString verifies that the private string modifier works
+func TestPrivateString(t *testing.T) {
+	tests := map[string]privateStrTest{
+		"$private1":    privateStrTest{true, `$private1 = "private!" private`},
+		"$private2":    privateStrTest{true, `$private2 = "private?" wide private`},
+		"$private3":    privateStrTest{true, `$private3 = /private_/ private xor`},
+		"$no_private1": privateStrTest{false, `$no_private1 = "no private :(" wide xor`},
+		"$no_private2": privateStrTest{false, `$no_private2 = "no private >:(" ascii nocase`},
+	}
+	const ruleName = "PRIVATE_STRING"
+	for _, rule := range ruleset.Rules {
+		if rule.Identifier == ruleName {
+			for _, s := range rule.Strings {
+				test := tests[s.ID]
+				serialized, _ := s.Serialize()
+				if s.Modifiers.Private != test.IsPrivate || serialized != test.Text {
+					t.Errorf(
+						`Ruleset "%s" rule "%s" string "%s" ranged private modifier incorrectly parsed, got - %v, want -%v`,
+						testfile, rule.Identifier, s.ID, privateStrTest{s.Modifiers.Private, serialized}, test,
+					)
+				}
+			}
+		}
+	}
+}

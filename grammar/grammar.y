@@ -389,6 +389,7 @@ string_modifiers
               ASCII: $1.ASCII || $2.ASCII,
               Nocase: $1.Nocase || $2.Nocase,
               Fullword: $1.Fullword || $2.Fullword,
+              Private: $1.Private || $2.Private,
               Xor: $1.Xor || $2.Xor,
               XorRange: $2.XorRange,
           }
@@ -401,6 +402,7 @@ string_modifier
     | _ASCII_       { $$.ASCII = true }
     | _NOCASE_      { $$.Nocase = true }
     | _FULLWORD_    { $$.Fullword = true }
+    | _PRIVATE_     { $$.Private = true }
     | _XOR_         
       {
         $$.Xor = true

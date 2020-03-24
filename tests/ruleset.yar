@@ -112,3 +112,14 @@ strings:
 condition:
     any of them
 }
+
+rule PRIVATE_STRING {
+strings:
+    $private1 = "private!" private
+    $private2 = "private?" wide private
+    $private3 = /private_/ private xor
+    $no_private1 = "no private :(" wide xor
+    $no_private2 = "no private >:(" ascii nocase
+condition:
+    all of them
+}

@@ -62,6 +62,7 @@ type StringModifiers struct {
 	ASCII    bool     `json:"ascii"`
 	Wide     bool     `json:"wide"`
 	Fullword bool     `json:"fullword"`
+	Private  bool     `json:"private"`
 	Xor      bool     `json:"xor"`
 	XorRange XorRange `json:"xor_range"` // makes sense only with XOR modifier
 	I        bool     `json:"i"`         // for regex

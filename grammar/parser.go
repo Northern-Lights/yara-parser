@@ -175,7 +175,7 @@ const xxEofCode = 1
 const xxErrCode = 2
 const xxInitialStackSize = 16
 
-//line /grammar/grammar.y:779
+//line /grammar/grammar.y:781
 
 //line yacctab:1
 var xxExca = [...]int{
@@ -186,99 +186,99 @@ var xxExca = [...]int{
 	23, 34,
 	-2, 32,
 	-1, 52,
-	35, 95,
-	-2, 81,
+	35, 96,
+	-2, 82,
 	-1, 107,
-	35, 95,
-	-2, 81,
+	35, 96,
+	-2, 82,
 	-1, 158,
-	70, 52,
-	74, 52,
-	-2, 55,
-	-1, 186,
 	70, 53,
 	74, 53,
-	-2, 55,
+	-2, 56,
+	-1, 187,
+	70, 54,
+	74, 54,
+	-2, 56,
 }
 
 const xxPrivate = 57344
 
-const xxLast = 393
+const xxLast = 400
 
 var xxAct = [...]int{
 
-	52, 183, 108, 140, 49, 146, 159, 172, 73, 53,
-	64, 65, 66, 111, 61, 62, 60, 63, 205, 74,
-	70, 193, 206, 179, 110, 194, 58, 59, 71, 72,
-	212, 114, 54, 112, 113, 203, 171, 50, 51, 96,
-	94, 95, 148, 48, 149, 202, 209, 200, 97, 98,
-	89, 90, 91, 92, 93, 102, 68, 190, 107, 105,
-	56, 69, 106, 187, 170, 57, 96, 94, 95, 115,
-	116, 141, 109, 197, 147, 97, 98, 89, 90, 91,
+	52, 184, 108, 140, 49, 146, 159, 172, 73, 53,
+	64, 65, 66, 111, 61, 62, 60, 63, 206, 74,
+	70, 194, 207, 180, 110, 195, 58, 59, 71, 72,
+	213, 114, 54, 112, 113, 204, 171, 50, 51, 96,
+	94, 95, 148, 48, 149, 203, 210, 201, 97, 98,
+	89, 90, 91, 92, 93, 102, 68, 191, 107, 105,
+	56, 69, 106, 188, 170, 57, 96, 94, 95, 115,
+	116, 141, 109, 198, 147, 97, 98, 89, 90, 91,
 	92, 93, 42, 122, 123, 124, 125, 126, 127, 128,
 	129, 130, 131, 132, 133, 134, 135, 136, 137, 138,
-	139, 38, 121, 181, 145, 89, 90, 91, 92, 93,
-	151, 152, 153, 79, 155, 40, 81, 82, 28, 158,
+	139, 38, 121, 182, 145, 89, 90, 91, 92, 93,
+	151, 152, 153, 55, 155, 40, 81, 82, 28, 158,
 	80, 79, 161, 162, 26, 160, 96, 94, 95, 87,
 	88, 83, 85, 84, 86, 97, 98, 89, 90, 91,
-	92, 93, 163, 17, 214, 91, 92, 93, 150, 73,
-	165, 64, 65, 66, 5, 61, 62, 60, 63, 55,
-	74, 80, 79, 44, 80, 79, 43, 58, 59, 71,
-	72, 39, 18, 104, 164, 74, 99, 186, 142, 118,
-	188, 100, 117, 30, 191, 211, 46, 47, 143, 35,
-	7, 199, 77, 13, 8, 4, 201, 68, 208, 195,
-	184, 78, 69, 207, 185, 45, 103, 210, 96, 94,
-	95, 144, 213, 37, 101, 36, 33, 97, 98, 89,
-	90, 91, 92, 93, 41, 96, 94, 95, 175, 174,
-	178, 176, 177, 169, 97, 98, 89, 90, 91, 92,
-	93, 154, 31, 23, 20, 73, 14, 64, 65, 66,
-	168, 61, 62, 60, 63, 25, 74, 96, 94, 95,
-	9, 11, 12, 58, 59, 22, 97, 98, 89, 90,
-	91, 92, 93, 96, 94, 95, 182, 166, 198, 196,
-	120, 119, 97, 98, 89, 90, 91, 92, 93, 192,
-	204, 189, 180, 68, 157, 167, 156, 67, 69, 96,
-	94, 95, 103, 76, 75, 32, 27, 15, 97, 98,
-	89, 90, 91, 92, 93, 81, 82, 1, 6, 10,
-	173, 150, 34, 24, 29, 96, 94, 95, 87, 88,
-	83, 85, 84, 86, 97, 98, 89, 90, 91, 92,
-	93, 96, 94, 95, 21, 19, 16, 2, 3, 0,
-	97, 98, 89, 90, 91, 92, 93, 94, 95, 0,
-	0, 0, 0, 0, 0, 97, 98, 89, 90, 91,
-	92, 93, 95, 0, 0, 0, 0, 0, 0, 97,
-	98, 89, 90, 91, 92, 93, 97, 98, 89, 90,
-	91, 92, 93,
+	92, 93, 163, 17, 215, 80, 79, 79, 150, 39,
+	165, 18, 73, 5, 64, 65, 66, 142, 61, 62,
+	60, 63, 104, 74, 91, 92, 93, 143, 101, 212,
+	58, 59, 71, 72, 74, 44, 164, 187, 43, 80,
+	79, 189, 99, 35, 30, 192, 118, 100, 77, 7,
+	144, 117, 200, 13, 4, 8, 209, 202, 46, 47,
+	68, 196, 185, 78, 208, 69, 186, 36, 211, 103,
+	96, 94, 95, 214, 37, 154, 31, 45, 41, 97,
+	98, 89, 90, 91, 92, 93, 23, 96, 94, 95,
+	20, 14, 33, 25, 22, 169, 97, 98, 89, 90,
+	91, 92, 93, 9, 11, 12, 183, 73, 166, 64,
+	65, 66, 168, 61, 62, 60, 63, 199, 74, 96,
+	94, 95, 120, 119, 193, 58, 59, 205, 97, 98,
+	89, 90, 91, 92, 93, 96, 94, 95, 190, 181,
+	157, 197, 156, 67, 97, 98, 89, 90, 91, 92,
+	93, 76, 75, 32, 27, 68, 15, 167, 1, 6,
+	69, 96, 94, 95, 103, 10, 173, 34, 24, 29,
+	97, 98, 89, 90, 91, 92, 93, 81, 82, 21,
+	19, 16, 2, 150, 3, 0, 0, 96, 94, 95,
+	87, 88, 83, 85, 84, 86, 97, 98, 89, 90,
+	91, 92, 93, 96, 94, 95, 0, 0, 0, 0,
+	0, 0, 97, 98, 89, 90, 91, 92, 93, 94,
+	95, 0, 0, 0, 0, 0, 0, 97, 98, 89,
+	90, 91, 92, 93, 95, 0, 0, 0, 178, 0,
+	0, 97, 98, 89, 90, 91, 92, 93, 97, 98,
+	89, 90, 91, 92, 93, 175, 174, 179, 176, 177,
 }
 var xxPact = [...]int{
 
-	-1000, 150, -1000, -1000, 173, -1000, 254, 172, -1000, 234,
-	-1000, -1000, -1000, -1000, -1000, 76, 129, 232, 256, 231,
-	-1000, 245, 57, -1000, -1000, 51, 230, 205, 202, 230,
-	-1000, 33, 127, 48, 202, -1000, 14, -1000, 145, -1000,
-	-4, -1000, 170, -1000, -1000, 183, -1000, -1000, 118, -1000,
-	-1000, -1000, 277, 147, 137, 138, -4, -4, -1000, -1000,
-	3, -1000, -1000, -1000, -1000, -48, -59, -38, 233, 233,
-	-1000, -1000, -1000, -1000, -1000, 161, 156, -1000, -1000, -1000,
-	-1000, 152, 233, 233, 233, 233, 233, 233, 233, 233,
-	233, 233, 233, 233, 233, 233, 233, 233, 233, 233,
-	2, 176, 293, 233, 5, -1000, -26, 78, 118, 233,
-	233, 233, 229, 233, -4, -1000, -1000, -1000, -1000, -4,
-	-4, -1000, 293, 293, 293, 293, 293, 293, 293, 84,
-	84, -1000, -1000, -1000, 322, 329, 308, 46, 46, 293,
-	-1000, 233, -1000, 140, 5, 251, -1000, -1000, -1000, -1000,
-	-1000, 225, 177, 160, -1000, -9, -34, -67, -1000, 204,
-	204, -1000, 66, 18, -1000, 36, 187, -1000, -1000, -1000,
-	-1000, -1000, -4, -1000, -1000, -1000, -1000, -1000, -6, 233,
-	-12, -1000, -49, -1000, -1000, -1000, -1000, 181, 209, 6,
-	233, -1000, -22, -1000, 187, -25, -1000, -1000, -52, 18,
-	-4, -1000, -1000, 180, -23, -1000, 233, 115, -40, -4,
-	293, -1000, -1000, 74, -1000,
+	-1000, 149, -1000, -1000, 174, -1000, 237, 172, -1000, 219,
+	-1000, -1000, -1000, -1000, -1000, 76, 108, 218, 225, 214,
+	-1000, 223, 57, -1000, -1000, 51, 204, 221, 194, 204,
+	-1000, 33, 105, 48, 194, -1000, 14, -1000, 157, -1000,
+	-4, -1000, 166, -1000, -1000, 185, -1000, -1000, 133, -1000,
+	-1000, -1000, 279, 153, 140, 127, -4, -4, -1000, -1000,
+	3, -1000, -1000, -1000, -1000, -48, -59, -38, 235, 235,
+	-1000, -1000, -1000, -1000, -1000, 170, 163, -1000, -1000, -1000,
+	-1000, 151, 235, 235, 235, 235, 235, 235, 235, 235,
+	235, 235, 235, 235, 235, 235, 235, 235, 235, 235,
+	2, 155, 295, 235, 5, -1000, -26, 78, 133, 235,
+	235, 235, 203, 235, -4, -1000, -1000, -1000, -1000, -4,
+	-4, -1000, 295, 295, 295, 295, 295, 295, 295, 103,
+	103, -1000, -1000, -1000, 324, 331, 310, 46, 46, 295,
+	-1000, 235, -1000, 142, 5, 253, -1000, -1000, -1000, -1000,
+	-1000, 227, 179, 162, -1000, -9, -34, -67, -1000, 371,
+	371, -1000, 100, 18, -1000, 36, 189, -1000, -1000, -1000,
+	-1000, -1000, -4, -1000, -1000, -1000, -1000, -1000, -1000, -6,
+	235, -12, -1000, -49, -1000, -1000, -1000, -1000, 183, 211,
+	6, 235, -1000, -22, -1000, 189, -25, -1000, -1000, -52,
+	18, -4, -1000, -1000, 178, -23, -1000, 235, 99, -40,
+	-4, 295, -1000, -1000, 74, -1000,
 }
 var xxPgo = [...]int{
 
-	0, 348, 347, 346, 345, 344, 324, 183, 323, 322,
-	189, 320, 6, 319, 318, 317, 307, 306, 305, 2,
-	304, 303, 297, 0, 296, 294, 4, 20, 3, 159,
-	292, 291, 290, 5, 289, 281, 280, 278, 277, 276,
+	0, 324, 322, 321, 320, 319, 309, 184, 308, 307,
+	183, 306, 6, 305, 299, 298, 296, 294, 293, 2,
+	292, 291, 283, 0, 282, 280, 4, 20, 3, 113,
+	279, 278, 267, 5, 264, 263, 262, 257, 248, 246,
 	1,
 }
 var xxR1 = [...]int{
@@ -287,15 +287,15 @@ var xxR1 = [...]int{
 	5, 5, 8, 8, 18, 14, 14, 13, 13, 3,
 	3, 4, 4, 6, 6, 7, 7, 7, 7, 7,
 	9, 9, 20, 10, 21, 10, 10, 12, 12, 11,
-	11, 11, 11, 11, 11, 11, 22, 22, 22, 22,
-	24, 24, 25, 25, 27, 19, 26, 26, 26, 26,
-	26, 26, 26, 26, 30, 32, 26, 34, 26, 26,
-	26, 35, 26, 36, 26, 26, 26, 26, 26, 26,
-	26, 26, 26, 31, 31, 28, 37, 37, 38, 33,
-	33, 39, 39, 40, 40, 29, 29, 29, 23, 23,
+	11, 11, 11, 11, 11, 11, 11, 22, 22, 22,
+	22, 24, 24, 25, 25, 27, 19, 26, 26, 26,
+	26, 26, 26, 26, 26, 30, 32, 26, 34, 26,
+	26, 26, 35, 26, 36, 26, 26, 26, 26, 26,
+	26, 26, 26, 26, 31, 31, 28, 37, 37, 38,
+	33, 33, 39, 39, 40, 40, 29, 29, 29, 23,
 	23, 23, 23, 23, 23, 23, 23, 23, 23, 23,
 	23, 23, 23, 23, 23, 23, 23, 23, 23, 23,
-	23, 23, 23, 23,
+	23, 23, 23, 23, 23,
 }
 var xxR2 = [...]int{
 
@@ -303,15 +303,15 @@ var xxR2 = [...]int{
 	0, 3, 0, 3, 3, 0, 2, 1, 1, 0,
 	2, 1, 2, 1, 2, 3, 3, 4, 3, 3,
 	1, 2, 0, 5, 0, 5, 3, 0, 2, 1,
-	1, 1, 1, 1, 4, 6, 1, 3, 4, 4,
-	0, 1, 1, 3, 1, 1, 1, 1, 3, 3,
-	1, 3, 3, 3, 0, 0, 11, 0, 9, 3,
-	2, 0, 4, 0, 4, 3, 3, 3, 3, 3,
-	3, 1, 3, 3, 1, 5, 1, 3, 0, 4,
-	1, 1, 3, 1, 1, 1, 1, 1, 3, 1,
-	1, 4, 1, 1, 1, 1, 4, 1, 4, 1,
-	1, 2, 3, 3, 3, 3, 3, 3, 3, 3,
-	2, 3, 3, 1,
+	1, 1, 1, 1, 1, 4, 6, 1, 3, 4,
+	4, 0, 1, 1, 3, 1, 1, 1, 1, 3,
+	3, 1, 3, 3, 3, 0, 0, 11, 0, 9,
+	3, 2, 0, 4, 0, 4, 3, 3, 3, 3,
+	3, 3, 1, 3, 3, 1, 5, 1, 3, 0,
+	4, 1, 1, 3, 1, 1, 1, 1, 1, 3,
+	1, 1, 4, 1, 1, 1, 1, 4, 1, 4,
+	1, 1, 2, 3, 3, 3, 3, 3, 3, 3,
+	3, 2, 3, 3, 1,
 }
 var xxChk = [...]int{
 
@@ -332,11 +332,11 @@ var xxChk = [...]int{
 	-28, 69, 2, 12, 35, -23, -33, 69, 37, 70,
 	70, -23, -23, -23, 12, -23, -24, -25, -26, -12,
 	-12, -19, -19, -23, 34, -33, -38, 70, 73, 73,
-	73, 70, 74, -11, 25, 24, 27, 28, 26, 5,
-	-30, 67, -39, -40, 13, 17, -26, 69, -23, -31,
-	69, -28, -34, 70, 74, 18, 70, 67, -37, -23,
-	69, -40, 70, 60, -32, 70, 74, -19, 18, 69,
-	-23, 70, 70, -19, 70,
+	73, 70, 74, -11, 25, 24, 27, 28, 7, 26,
+	5, -30, 67, -39, -40, 13, 17, -26, 69, -23,
+	-31, 69, -28, -34, 70, 74, 18, 70, 67, -37,
+	-23, 69, -40, 70, 60, -32, 70, 74, -19, 18,
+	69, -23, 70, 70, -19, 70,
 }
 var xxDef = [...]int{
 
@@ -344,24 +344,24 @@ var xxDef = [...]int{
 	16, 17, 18, 6, 7, 19, 0, 0, 10, 20,
 	21, 12, 0, 22, 8, 0, 0, 0, 0, 11,
 	23, 0, 0, 0, 13, 30, 0, 24, 0, 9,
-	0, 31, -2, 25, 26, 0, 28, 29, 14, 55,
-	56, 57, -2, 60, 0, 0, 0, 0, 99, 100,
-	0, 102, 103, 104, 105, 107, 109, 110, 0, 0,
-	123, 96, 97, 46, 54, 0, 0, 36, 27, 71,
-	73, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	0, 31, -2, 25, 26, 0, 28, 29, 14, 56,
+	57, 58, -2, 61, 0, 0, 0, 0, 100, 101,
+	0, 103, 104, 105, 106, 108, 110, 111, 0, 0,
+	124, 97, 98, 47, 55, 0, 0, 36, 27, 72,
+	74, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	0, 0, 95, 0, 0, 70, 55, -2, 0, 0,
-	0, 0, 0, 0, 50, 111, 120, 37, 37, 0,
-	0, 58, 59, 75, 76, 77, 78, 79, 80, 112,
-	113, 114, 115, 116, 117, 118, 119, 121, 122, 61,
-	62, 0, 63, 0, 0, 0, 69, 88, 90, 82,
-	98, 0, 0, 0, 47, 0, 0, 51, -2, 33,
-	35, 72, 74, 0, 64, 0, 0, 101, 106, 108,
-	48, 49, 0, 38, 39, 40, 41, 42, 43, 0,
-	0, 67, 0, 91, 93, 94, -2, 0, 0, 0,
-	0, 84, 0, 89, 0, 0, 85, 65, 0, 86,
-	0, 92, 44, 0, 0, 83, 0, 0, 0, 0,
-	87, 68, 45, 0, 66,
+	0, 0, 96, 0, 0, 71, 56, -2, 0, 0,
+	0, 0, 0, 0, 51, 112, 121, 37, 37, 0,
+	0, 59, 60, 76, 77, 78, 79, 80, 81, 113,
+	114, 115, 116, 117, 118, 119, 120, 122, 123, 62,
+	63, 0, 64, 0, 0, 0, 70, 89, 91, 83,
+	99, 0, 0, 0, 48, 0, 0, 52, -2, 33,
+	35, 73, 75, 0, 65, 0, 0, 102, 107, 109,
+	49, 50, 0, 38, 39, 40, 41, 42, 43, 44,
+	0, 0, 68, 0, 92, 94, 95, -2, 0, 0,
+	0, 0, 85, 0, 90, 0, 0, 86, 66, 0,
+	87, 0, 93, 45, 0, 0, 84, 0, 0, 0,
+	0, 88, 69, 46, 0, 67,
 }
 var xxTok1 = [...]int{
 
@@ -1013,31 +1013,32 @@ xxdefault:
 				ASCII:    xxDollar[1].mod.ASCII || xxDollar[2].mod.ASCII,
 				Nocase:   xxDollar[1].mod.Nocase || xxDollar[2].mod.Nocase,
 				Fullword: xxDollar[1].mod.Fullword || xxDollar[2].mod.Fullword,
+				Private:  xxDollar[1].mod.Private || xxDollar[2].mod.Private,
 				Xor:      xxDollar[1].mod.Xor || xxDollar[2].mod.Xor,
 				XorRange: xxDollar[2].mod.XorRange,
 			}
 		}
 	case 39:
 		xxDollar = xxS[xxpt-1 : xxpt+1]
-//line /grammar/grammar.y:400
+//line /grammar/grammar.y:401
 		{
 			xxVAL.mod.Wide = true
 		}
 	case 40:
 		xxDollar = xxS[xxpt-1 : xxpt+1]
-//line /grammar/grammar.y:401
+//line /grammar/grammar.y:402
 		{
 			xxVAL.mod.ASCII = true
 		}
 	case 41:
 		xxDollar = xxS[xxpt-1 : xxpt+1]
-//line /grammar/grammar.y:402
+//line /grammar/grammar.y:403
 		{
 			xxVAL.mod.Nocase = true
 		}
 	case 42:
 		xxDollar = xxS[xxpt-1 : xxpt+1]
-//line /grammar/grammar.y:403
+//line /grammar/grammar.y:404
 		{
 			xxVAL.mod.Fullword = true
 		}
@@ -1045,11 +1046,17 @@ xxdefault:
 		xxDollar = xxS[xxpt-1 : xxpt+1]
 //line /grammar/grammar.y:405
 		{
-			xxVAL.mod.Xor = true
+			xxVAL.mod.Private = true
 		}
 	case 44:
+		xxDollar = xxS[xxpt-1 : xxpt+1]
+//line /grammar/grammar.y:407
+		{
+			xxVAL.mod.Xor = true
+		}
+	case 45:
 		xxDollar = xxS[xxpt-4 : xxpt+1]
-//line /grammar/grammar.y:409
+//line /grammar/grammar.y:411
 		{
 			if xxDollar[3].num.Val < 0 || xxDollar[3].num.Val > 255 {
 				msg := fmt.Sprintf("XOR value must be in range between 0 and 255, provided value %d", xxDollar[3].num.Val)
@@ -1062,9 +1069,9 @@ xxdefault:
 				Max: xxDollar[3].num,
 			}
 		}
-	case 45:
+	case 46:
 		xxDollar = xxS[xxpt-6 : xxpt+1]
-//line /grammar/grammar.y:422
+//line /grammar/grammar.y:424
 		{
 			if xxDollar[3].num.Val < 0 || xxDollar[5].num.Val > 255 || xxDollar[3].num.Val > xxDollar[5].num.Val {
 				msg := fmt.Sprintf("XOR values must be in range between 0 and 255, provided values (%d - %d)", xxDollar[3].num.Val, xxDollar[5].num.Val)
@@ -1077,443 +1084,443 @@ xxdefault:
 				Max: xxDollar[5].num,
 			}
 		}
-	case 46:
-		xxDollar = xxS[xxpt-1 : xxpt+1]
-//line /grammar/grammar.y:439
-		{
-
-		}
 	case 47:
-		xxDollar = xxS[xxpt-3 : xxpt+1]
-//line /grammar/grammar.y:443
+		xxDollar = xxS[xxpt-1 : xxpt+1]
+//line /grammar/grammar.y:441
 		{
 
 		}
 	case 48:
-		xxDollar = xxS[xxpt-4 : xxpt+1]
-//line /grammar/grammar.y:447
+		xxDollar = xxS[xxpt-3 : xxpt+1]
+//line /grammar/grammar.y:445
 		{
 
 		}
 	case 49:
 		xxDollar = xxS[xxpt-4 : xxpt+1]
-//line /grammar/grammar.y:452
+//line /grammar/grammar.y:449
 		{
 
 		}
 	case 50:
-		xxDollar = xxS[xxpt-0 : xxpt+1]
-//line /grammar/grammar.y:459
+		xxDollar = xxS[xxpt-4 : xxpt+1]
+//line /grammar/grammar.y:454
 		{
+
 		}
 	case 51:
-		xxDollar = xxS[xxpt-1 : xxpt+1]
-//line /grammar/grammar.y:460
+		xxDollar = xxS[xxpt-0 : xxpt+1]
+//line /grammar/grammar.y:461
 		{
 		}
 	case 52:
 		xxDollar = xxS[xxpt-1 : xxpt+1]
-//line /grammar/grammar.y:465
+//line /grammar/grammar.y:462
 		{
-
 		}
 	case 53:
-		xxDollar = xxS[xxpt-3 : xxpt+1]
-//line /grammar/grammar.y:469
+		xxDollar = xxS[xxpt-1 : xxpt+1]
+//line /grammar/grammar.y:467
 		{
 
 		}
 	case 54:
-		xxDollar = xxS[xxpt-1 : xxpt+1]
-//line /grammar/grammar.y:477
+		xxDollar = xxS[xxpt-3 : xxpt+1]
+//line /grammar/grammar.y:471
 		{
 
 		}
 	case 55:
 		xxDollar = xxS[xxpt-1 : xxpt+1]
-//line /grammar/grammar.y:485
+//line /grammar/grammar.y:479
 		{
 
 		}
 	case 56:
 		xxDollar = xxS[xxpt-1 : xxpt+1]
-//line /grammar/grammar.y:492
+//line /grammar/grammar.y:487
 		{
 
 		}
 	case 57:
 		xxDollar = xxS[xxpt-1 : xxpt+1]
-//line /grammar/grammar.y:496
+//line /grammar/grammar.y:494
 		{
 
 		}
 	case 58:
-		xxDollar = xxS[xxpt-3 : xxpt+1]
-//line /grammar/grammar.y:500
+		xxDollar = xxS[xxpt-1 : xxpt+1]
+//line /grammar/grammar.y:498
 		{
 
 		}
 	case 59:
 		xxDollar = xxS[xxpt-3 : xxpt+1]
-//line /grammar/grammar.y:504
+//line /grammar/grammar.y:502
 		{
 
 		}
 	case 60:
-		xxDollar = xxS[xxpt-1 : xxpt+1]
-//line /grammar/grammar.y:508
+		xxDollar = xxS[xxpt-3 : xxpt+1]
+//line /grammar/grammar.y:506
 		{
 
 		}
 	case 61:
-		xxDollar = xxS[xxpt-3 : xxpt+1]
-//line /grammar/grammar.y:512
+		xxDollar = xxS[xxpt-1 : xxpt+1]
+//line /grammar/grammar.y:510
 		{
 
 		}
 	case 62:
 		xxDollar = xxS[xxpt-3 : xxpt+1]
-//line /grammar/grammar.y:516
+//line /grammar/grammar.y:514
 		{
 
 		}
 	case 63:
 		xxDollar = xxS[xxpt-3 : xxpt+1]
-//line /grammar/grammar.y:520
+//line /grammar/grammar.y:518
 		{
 
 		}
 	case 64:
-		xxDollar = xxS[xxpt-4 : xxpt+1]
-//line /grammar/grammar.y:524
+		xxDollar = xxS[xxpt-3 : xxpt+1]
+//line /grammar/grammar.y:522
 		{
 
 		}
 	case 65:
-		xxDollar = xxS[xxpt-7 : xxpt+1]
-//line /grammar/grammar.y:528
+		xxDollar = xxS[xxpt-4 : xxpt+1]
+//line /grammar/grammar.y:526
 		{
 
 		}
 	case 66:
-		xxDollar = xxS[xxpt-11 : xxpt+1]
-//line /grammar/grammar.y:532
+		xxDollar = xxS[xxpt-7 : xxpt+1]
+//line /grammar/grammar.y:530
 		{
 
 		}
 	case 67:
-		xxDollar = xxS[xxpt-5 : xxpt+1]
-//line /grammar/grammar.y:536
+		xxDollar = xxS[xxpt-11 : xxpt+1]
+//line /grammar/grammar.y:534
 		{
 
 		}
 	case 68:
-		xxDollar = xxS[xxpt-9 : xxpt+1]
-//line /grammar/grammar.y:540
+		xxDollar = xxS[xxpt-5 : xxpt+1]
+//line /grammar/grammar.y:538
 		{
 
 		}
 	case 69:
-		xxDollar = xxS[xxpt-3 : xxpt+1]
-//line /grammar/grammar.y:544
+		xxDollar = xxS[xxpt-9 : xxpt+1]
+//line /grammar/grammar.y:542
 		{
 
 		}
 	case 70:
-		xxDollar = xxS[xxpt-2 : xxpt+1]
-//line /grammar/grammar.y:548
+		xxDollar = xxS[xxpt-3 : xxpt+1]
+//line /grammar/grammar.y:546
 		{
 
 		}
 	case 71:
 		xxDollar = xxS[xxpt-2 : xxpt+1]
-//line /grammar/grammar.y:552
+//line /grammar/grammar.y:550
 		{
 
 		}
 	case 72:
-		xxDollar = xxS[xxpt-4 : xxpt+1]
-//line /grammar/grammar.y:556
+		xxDollar = xxS[xxpt-2 : xxpt+1]
+//line /grammar/grammar.y:554
 		{
 
 		}
 	case 73:
-		xxDollar = xxS[xxpt-2 : xxpt+1]
-//line /grammar/grammar.y:560
+		xxDollar = xxS[xxpt-4 : xxpt+1]
+//line /grammar/grammar.y:558
 		{
 
 		}
 	case 74:
-		xxDollar = xxS[xxpt-4 : xxpt+1]
-//line /grammar/grammar.y:564
+		xxDollar = xxS[xxpt-2 : xxpt+1]
+//line /grammar/grammar.y:562
 		{
 
 		}
 	case 75:
-		xxDollar = xxS[xxpt-3 : xxpt+1]
-//line /grammar/grammar.y:568
+		xxDollar = xxS[xxpt-4 : xxpt+1]
+//line /grammar/grammar.y:566
 		{
 
 		}
 	case 76:
 		xxDollar = xxS[xxpt-3 : xxpt+1]
-//line /grammar/grammar.y:572
+//line /grammar/grammar.y:570
 		{
 
 		}
 	case 77:
 		xxDollar = xxS[xxpt-3 : xxpt+1]
-//line /grammar/grammar.y:576
+//line /grammar/grammar.y:574
 		{
 
 		}
 	case 78:
 		xxDollar = xxS[xxpt-3 : xxpt+1]
-//line /grammar/grammar.y:580
+//line /grammar/grammar.y:578
 		{
 
 		}
 	case 79:
 		xxDollar = xxS[xxpt-3 : xxpt+1]
-//line /grammar/grammar.y:584
+//line /grammar/grammar.y:582
 		{
 
 		}
 	case 80:
 		xxDollar = xxS[xxpt-3 : xxpt+1]
-//line /grammar/grammar.y:588
+//line /grammar/grammar.y:586
 		{
 
 		}
 	case 81:
-		xxDollar = xxS[xxpt-1 : xxpt+1]
-//line /grammar/grammar.y:592
+		xxDollar = xxS[xxpt-3 : xxpt+1]
+//line /grammar/grammar.y:590
 		{
 
 		}
 	case 82:
-		xxDollar = xxS[xxpt-3 : xxpt+1]
-//line /grammar/grammar.y:596
+		xxDollar = xxS[xxpt-1 : xxpt+1]
+//line /grammar/grammar.y:594
 		{
 
 		}
 	case 83:
 		xxDollar = xxS[xxpt-3 : xxpt+1]
-//line /grammar/grammar.y:603
-		{
-		}
-	case 84:
-		xxDollar = xxS[xxpt-1 : xxpt+1]
-//line /grammar/grammar.y:604
-		{
-		}
-	case 85:
-		xxDollar = xxS[xxpt-5 : xxpt+1]
-//line /grammar/grammar.y:610
+//line /grammar/grammar.y:598
 		{
 
 		}
-	case 86:
+	case 84:
+		xxDollar = xxS[xxpt-3 : xxpt+1]
+//line /grammar/grammar.y:605
+		{
+		}
+	case 85:
 		xxDollar = xxS[xxpt-1 : xxpt+1]
-//line /grammar/grammar.y:618
+//line /grammar/grammar.y:606
+		{
+		}
+	case 86:
+		xxDollar = xxS[xxpt-5 : xxpt+1]
+//line /grammar/grammar.y:612
 		{
 
 		}
 	case 87:
-		xxDollar = xxS[xxpt-3 : xxpt+1]
-//line /grammar/grammar.y:622
+		xxDollar = xxS[xxpt-1 : xxpt+1]
+//line /grammar/grammar.y:620
 		{
 
 		}
 	case 88:
-		xxDollar = xxS[xxpt-1 : xxpt+1]
-//line /grammar/grammar.y:630
+		xxDollar = xxS[xxpt-3 : xxpt+1]
+//line /grammar/grammar.y:624
 		{
 
 		}
-	case 90:
+	case 89:
 		xxDollar = xxS[xxpt-1 : xxpt+1]
-//line /grammar/grammar.y:635
+//line /grammar/grammar.y:632
 		{
 
 		}
-	case 93:
+	case 91:
 		xxDollar = xxS[xxpt-1 : xxpt+1]
-//line /grammar/grammar.y:649
+//line /grammar/grammar.y:637
 		{
 
 		}
 	case 94:
 		xxDollar = xxS[xxpt-1 : xxpt+1]
-//line /grammar/grammar.y:653
+//line /grammar/grammar.y:651
 		{
 
 		}
-	case 96:
+	case 95:
 		xxDollar = xxS[xxpt-1 : xxpt+1]
-//line /grammar/grammar.y:662
+//line /grammar/grammar.y:655
 		{
 
 		}
 	case 97:
 		xxDollar = xxS[xxpt-1 : xxpt+1]
-//line /grammar/grammar.y:666
+//line /grammar/grammar.y:664
 		{
 
 		}
 	case 98:
-		xxDollar = xxS[xxpt-3 : xxpt+1]
-//line /grammar/grammar.y:674
+		xxDollar = xxS[xxpt-1 : xxpt+1]
+//line /grammar/grammar.y:668
 		{
 
 		}
 	case 99:
-		xxDollar = xxS[xxpt-1 : xxpt+1]
-//line /grammar/grammar.y:678
+		xxDollar = xxS[xxpt-3 : xxpt+1]
+//line /grammar/grammar.y:676
 		{
 
 		}
 	case 100:
 		xxDollar = xxS[xxpt-1 : xxpt+1]
-//line /grammar/grammar.y:682
+//line /grammar/grammar.y:680
 		{
 
 		}
 	case 101:
-		xxDollar = xxS[xxpt-4 : xxpt+1]
-//line /grammar/grammar.y:686
+		xxDollar = xxS[xxpt-1 : xxpt+1]
+//line /grammar/grammar.y:684
 		{
 
 		}
 	case 102:
-		xxDollar = xxS[xxpt-1 : xxpt+1]
-//line /grammar/grammar.y:690
+		xxDollar = xxS[xxpt-4 : xxpt+1]
+//line /grammar/grammar.y:688
 		{
 
 		}
 	case 103:
 		xxDollar = xxS[xxpt-1 : xxpt+1]
-//line /grammar/grammar.y:694
+//line /grammar/grammar.y:692
 		{
 
 		}
 	case 104:
 		xxDollar = xxS[xxpt-1 : xxpt+1]
-//line /grammar/grammar.y:698
+//line /grammar/grammar.y:696
 		{
 
 		}
 	case 105:
 		xxDollar = xxS[xxpt-1 : xxpt+1]
-//line /grammar/grammar.y:702
+//line /grammar/grammar.y:700
 		{
 
 		}
 	case 106:
-		xxDollar = xxS[xxpt-4 : xxpt+1]
-//line /grammar/grammar.y:706
+		xxDollar = xxS[xxpt-1 : xxpt+1]
+//line /grammar/grammar.y:704
 		{
 
 		}
 	case 107:
-		xxDollar = xxS[xxpt-1 : xxpt+1]
-//line /grammar/grammar.y:710
+		xxDollar = xxS[xxpt-4 : xxpt+1]
+//line /grammar/grammar.y:708
 		{
 
 		}
 	case 108:
-		xxDollar = xxS[xxpt-4 : xxpt+1]
-//line /grammar/grammar.y:714
+		xxDollar = xxS[xxpt-1 : xxpt+1]
+//line /grammar/grammar.y:712
 		{
 
 		}
 	case 109:
-		xxDollar = xxS[xxpt-1 : xxpt+1]
-//line /grammar/grammar.y:718
+		xxDollar = xxS[xxpt-4 : xxpt+1]
+//line /grammar/grammar.y:716
 		{
 
 		}
 	case 110:
 		xxDollar = xxS[xxpt-1 : xxpt+1]
-//line /grammar/grammar.y:722
+//line /grammar/grammar.y:720
 		{
 
 		}
 	case 111:
-		xxDollar = xxS[xxpt-2 : xxpt+1]
-//line /grammar/grammar.y:726
+		xxDollar = xxS[xxpt-1 : xxpt+1]
+//line /grammar/grammar.y:724
 		{
 
 		}
 	case 112:
-		xxDollar = xxS[xxpt-3 : xxpt+1]
-//line /grammar/grammar.y:730
+		xxDollar = xxS[xxpt-2 : xxpt+1]
+//line /grammar/grammar.y:728
 		{
 
 		}
 	case 113:
 		xxDollar = xxS[xxpt-3 : xxpt+1]
-//line /grammar/grammar.y:734
+//line /grammar/grammar.y:732
 		{
 
 		}
 	case 114:
 		xxDollar = xxS[xxpt-3 : xxpt+1]
-//line /grammar/grammar.y:738
+//line /grammar/grammar.y:736
 		{
 
 		}
 	case 115:
 		xxDollar = xxS[xxpt-3 : xxpt+1]
-//line /grammar/grammar.y:742
+//line /grammar/grammar.y:740
 		{
 
 		}
 	case 116:
 		xxDollar = xxS[xxpt-3 : xxpt+1]
-//line /grammar/grammar.y:746
+//line /grammar/grammar.y:744
 		{
 
 		}
 	case 117:
 		xxDollar = xxS[xxpt-3 : xxpt+1]
-//line /grammar/grammar.y:750
+//line /grammar/grammar.y:748
 		{
 
 		}
 	case 118:
 		xxDollar = xxS[xxpt-3 : xxpt+1]
-//line /grammar/grammar.y:754
+//line /grammar/grammar.y:752
 		{
 
 		}
 	case 119:
 		xxDollar = xxS[xxpt-3 : xxpt+1]
-//line /grammar/grammar.y:758
+//line /grammar/grammar.y:756
 		{
 
 		}
 	case 120:
-		xxDollar = xxS[xxpt-2 : xxpt+1]
-//line /grammar/grammar.y:762
+		xxDollar = xxS[xxpt-3 : xxpt+1]
+//line /grammar/grammar.y:760
 		{
 
 		}
 	case 121:
-		xxDollar = xxS[xxpt-3 : xxpt+1]
-//line /grammar/grammar.y:766
+		xxDollar = xxS[xxpt-2 : xxpt+1]
+//line /grammar/grammar.y:764
 		{
 
 		}
 	case 122:
 		xxDollar = xxS[xxpt-3 : xxpt+1]
-//line /grammar/grammar.y:770
+//line /grammar/grammar.y:768
 		{
 
 		}
 	case 123:
+		xxDollar = xxS[xxpt-3 : xxpt+1]
+//line /grammar/grammar.y:772
+		{
+
+		}
+	case 124:
 		xxDollar = xxS[xxpt-1 : xxpt+1]
-//line /grammar/grammar.y:774
+//line /grammar/grammar.y:776
 		{
 
 		}

@@ -28,6 +28,7 @@ message StringModifiers {
     bool s = 6;
     bool xor = 7;
     XorRange xor_range = 8;
+    bool private = 9;
 }
 
 message String {
