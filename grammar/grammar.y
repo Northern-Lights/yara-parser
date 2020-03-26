@@ -403,6 +403,10 @@ string_modifiers
               Xor: $1.Xor || $2.Xor,
               XorRange: xorRange,
           }
+
+          if $$.Xor && $$.Nocase {
+            panic(`invalid modifier combination "xor nocase"`)
+          }
     }
     ;
 

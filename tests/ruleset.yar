@@ -93,7 +93,7 @@ condition:
 rule XOR {
 strings:
     $xor1 = "xor!" xor
-    $xor2 = "xor?" nocase xor
+    $xor2 = "xor?" wide fullword xor
     $no_xor1 = "no xor :(" wide
     $no_xor2 = "no xor >:(" ascii nocase
     $no_xor3 = /xor_/
@@ -104,7 +104,7 @@ condition:
 rule XOR_RANGE {
 strings:
     $xor1 = "xor!" xor(0)
-    $xor2 = "xor?" nocase xor(0x5d)
+    $xor2 = "xor?" ascii xor(0x5d)
     $xor3 = "^xor_$!" xor(0xde-0xff)
     $xor4 = "xor?" xor(132-0xff) private
     $no_xor1 = "no xor :(" wide

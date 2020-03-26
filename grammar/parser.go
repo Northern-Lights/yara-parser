@@ -175,7 +175,7 @@ const xxEofCode = 1
 const xxErrCode = 2
 const xxInitialStackSize = 16
 
-//line /grammar/grammar.y:836
+//line /grammar/grammar.y:840
 
 //line yacctab:1
 var xxExca = [...]int{
@@ -1027,46 +1027,50 @@ xxdefault:
 				Xor:      xxDollar[1].mod.Xor || xxDollar[2].mod.Xor,
 				XorRange: xorRange,
 			}
+
+			if xxVAL.mod.Xor && xxVAL.mod.Nocase {
+				panic(`invalid modifier combination "xor nocase"`)
+			}
 		}
 	case 39:
 		xxDollar = xxS[xxpt-1 : xxpt+1]
-//line /grammar/grammar.y:411
+//line /grammar/grammar.y:415
 		{
 			xxVAL.mod.Wide = true
 		}
 	case 40:
 		xxDollar = xxS[xxpt-1 : xxpt+1]
-//line /grammar/grammar.y:412
+//line /grammar/grammar.y:416
 		{
 			xxVAL.mod.ASCII = true
 		}
 	case 41:
 		xxDollar = xxS[xxpt-1 : xxpt+1]
-//line /grammar/grammar.y:413
+//line /grammar/grammar.y:417
 		{
 			xxVAL.mod.Nocase = true
 		}
 	case 42:
 		xxDollar = xxS[xxpt-1 : xxpt+1]
-//line /grammar/grammar.y:414
+//line /grammar/grammar.y:418
 		{
 			xxVAL.mod.Fullword = true
 		}
 	case 43:
 		xxDollar = xxS[xxpt-1 : xxpt+1]
-//line /grammar/grammar.y:415
+//line /grammar/grammar.y:419
 		{
 			xxVAL.mod.Private = true
 		}
 	case 44:
 		xxDollar = xxS[xxpt-1 : xxpt+1]
-//line /grammar/grammar.y:417
+//line /grammar/grammar.y:421
 		{
 			xxVAL.mod.Xor = true
 		}
 	case 45:
 		xxDollar = xxS[xxpt-4 : xxpt+1]
-//line /grammar/grammar.y:421
+//line /grammar/grammar.y:425
 		{
 			if xxDollar[3].num.Val < 0 || xxDollar[3].num.Val > 255 {
 				msg := fmt.Sprintf("XOR value must be in range between 0 and 255, provided value %d", xxDollar[3].num.Val)
@@ -1081,7 +1085,7 @@ xxdefault:
 		}
 	case 46:
 		xxDollar = xxS[xxpt-6 : xxpt+1]
-//line /grammar/grammar.y:434
+//line /grammar/grammar.y:438
 		{
 			if xxDollar[3].num.Val < 0 || xxDollar[5].num.Val > 255 || xxDollar[3].num.Val > xxDollar[5].num.Val {
 				msg := fmt.Sprintf("XOR values must be in range between 0 and 255, provided values (%d - %d)", xxDollar[3].num.Val, xxDollar[5].num.Val)
@@ -1096,13 +1100,13 @@ xxdefault:
 		}
 	case 47:
 		xxDollar = xxS[xxpt-0 : xxpt+1]
-//line /grammar/grammar.y:451
+//line /grammar/grammar.y:455
 		{
 			xxVAL.mod = data.StringModifiers{}
 		}
 	case 48:
 		xxDollar = xxS[xxpt-2 : xxpt+1]
-//line /grammar/grammar.y:454
+//line /grammar/grammar.y:458
 		{
 			xxVAL.mod = data.StringModifiers{
 				Wide:     xxDollar[1].mod.Wide || xxDollar[2].mod.Wide,
@@ -1114,43 +1118,43 @@ xxdefault:
 		}
 	case 49:
 		xxDollar = xxS[xxpt-1 : xxpt+1]
-//line /grammar/grammar.y:467
+//line /grammar/grammar.y:471
 		{
 			xxVAL.mod.Wide = true
 		}
 	case 50:
 		xxDollar = xxS[xxpt-1 : xxpt+1]
-//line /grammar/grammar.y:468
+//line /grammar/grammar.y:472
 		{
 			xxVAL.mod.ASCII = true
 		}
 	case 51:
 		xxDollar = xxS[xxpt-1 : xxpt+1]
-//line /grammar/grammar.y:469
+//line /grammar/grammar.y:473
 		{
 			xxVAL.mod.Nocase = true
 		}
 	case 52:
 		xxDollar = xxS[xxpt-1 : xxpt+1]
-//line /grammar/grammar.y:470
+//line /grammar/grammar.y:474
 		{
 			xxVAL.mod.Fullword = true
 		}
 	case 53:
 		xxDollar = xxS[xxpt-1 : xxpt+1]
-//line /grammar/grammar.y:471
+//line /grammar/grammar.y:475
 		{
 			xxVAL.mod.Private = true
 		}
 	case 54:
 		xxDollar = xxS[xxpt-0 : xxpt+1]
-//line /grammar/grammar.y:477
+//line /grammar/grammar.y:481
 		{
 			xxVAL.mod = data.StringModifiers{}
 		}
 	case 55:
 		xxDollar = xxS[xxpt-2 : xxpt+1]
-//line /grammar/grammar.y:481
+//line /grammar/grammar.y:485
 		{
 			xxVAL.mod = data.StringModifiers{
 				Private: xxDollar[1].mod.Private || xxDollar[2].mod.Private,
@@ -1158,447 +1162,447 @@ xxdefault:
 		}
 	case 56:
 		xxDollar = xxS[xxpt-1 : xxpt+1]
-//line /grammar/grammar.y:490
+//line /grammar/grammar.y:494
 		{
 			xxVAL.mod.Private = true
 		}
 	case 57:
 		xxDollar = xxS[xxpt-1 : xxpt+1]
-//line /grammar/grammar.y:496
+//line /grammar/grammar.y:500
 		{
 
 		}
 	case 58:
 		xxDollar = xxS[xxpt-3 : xxpt+1]
-//line /grammar/grammar.y:500
+//line /grammar/grammar.y:504
 		{
 
 		}
 	case 59:
 		xxDollar = xxS[xxpt-4 : xxpt+1]
-//line /grammar/grammar.y:504
+//line /grammar/grammar.y:508
 		{
 
 		}
 	case 60:
 		xxDollar = xxS[xxpt-4 : xxpt+1]
-//line /grammar/grammar.y:509
+//line /grammar/grammar.y:513
 		{
 
 		}
 	case 61:
 		xxDollar = xxS[xxpt-0 : xxpt+1]
-//line /grammar/grammar.y:516
+//line /grammar/grammar.y:520
 		{
 		}
 	case 62:
 		xxDollar = xxS[xxpt-1 : xxpt+1]
-//line /grammar/grammar.y:517
+//line /grammar/grammar.y:521
 		{
 		}
 	case 63:
 		xxDollar = xxS[xxpt-1 : xxpt+1]
-//line /grammar/grammar.y:522
+//line /grammar/grammar.y:526
 		{
 
 		}
 	case 64:
 		xxDollar = xxS[xxpt-3 : xxpt+1]
-//line /grammar/grammar.y:526
+//line /grammar/grammar.y:530
 		{
 
 		}
 	case 65:
 		xxDollar = xxS[xxpt-1 : xxpt+1]
-//line /grammar/grammar.y:534
+//line /grammar/grammar.y:538
 		{
 
 		}
 	case 66:
 		xxDollar = xxS[xxpt-1 : xxpt+1]
-//line /grammar/grammar.y:542
+//line /grammar/grammar.y:546
 		{
 
 		}
 	case 67:
 		xxDollar = xxS[xxpt-1 : xxpt+1]
-//line /grammar/grammar.y:549
+//line /grammar/grammar.y:553
 		{
 
 		}
 	case 68:
 		xxDollar = xxS[xxpt-1 : xxpt+1]
-//line /grammar/grammar.y:553
+//line /grammar/grammar.y:557
 		{
 
 		}
 	case 69:
 		xxDollar = xxS[xxpt-3 : xxpt+1]
-//line /grammar/grammar.y:557
+//line /grammar/grammar.y:561
 		{
 
 		}
 	case 70:
 		xxDollar = xxS[xxpt-3 : xxpt+1]
-//line /grammar/grammar.y:561
+//line /grammar/grammar.y:565
 		{
 
 		}
 	case 71:
 		xxDollar = xxS[xxpt-1 : xxpt+1]
-//line /grammar/grammar.y:565
+//line /grammar/grammar.y:569
 		{
 
 		}
 	case 72:
 		xxDollar = xxS[xxpt-3 : xxpt+1]
-//line /grammar/grammar.y:569
+//line /grammar/grammar.y:573
 		{
 
 		}
 	case 73:
 		xxDollar = xxS[xxpt-3 : xxpt+1]
-//line /grammar/grammar.y:573
+//line /grammar/grammar.y:577
 		{
 
 		}
 	case 74:
 		xxDollar = xxS[xxpt-3 : xxpt+1]
-//line /grammar/grammar.y:577
+//line /grammar/grammar.y:581
 		{
 
 		}
 	case 75:
 		xxDollar = xxS[xxpt-4 : xxpt+1]
-//line /grammar/grammar.y:581
+//line /grammar/grammar.y:585
 		{
 
 		}
 	case 76:
 		xxDollar = xxS[xxpt-7 : xxpt+1]
-//line /grammar/grammar.y:585
+//line /grammar/grammar.y:589
 		{
 
 		}
 	case 77:
 		xxDollar = xxS[xxpt-11 : xxpt+1]
-//line /grammar/grammar.y:589
+//line /grammar/grammar.y:593
 		{
 
 		}
 	case 78:
 		xxDollar = xxS[xxpt-5 : xxpt+1]
-//line /grammar/grammar.y:593
+//line /grammar/grammar.y:597
 		{
 
 		}
 	case 79:
 		xxDollar = xxS[xxpt-9 : xxpt+1]
-//line /grammar/grammar.y:597
+//line /grammar/grammar.y:601
 		{
 
 		}
 	case 80:
 		xxDollar = xxS[xxpt-3 : xxpt+1]
-//line /grammar/grammar.y:601
+//line /grammar/grammar.y:605
 		{
 
 		}
 	case 81:
 		xxDollar = xxS[xxpt-2 : xxpt+1]
-//line /grammar/grammar.y:605
+//line /grammar/grammar.y:609
 		{
 
 		}
 	case 82:
 		xxDollar = xxS[xxpt-2 : xxpt+1]
-//line /grammar/grammar.y:609
+//line /grammar/grammar.y:613
 		{
 
 		}
 	case 83:
 		xxDollar = xxS[xxpt-4 : xxpt+1]
-//line /grammar/grammar.y:613
+//line /grammar/grammar.y:617
 		{
 
 		}
 	case 84:
 		xxDollar = xxS[xxpt-2 : xxpt+1]
-//line /grammar/grammar.y:617
+//line /grammar/grammar.y:621
 		{
 
 		}
 	case 85:
 		xxDollar = xxS[xxpt-4 : xxpt+1]
-//line /grammar/grammar.y:621
+//line /grammar/grammar.y:625
 		{
 
 		}
 	case 86:
 		xxDollar = xxS[xxpt-3 : xxpt+1]
-//line /grammar/grammar.y:625
+//line /grammar/grammar.y:629
 		{
 
 		}
 	case 87:
 		xxDollar = xxS[xxpt-3 : xxpt+1]
-//line /grammar/grammar.y:629
+//line /grammar/grammar.y:633
 		{
 
 		}
 	case 88:
 		xxDollar = xxS[xxpt-3 : xxpt+1]
-//line /grammar/grammar.y:633
+//line /grammar/grammar.y:637
 		{
 
 		}
 	case 89:
 		xxDollar = xxS[xxpt-3 : xxpt+1]
-//line /grammar/grammar.y:637
+//line /grammar/grammar.y:641
 		{
 
 		}
 	case 90:
 		xxDollar = xxS[xxpt-3 : xxpt+1]
-//line /grammar/grammar.y:641
+//line /grammar/grammar.y:645
 		{
 
 		}
 	case 91:
 		xxDollar = xxS[xxpt-3 : xxpt+1]
-//line /grammar/grammar.y:645
+//line /grammar/grammar.y:649
 		{
 
 		}
 	case 92:
 		xxDollar = xxS[xxpt-1 : xxpt+1]
-//line /grammar/grammar.y:649
+//line /grammar/grammar.y:653
 		{
 
 		}
 	case 93:
 		xxDollar = xxS[xxpt-3 : xxpt+1]
-//line /grammar/grammar.y:653
+//line /grammar/grammar.y:657
 		{
 
 		}
 	case 94:
 		xxDollar = xxS[xxpt-3 : xxpt+1]
-//line /grammar/grammar.y:660
+//line /grammar/grammar.y:664
 		{
 		}
 	case 95:
 		xxDollar = xxS[xxpt-1 : xxpt+1]
-//line /grammar/grammar.y:661
+//line /grammar/grammar.y:665
 		{
 		}
 	case 96:
 		xxDollar = xxS[xxpt-5 : xxpt+1]
-//line /grammar/grammar.y:667
+//line /grammar/grammar.y:671
 		{
 
 		}
 	case 97:
 		xxDollar = xxS[xxpt-1 : xxpt+1]
-//line /grammar/grammar.y:675
+//line /grammar/grammar.y:679
 		{
 
 		}
 	case 98:
 		xxDollar = xxS[xxpt-3 : xxpt+1]
-//line /grammar/grammar.y:679
+//line /grammar/grammar.y:683
 		{
 
 		}
 	case 99:
 		xxDollar = xxS[xxpt-1 : xxpt+1]
-//line /grammar/grammar.y:687
+//line /grammar/grammar.y:691
 		{
 
 		}
 	case 101:
 		xxDollar = xxS[xxpt-1 : xxpt+1]
-//line /grammar/grammar.y:692
+//line /grammar/grammar.y:696
 		{
 
 		}
 	case 104:
 		xxDollar = xxS[xxpt-1 : xxpt+1]
-//line /grammar/grammar.y:706
+//line /grammar/grammar.y:710
 		{
 
 		}
 	case 105:
 		xxDollar = xxS[xxpt-1 : xxpt+1]
-//line /grammar/grammar.y:710
+//line /grammar/grammar.y:714
 		{
 
 		}
 	case 107:
 		xxDollar = xxS[xxpt-1 : xxpt+1]
-//line /grammar/grammar.y:719
+//line /grammar/grammar.y:723
 		{
 
 		}
 	case 108:
 		xxDollar = xxS[xxpt-1 : xxpt+1]
-//line /grammar/grammar.y:723
+//line /grammar/grammar.y:727
 		{
 
 		}
 	case 109:
 		xxDollar = xxS[xxpt-3 : xxpt+1]
-//line /grammar/grammar.y:731
+//line /grammar/grammar.y:735
 		{
 
 		}
 	case 110:
 		xxDollar = xxS[xxpt-1 : xxpt+1]
-//line /grammar/grammar.y:735
+//line /grammar/grammar.y:739
 		{
 
 		}
 	case 111:
 		xxDollar = xxS[xxpt-1 : xxpt+1]
-//line /grammar/grammar.y:739
+//line /grammar/grammar.y:743
 		{
 
 		}
 	case 112:
 		xxDollar = xxS[xxpt-4 : xxpt+1]
-//line /grammar/grammar.y:743
+//line /grammar/grammar.y:747
 		{
 
 		}
 	case 113:
 		xxDollar = xxS[xxpt-1 : xxpt+1]
-//line /grammar/grammar.y:747
+//line /grammar/grammar.y:751
 		{
 
 		}
 	case 114:
 		xxDollar = xxS[xxpt-1 : xxpt+1]
-//line /grammar/grammar.y:751
+//line /grammar/grammar.y:755
 		{
 
 		}
 	case 115:
 		xxDollar = xxS[xxpt-1 : xxpt+1]
-//line /grammar/grammar.y:755
+//line /grammar/grammar.y:759
 		{
 
 		}
 	case 116:
 		xxDollar = xxS[xxpt-1 : xxpt+1]
-//line /grammar/grammar.y:759
+//line /grammar/grammar.y:763
 		{
 
 		}
 	case 117:
 		xxDollar = xxS[xxpt-4 : xxpt+1]
-//line /grammar/grammar.y:763
+//line /grammar/grammar.y:767
 		{
 
 		}
 	case 118:
 		xxDollar = xxS[xxpt-1 : xxpt+1]
-//line /grammar/grammar.y:767
+//line /grammar/grammar.y:771
 		{
 
 		}
 	case 119:
 		xxDollar = xxS[xxpt-4 : xxpt+1]
-//line /grammar/grammar.y:771
+//line /grammar/grammar.y:775
 		{
 
 		}
 	case 120:
 		xxDollar = xxS[xxpt-1 : xxpt+1]
-//line /grammar/grammar.y:775
+//line /grammar/grammar.y:779
 		{
 
 		}
 	case 121:
 		xxDollar = xxS[xxpt-1 : xxpt+1]
-//line /grammar/grammar.y:779
+//line /grammar/grammar.y:783
 		{
 
 		}
 	case 122:
 		xxDollar = xxS[xxpt-2 : xxpt+1]
-//line /grammar/grammar.y:783
+//line /grammar/grammar.y:787
 		{
 
 		}
 	case 123:
 		xxDollar = xxS[xxpt-3 : xxpt+1]
-//line /grammar/grammar.y:787
+//line /grammar/grammar.y:791
 		{
 
 		}
 	case 124:
 		xxDollar = xxS[xxpt-3 : xxpt+1]
-//line /grammar/grammar.y:791
+//line /grammar/grammar.y:795
 		{
 
 		}
 	case 125:
 		xxDollar = xxS[xxpt-3 : xxpt+1]
-//line /grammar/grammar.y:795
+//line /grammar/grammar.y:799
 		{
 
 		}
 	case 126:
 		xxDollar = xxS[xxpt-3 : xxpt+1]
-//line /grammar/grammar.y:799
+//line /grammar/grammar.y:803
 		{
 
 		}
 	case 127:
 		xxDollar = xxS[xxpt-3 : xxpt+1]
-//line /grammar/grammar.y:803
+//line /grammar/grammar.y:807
 		{
 
 		}
 	case 128:
 		xxDollar = xxS[xxpt-3 : xxpt+1]
-//line /grammar/grammar.y:807
+//line /grammar/grammar.y:811
 		{
 
 		}
 	case 129:
 		xxDollar = xxS[xxpt-3 : xxpt+1]
-//line /grammar/grammar.y:811
+//line /grammar/grammar.y:815
 		{
 
 		}
 	case 130:
 		xxDollar = xxS[xxpt-3 : xxpt+1]
-//line /grammar/grammar.y:815
+//line /grammar/grammar.y:819
 		{
 
 		}
 	case 131:
 		xxDollar = xxS[xxpt-2 : xxpt+1]
-//line /grammar/grammar.y:819
+//line /grammar/grammar.y:823
 		{
 
 		}
 	case 132:
 		xxDollar = xxS[xxpt-3 : xxpt+1]
-//line /grammar/grammar.y:823
+//line /grammar/grammar.y:827
 		{
 
 		}
 	case 133:
 		xxDollar = xxS[xxpt-3 : xxpt+1]
-//line /grammar/grammar.y:827
+//line /grammar/grammar.y:831
 		{
 
 		}
 	case 134:
 		xxDollar = xxS[xxpt-1 : xxpt+1]
-//line /grammar/grammar.y:831
+//line /grammar/grammar.y:835
 		{
 
 		}

@@ -169,7 +169,7 @@ type xorRangeTest struct {
 func TestXorRange(t *testing.T) {
 	tests := map[string]xorRangeTest{
 		"$xor1":    xorRangeTest{true, 0, 0, `$xor1 = "xor!" xor`},
-		"$xor2":    xorRangeTest{true, 0x5d, 0x5d, `$xor2 = "xor?" nocase xor(0x5d)`},
+		"$xor2":    xorRangeTest{true, 0x5d, 0x5d, `$xor2 = "xor?" ascii xor(0x5d)`},
 		"$xor3":    xorRangeTest{true, 0xde, 0xff, `$xor3 = "^xor_$!" xor(0xde-0xff)`},
 		"$xor4":    xorRangeTest{true, 132, 0xff, `$xor4 = "xor?" private xor(132-0xff)`},
 		"$no_xor1": xorRangeTest{false, 0, 0, `$no_xor1 = "no xor :(" wide`},
