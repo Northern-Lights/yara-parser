@@ -91,3 +91,18 @@ func (m StringModifiers) String() string {
 	}
 	return fmt.Sprintf("%v", mods)
 }
+
+// String returns the base-10 representation of the underlying int64
+func (d Dec) String() string {
+	return fmt.Sprintf("%d", d.Value())
+}
+
+// String returns the base-8 representation of the underlying int64
+func (o Oct) String() string {
+	return fmt.Sprintf("%o", o.Value())
+}
+
+// String returns the base-16 representation of the underlying int64
+func (h Hex) String() string {
+	return fmt.Sprintf("0x%x", h.Value())
+}

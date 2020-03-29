@@ -66,3 +66,32 @@ type StringModifiers struct {
 	I        bool `json:"i"` // for regex
 	S        bool `json:"s"` // for regex
 }
+
+// An Int can return its underlying value as int64
+type Int interface {
+	Value() int64
+}
+
+// Dec formats its value using base-10
+type Dec int64
+
+// Value --
+func (d Dec) Value() int64 {
+	return int64(d)
+}
+
+// Oct formats its value using base-8
+type Oct int64
+
+// Value --
+func (o Oct) Value() int64 {
+	return int64(o)
+}
+
+// Hex formats its value using base-16
+type Hex int64
+
+// Value --
+func (h Hex) Value() int64 {
+	return int64(h)
+}
