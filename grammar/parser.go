@@ -23,7 +23,7 @@ type regexPair struct {
 //line /grammar/grammar.y:130
 type xxSymType struct {
 	yys int
-	i64 int64
+	i64 data.Int
 	s   string
 	ss  []string
 
@@ -925,7 +925,7 @@ xxdefault:
 		xxDollar = xxS[xxpt-4 : xxpt+1]
 //line /grammar/grammar.y:323
 		{
-			xxVAL.mp = data.Meta{xxDollar[1].s, -xxDollar[4].i64}
+			xxVAL.mp = data.Meta{xxDollar[1].s, -xxDollar[4].i64.Value()}
 		}
 	case 28:
 		xxDollar = xxS[xxpt-3 : xxpt+1]
