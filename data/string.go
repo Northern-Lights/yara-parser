@@ -99,7 +99,7 @@ func (d Dec) String() string {
 
 // String returns the base-8 representation of the underlying int64
 func (o Oct) String() string {
-	return fmt.Sprintf("%o", o.Value())
+	return fmt.Sprintf("0o%o", o.Value())
 }
 
 // String returns the base-16 representation of the underlying int64
