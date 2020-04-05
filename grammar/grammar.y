@@ -128,7 +128,7 @@ type regexPair struct {
 %type <rm>  rule_modifiers
 
 %union {
-    i64           int64
+    i64           data.Int
     s             string
     ss            []string
 
@@ -321,7 +321,17 @@ meta_declaration
       }
     | _IDENTIFIER_ '=' '-' _NUMBER_
       {
-          $$ = data.Meta{$1, -$4}
+          switch $4.(type) {
+          case data.Dec:
+              $4 = data.Dec(-$4.Value())
+          case data.Oct:
+              $4 = data.Oct(-$4.Value())
+          case data.Hex:
+              $4 = data.Hex(-$4.Value())
+          default:
+              panic(fmt.Errorf(`unknown integer format type %T`, $4))
+          }
+          $$ = data.Meta{$1, -$4.Value()}
       }
     | _IDENTIFIER_ '=' _TRUE_
       {

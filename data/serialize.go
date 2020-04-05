@@ -120,7 +120,13 @@ func (m *Meta) Serialize() (out string, err error) {
 	case string:
 		out = fmt.Sprintf(`%s = "%s"`, m.Key, val)
 
-	case int64, bool:
+	case int64:
+		out = fmt.Sprintf(`%s = %d`, m.Key, val)
+
+	case Dec, Oct, Hex:
+		out = fmt.Sprintf(`%s = %s`, m.Key, val)
+
+	case bool:
 		out = fmt.Sprintf(`%s = %v`, m.Key, val)
 
 	case float64:
