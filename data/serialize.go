@@ -224,8 +224,12 @@ func (m *StringModifiers) Serialize() (out string, _ error) {
 	if m.Fullword {
 		modifiers = append(modifiers, "fullword")
 	}
+	if m.Private {
+		modifiers = append(modifiers, "private")
+	}
 	if m.Xor {
-		modifiers = append(modifiers, "xor")
+		xor := fmt.Sprintf("xor%s", m.XorRange)
+		modifiers = append(modifiers, xor)
 	}
 
 	out = strings.Join(modifiers, " ")
