@@ -139,7 +139,6 @@ octdigit      [0-7]
 "xor"                   { return _XOR_;         }
 "fullword"              { return _FULLWORD_;    }
 "nocase"                { return _NOCASE_;      }
-"condition"             { return _CONDITION_;   }
 "true"                  { return _TRUE_;        }
 "false"                 { return _FALSE_;       }
 "not"                   { return _NOT_;         }

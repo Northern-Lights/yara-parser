@@ -135,39 +135,39 @@ const yyInteractiveDefault = false
 // SKEL ----------------------------------------------------------------
 
 // [4.0] data tables for the DFA go here -------------------------------
-const yyNumRules = 76
-const yyEndOfBuffer = 77
+const yyNumRules = 75
+const yyEndOfBuffer = 76
 var yyAccept = [283]int16{   0,
         0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-       77,   75,   74,   74,   50,   71,   48,   47,   75,   72,
-       53,   53,    3,   75,    4,   49,   52,   52,   52,   52,
-       52,   52,   52,   52,   52,   52,   52,   52,   52,   52,
-       52,   52,   52,   39,   40,   63,   64,   57,   76,   69,
-       70,   66,   76,   76,   44,   44,   50,    8,   48,   46,
-       47,    2,   42,   45,    0,   53,    0,    0,    0,    0,
-        9,    5,    7,    6,   10,   49,   52,   52,   52,   52,
-       27,   52,   52,   52,   52,   52,   52,   52,   52,   28,
-       52,   52,   52,   29,   26,   52,   52,   52,   52,   52,
+       76,   74,   73,   73,   49,   70,   47,   46,   74,   71,
+       52,   52,    3,   74,    4,   48,   51,   51,   51,   51,
+       51,   51,   51,   51,   51,   51,   51,   51,   51,   51,
+       51,   51,   51,   38,   39,   62,   63,   56,   75,   68,
+       69,   65,   75,   75,   43,   43,   49,    8,   47,   45,
+       46,    2,   41,   44,    0,   52,    0,    0,    0,    0,
+        9,    5,    7,    6,   10,   48,   51,   51,   51,   51,
+       26,   51,   51,   51,   51,   51,   51,   51,   51,   27,
+       51,   51,   51,   28,   25,   51,   51,   51,   51,   51,
 
-       52,   52,   52,    0,    0,   63,   65,   60,   61,   59,
-       58,   65,   69,   66,   66,   68,   67,   43,   45,   54,
-       53,   56,   55,   32,   25,   33,   52,   52,   52,   52,
-       52,   31,   52,   52,   52,   52,   52,   52,   52,   52,
-       24,   52,   52,   52,   52,   52,   52,   52,   18,   73,
-        0,    0,    0,   52,   52,   52,   52,   52,   52,   52,
-       52,   52,   52,   52,   52,   51,   52,   14,   52,   52,
-       13,   52,   30,   22,   17,    0,    0,    0,    0,    0,
-       73,   62,   16,   52,   52,   52,   23,   52,   52,   52,
-       52,   52,   52,   52,   52,   52,   52,    0,    0,    0,
+       51,   51,   51,    0,    0,   62,   64,   59,   60,   58,
+       57,   64,   68,   65,   65,   67,   66,   42,   44,   53,
+       52,   55,   54,   31,   24,   32,   51,   51,   51,   51,
+       51,   30,   51,   51,   51,   51,   51,   51,   51,   51,
+       23,   51,   51,   51,   51,   51,   51,   51,   18,   72,
+        0,    0,    0,   51,   51,   51,   51,   51,   51,   51,
+       51,   51,   51,   51,   51,   50,   51,   14,   51,   51,
+       13,   51,   29,   21,   17,    0,    0,    0,    0,    0,
+       72,   61,   16,   51,   51,   51,   22,   51,   51,   51,
+       51,   51,   51,   51,   51,   51,   51,    0,    0,    0,
 
-       52,   52,   52,   52,   52,   12,   38,   52,   51,   52,
-       20,   52,   52,    0,    0,    0,    0,    0,    0,    0,
-       73,   52,   52,   52,   52,   52,   41,   36,   11,   15,
-        0,   73,    0,    0,    0,    0,   73,    0,    0,   52,
-       37,   52,   35,   19,    0,    0,    0,    0,    0,    0,
-        0,   73,    0,   73,    0,    0,    0,    0,   73,    1,
-       52,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-        0,   73,    0,    0,    0,   73,   34,    0,    0,    0,
+       51,   51,   51,   51,   51,   12,   37,   51,   50,   51,
+       20,   51,   51,    0,    0,    0,    0,    0,    0,    0,
+       72,   51,   51,   51,   51,   51,   40,   35,   11,   15,
+        0,   72,    0,    0,    0,    0,   72,    0,    0,   51,
+       36,   51,   34,   19,    0,    0,    0,    0,    0,    0,
+        0,   72,    0,   72,    0,    0,    0,    0,   72,    1,
+       51,    0,    0,    0,    0,    0,    0,    0,    0,    0,
+        0,   72,    0,    0,    0,   72,   33,    0,    0,    0,
         0,    0,
     }
 
@@ -602,11 +602,11 @@ var yyChk = [1400]int16{   0,
     }
 
 /* Table of booleans, true if rule could match eol. */
-var yyRuleCanMatchEol = [77]int32{   0,
+var yyRuleCanMatchEol = [76]int32{   0,
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
-    0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
-    0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0,     };
+    0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+    0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0,     };
 
 //line /grammar/lexer.l:1
 /*
@@ -1164,7 +1164,7 @@ case 21:
 
 
 //line /grammar/lexer.l:142
-{ return _CONDITION_;   }
+{ return _TRUE_;        }
 case 22:
 
 	yylineno = yy.Lineno
@@ -1180,7 +1180,7 @@ case 22:
 
 
 //line /grammar/lexer.l:143
-{ return _TRUE_;        }
+{ return _FALSE_;       }
 case 23:
 
 	yylineno = yy.Lineno
@@ -1196,7 +1196,7 @@ case 23:
 
 
 //line /grammar/lexer.l:144
-{ return _FALSE_;       }
+{ return _NOT_;         }
 case 24:
 
 	yylineno = yy.Lineno
@@ -1212,7 +1212,7 @@ case 24:
 
 
 //line /grammar/lexer.l:145
-{ return _NOT_;         }
+{ return _AND_;         }
 case 25:
 
 	yylineno = yy.Lineno
@@ -1228,7 +1228,7 @@ case 25:
 
 
 //line /grammar/lexer.l:146
-{ return _AND_;         }
+{ return _OR_;          }
 case 26:
 
 	yylineno = yy.Lineno
@@ -1244,7 +1244,7 @@ case 26:
 
 
 //line /grammar/lexer.l:147
-{ return _OR_;          }
+{ return _AT_;          }
 case 27:
 
 	yylineno = yy.Lineno
@@ -1260,7 +1260,7 @@ case 27:
 
 
 //line /grammar/lexer.l:148
-{ return _AT_;          }
+{ return _IN_;          }
 case 28:
 
 	yylineno = yy.Lineno
@@ -1276,7 +1276,7 @@ case 28:
 
 
 //line /grammar/lexer.l:149
-{ return _IN_;          }
+{ return _OF_;          }
 case 29:
 
 	yylineno = yy.Lineno
@@ -1292,7 +1292,7 @@ case 29:
 
 
 //line /grammar/lexer.l:150
-{ return _OF_;          }
+{ return _THEM_;        }
 case 30:
 
 	yylineno = yy.Lineno
@@ -1308,7 +1308,7 @@ case 30:
 
 
 //line /grammar/lexer.l:151
-{ return _THEM_;        }
+{ return _FOR_;         }
 case 31:
 
 	yylineno = yy.Lineno
@@ -1324,7 +1324,7 @@ case 31:
 
 
 //line /grammar/lexer.l:152
-{ return _FOR_;         }
+{ return _ALL_;         }
 case 32:
 
 	yylineno = yy.Lineno
@@ -1340,7 +1340,7 @@ case 32:
 
 
 //line /grammar/lexer.l:153
-{ return _ALL_;         }
+{ return _ANY_;         }
 case 33:
 
 	yylineno = yy.Lineno
@@ -1356,7 +1356,7 @@ case 33:
 
 
 //line /grammar/lexer.l:154
-{ return _ANY_;         }
+{ return _ENTRYPOINT_;  }
 case 34:
 
 	yylineno = yy.Lineno
@@ -1372,7 +1372,7 @@ case 34:
 
 
 //line /grammar/lexer.l:155
-{ return _ENTRYPOINT_;  }
+{ return _FILESIZE_;    }
 case 35:
 
 	yylineno = yy.Lineno
@@ -1388,7 +1388,7 @@ case 35:
 
 
 //line /grammar/lexer.l:156
-{ return _FILESIZE_;    }
+{ return _MATCHES_;     }
 case 36:
 
 	yylineno = yy.Lineno
@@ -1404,7 +1404,7 @@ case 36:
 
 
 //line /grammar/lexer.l:157
-{ return _MATCHES_;     }
+{ return _CONTAINS_;    }
 case 37:
 
 	yylineno = yy.Lineno
@@ -1420,7 +1420,7 @@ case 37:
 
 
 //line /grammar/lexer.l:158
-{ return _CONTAINS_;    }
+{ return _IMPORT_;      }
 case 38:
 
 	yylineno = yy.Lineno
@@ -1435,8 +1435,8 @@ case 38:
   }
 
 
-//line /grammar/lexer.l:159
-{ return _IMPORT_;      }
+//line /grammar/lexer.l:160
+{ return _LBRACE_; }
 case 39:
 
 	yylineno = yy.Lineno
@@ -1452,7 +1452,12 @@ case 39:
 
 
 //line /grammar/lexer.l:161
-{ return _LBRACE_; }
+{ 
+                          if collect {
+                            collect = false
+                          }
+                          return _RBRACE_;
+                        }
 case 40:
 
 	yylineno = yy.Lineno
@@ -1467,13 +1472,8 @@ case 40:
   }
 
 
-//line /grammar/lexer.l:162
-{ 
-                          if collect {
-                            collect = false
-                          }
-                          return _RBRACE_;
-                        }
+//line /grammar/lexer.l:167
+{ return _INCLUDE_; }
 case 41:
 
 	yylineno = yy.Lineno
@@ -1488,8 +1488,8 @@ case 41:
   }
 
 
-//line /grammar/lexer.l:168
-{ return _INCLUDE_; }
+//line /grammar/lexer.l:169
+{ yy.start = 1 + 2*  (comment);       }
 case 42:
 
 	yylineno = yy.Lineno
@@ -1505,8 +1505,9 @@ case 42:
 
 
 //line /grammar/lexer.l:170
-{ yy.start = 1 + 2*  (comment);       }
+{ yy.start = 1 + 2*  (yyInitial );       }
 case 43:
+/* rule 43 can match eol */
 
 	yylineno = yy.Lineno
 	YYtext = string(yytext)
@@ -1521,9 +1522,8 @@ case 43:
 
 
 //line /grammar/lexer.l:171
-{ yy.start = 1 + 2*  (yyInitial );       }
+{ /* skip comments */   }
 case 44:
-/* rule 44 can match eol */
 
 	yylineno = yy.Lineno
 	YYtext = string(yytext)
@@ -1537,8 +1537,19 @@ case 44:
   }
 
 
-//line /grammar/lexer.l:172
-{ /* skip comments */   }
+//line /grammar/lexer.l:174
+{ /* skip single-line comments */ }
+case (yyEndOfBuffer + yyInitial  + 1) :
+	fallthrough
+case (yyEndOfBuffer + str + 1) :
+	fallthrough
+case (yyEndOfBuffer + regexp + 1) :
+	fallthrough
+case (yyEndOfBuffer + include + 1) :
+	fallthrough
+case (yyEndOfBuffer + comment + 1) :
+//line /grammar/lexer.l:176
+{ return eof }
 case 45:
 
 	yylineno = yy.Lineno
@@ -1553,19 +1564,11 @@ case 45:
   }
 
 
-//line /grammar/lexer.l:175
-{ /* skip single-line comments */ }
-case (yyEndOfBuffer + yyInitial  + 1) :
-	fallthrough
-case (yyEndOfBuffer + str + 1) :
-	fallthrough
-case (yyEndOfBuffer + regexp + 1) :
-	fallthrough
-case (yyEndOfBuffer + include + 1) :
-	fallthrough
-case (yyEndOfBuffer + comment + 1) :
-//line /grammar/lexer.l:177
-{ return eof }
+//line /grammar/lexer.l:179
+{
+  yylval.s = string(yytext)
+  return _STRING_IDENTIFIER_WITH_WILDCARD_;
+}
 case 46:
 
 	yylineno = yy.Lineno
@@ -1580,10 +1583,10 @@ case 46:
   }
 
 
-//line /grammar/lexer.l:180
+//line /grammar/lexer.l:185
 {
   yylval.s = string(yytext)
-  return _STRING_IDENTIFIER_WITH_WILDCARD_;
+  return _STRING_IDENTIFIER_;
 }
 case 47:
 
@@ -1599,10 +1602,9 @@ case 47:
   }
 
 
-//line /grammar/lexer.l:186
+//line /grammar/lexer.l:191
 {
-  yylval.s = string(yytext)
-  return _STRING_IDENTIFIER_;
+  return _STRING_COUNT_;
 }
 case 48:
 
@@ -1618,9 +1620,9 @@ case 48:
   }
 
 
-//line /grammar/lexer.l:192
+//line /grammar/lexer.l:196
 {
-  return _STRING_COUNT_;
+  return _STRING_OFFSET_;
 }
 case 49:
 
@@ -1636,9 +1638,9 @@ case 49:
   }
 
 
-//line /grammar/lexer.l:197
+//line /grammar/lexer.l:201
 {
-  return _STRING_OFFSET_;
+  return _STRING_LENGTH_;
 }
 case 50:
 
@@ -1654,9 +1656,9 @@ case 50:
   }
 
 
-//line /grammar/lexer.l:202
+//line /grammar/lexer.l:206
 {
-  return _STRING_LENGTH_;
+  return _INTEGER_FUNCTION_;
 }
 case 51:
 
@@ -1672,9 +1674,10 @@ case 51:
   }
 
 
-//line /grammar/lexer.l:207
+//line /grammar/lexer.l:211
 {
-  return _INTEGER_FUNCTION_;
+  yylval.s = string(yytext)
+  return _IDENTIFIER_;
 }
 case 52:
 
@@ -1690,26 +1693,7 @@ case 52:
   }
 
 
-//line /grammar/lexer.l:212
-{
-  yylval.s = string(yytext)
-  return _IDENTIFIER_;
-}
-case 53:
-
-	yylineno = yy.Lineno
-	YYtext = string(yytext)
-
-  if collect {
-    conditionBuilder.Write(yytext)
-  }
-
-  if collectText {
-    textBuilder.Write(yytext)
-  }
-
-
-//line /grammar/lexer.l:218
+//line /grammar/lexer.l:217
 {
   s := strings.TrimRight(YYtext, "MKB")
   i, err := strconv.ParseInt(s, 10, 64)
@@ -1737,6 +1721,24 @@ case 53:
   yylval.i64 = data.Dec(i)
   return _NUMBER_;
 }
+case 53:
+
+	yylineno = yy.Lineno
+	YYtext = string(yytext)
+
+  if collect {
+    conditionBuilder.Write(yytext)
+  }
+
+  if collectText {
+    textBuilder.Write(yytext)
+  }
+
+
+//line /grammar/lexer.l:245
+{
+  return _DOUBLE_;
+}
 case 54:
 
 	yylineno = yy.Lineno
@@ -1751,9 +1753,15 @@ case 54:
   }
 
 
-//line /grammar/lexer.l:246
+//line /grammar/lexer.l:249
 {
-  return _DOUBLE_;
+  i, err := strconv.ParseInt(YYtext, 0, 64)
+  if err != nil {
+      panic(fmt.Errorf("Number conversion error: %s", err))
+  }
+
+  yylval.i64 = data.Hex(i)
+  return _NUMBER_;
 }
 case 55:
 
@@ -1769,14 +1777,15 @@ case 55:
   }
 
 
-//line /grammar/lexer.l:250
+//line /grammar/lexer.l:259
 {
-  i, err := strconv.ParseInt(YYtext, 0, 64)
+  s := strings.TrimLeft(YYtext, "0o")
+  i, err := strconv.ParseInt(s, 8, 64)
   if err != nil {
       panic(fmt.Errorf("Number conversion error: %s", err))
   }
 
-  yylval.i64 = data.Hex(i)
+  yylval.i64 = data.Oct(i)
   return _NUMBER_;
 }
 case 56:
@@ -1793,16 +1802,16 @@ case 56:
   }
 
 
-//line /grammar/lexer.l:260
-{
-  s := strings.TrimLeft(YYtext, "0o")
-  i, err := strconv.ParseInt(s, 8, 64)
-  if err != nil {
-      panic(fmt.Errorf("Number conversion error: %s", err))
-  }
+//line /grammar/lexer.l:271
+{     /* saw closing quote - all done */
 
-  yylval.i64 = data.Oct(i)
-  return _NUMBER_;
+  // NOTE: textBuilder.String() will end with `"` char
+  collectText = false
+  yylval.s = strings.TrimSuffix(textBuilder.String(), `"`)
+
+  yy.start = 1 + 2*  (yyInitial );
+
+  return _TEXT_STRING_;
 }
 case 57:
 
@@ -1818,16 +1827,8 @@ case 57:
   }
 
 
-//line /grammar/lexer.l:272
-{     /* saw closing quote - all done */
-
-  // NOTE: textBuilder.String() will end with `"` char
-  collectText = false
-  yylval.s = strings.TrimSuffix(textBuilder.String(), `"`)
-
-  yy.start = 1 + 2*  (yyInitial );
-
-  return _TEXT_STRING_;
+//line /grammar/lexer.l:283
+{
 }
 case 58:
 
@@ -1843,7 +1844,7 @@ case 58:
   }
 
 
-//line /grammar/lexer.l:284
+//line /grammar/lexer.l:287
 {
 }
 case 59:
@@ -1860,7 +1861,7 @@ case 59:
   }
 
 
-//line /grammar/lexer.l:288
+//line /grammar/lexer.l:291
 {
 }
 case 60:
@@ -1877,7 +1878,7 @@ case 60:
   }
 
 
-//line /grammar/lexer.l:292
+//line /grammar/lexer.l:295
 {
 }
 case 61:
@@ -1894,7 +1895,7 @@ case 61:
   }
 
 
-//line /grammar/lexer.l:296
+//line /grammar/lexer.l:299
 {
 }
 case 62:
@@ -1911,10 +1912,10 @@ case 62:
   }
 
 
-//line /grammar/lexer.l:300
-{
-}
+//line /grammar/lexer.l:303
+{ }
 case 63:
+/* rule 63 can match eol */
 
 	yylineno = yy.Lineno
 	YYtext = string(yytext)
@@ -1928,8 +1929,10 @@ case 63:
   }
 
 
-//line /grammar/lexer.l:304
-{ }
+//line /grammar/lexer.l:306
+{
+  panic(fmt.Errorf("unterminated string"))
+}
 case 64:
 /* rule 64 can match eol */
 
@@ -1945,30 +1948,11 @@ case 64:
   }
 
 
-//line /grammar/lexer.l:307
-{
-  panic(fmt.Errorf("unterminated string"))
-}
-case 65:
-/* rule 65 can match eol */
-
-	yylineno = yy.Lineno
-	YYtext = string(yytext)
-
-  if collect {
-    conditionBuilder.Write(yytext)
-  }
-
-  if collectText {
-    textBuilder.Write(yytext)
-  }
-
-
-//line /grammar/lexer.l:312
+//line /grammar/lexer.l:311
 {
   panic(fmt.Errorf("illegal escape sequence"))
 }
-case 66:
+case 65:
 
 	yylineno = yy.Lineno
 	YYtext = string(yytext)
@@ -1982,7 +1966,7 @@ case 66:
   }
 
 
-//line /grammar/lexer.l:317
+//line /grammar/lexer.l:316
 {
   collectText = false
 
@@ -2015,6 +1999,23 @@ case 66:
   yy.start = 1 + 2*  (yyInitial );
   return _REGEXP_;
 }
+case 66:
+
+	yylineno = yy.Lineno
+	YYtext = string(yytext)
+
+  if collect {
+    conditionBuilder.Write(yytext)
+  }
+
+  if collectText {
+    textBuilder.Write(yytext)
+  }
+
+
+//line /grammar/lexer.l:350
+{
+}
 case 67:
 
 	yylineno = yy.Lineno
@@ -2029,7 +2030,7 @@ case 67:
   }
 
 
-//line /grammar/lexer.l:351
+//line /grammar/lexer.l:354
 {
 }
 case 68:
@@ -2046,27 +2047,10 @@ case 68:
   }
 
 
-//line /grammar/lexer.l:355
-{
-}
-case 69:
-
-	yylineno = yy.Lineno
-	YYtext = string(yytext)
-
-  if collect {
-    conditionBuilder.Write(yytext)
-  }
-
-  if collectText {
-    textBuilder.Write(yytext)
-  }
-
-
-//line /grammar/lexer.l:359
+//line /grammar/lexer.l:358
 { }
-case 70:
-/* rule 70 can match eol */
+case 69:
+/* rule 69 can match eol */
 
 	yylineno = yy.Lineno
 	YYtext = string(yytext)
@@ -2080,9 +2064,29 @@ case 70:
   }
 
 
-//line /grammar/lexer.l:362
+//line /grammar/lexer.l:361
 {
   panic(fmt.Errorf("unterminated regular expression"))
+}
+case 70:
+
+	yylineno = yy.Lineno
+	YYtext = string(yytext)
+
+  if collect {
+    conditionBuilder.Write(yytext)
+  }
+
+  if collectText {
+    textBuilder.Write(yytext)
+  }
+
+
+//line /grammar/lexer.l:366
+{
+  collectText = true
+  textBuilder.Reset()
+  yy.start = 1 + 2*  (str);
 }
 case 71:
 
@@ -2098,13 +2102,14 @@ case 71:
   }
 
 
-//line /grammar/lexer.l:367
+//line /grammar/lexer.l:373
 {
   collectText = true
   textBuilder.Reset()
-  yy.start = 1 + 2*  (str);
+  yy.start = 1 + 2*  (regexp);
 }
 case 72:
+/* rule 72 can match eol */
 
 	yylineno = yy.Lineno
 	YYtext = string(yytext)
@@ -2118,11 +2123,21 @@ case 72:
   }
 
 
-//line /grammar/lexer.l:374
+//line /grammar/lexer.l:380
 {
-  collectText = true
-  textBuilder.Reset()
-  yy.start = 1 + 2*  (regexp);
+  // Match hex-digits with whitespace or comments. The latter are stripped
+  // out by hex_lexer.l
+  // TODO(vmalvarez): Integrate the hex string lexer and parser into this one,
+  // by having a single lexer/parser instead of two different ones we can avoid
+  // complex regular expressions like the one above, which is actually trying to
+  // do some parsing in the lexer.
+
+  // NOTE: The above comment may not apply. We plan to not use hex_lexer.l
+
+  // No need to collect like str and regexp start conditions
+  yylval.s = strings.Trim(YYtext, "{}")
+
+  return _HEX_STRING_;
 }
 case 73:
 /* rule 73 can match eol */
@@ -2139,24 +2154,9 @@ case 73:
   }
 
 
-//line /grammar/lexer.l:381
-{
-  // Match hex-digits with whitespace or comments. The latter are stripped
-  // out by hex_lexer.l
-  // TODO(vmalvarez): Integrate the hex string lexer and parser into this one,
-  // by having a single lexer/parser instead of two different ones we can avoid
-  // complex regular expressions like the one above, which is actually trying to
-  // do some parsing in the lexer.
-
-  // NOTE: The above comment may not apply. We plan to not use hex_lexer.l
-
-  // No need to collect like str and regexp start conditions
-  yylval.s = strings.Trim(YYtext, "{}")
-
-  return _HEX_STRING_;
-}
+//line /grammar/lexer.l:397
+/* skip whitespace */
 case 74:
-/* rule 74 can match eol */
 
 	yylineno = yy.Lineno
 	YYtext = string(yytext)
@@ -2170,8 +2170,17 @@ case 74:
   }
 
 
-//line /grammar/lexer.l:398
-/* skip whitespace */
+//line /grammar/lexer.l:399
+{
+
+  r := int(yytext[0])
+
+  if r >= 32 && r < 127 {
+    return r
+  }
+
+  panic(fmt.Errorf("non-ascii byte '%d'", r))
+}
 case 75:
 
 	yylineno = yy.Lineno
@@ -2186,34 +2195,9 @@ case 75:
   }
 
 
-//line /grammar/lexer.l:400
-{
-
-  r := int(yytext[0])
-
-  if r >= 32 && r < 127 {
-    return r
-  }
-
-  panic(fmt.Errorf("non-ascii byte '%d'", r))
-}
-case 76:
-
-	yylineno = yy.Lineno
-	YYtext = string(yytext)
-
-  if collect {
-    conditionBuilder.Write(yytext)
-  }
-
-  if collectText {
-    textBuilder.Write(yytext)
-  }
-
-
-//line /grammar/lexer.l:411
+//line /grammar/lexer.l:410
 yyout.Write(yytext) 
-//line /grammar/lexer.go:2217
+//line /grammar/lexer.go:2201
 // SKEL ----------------------------------------------------------------
 
 		case yyEndOfBuffer:
@@ -2674,7 +2658,7 @@ func YYmain(filenames ...string) (interface{}, error) {
 }
 
 // END OF SKELL --------------------------------------------------------
-//line /grammar/lexer.l:411
+//line /grammar/lexer.l:410
 
 
 
