@@ -93,10 +93,34 @@ condition:
 rule XOR {
 strings:
     $xor1 = "xor!" xor
-    $xor2 = "xor?" nocase xor
-    $xor3 = /xor_/ xor
+    $xor2 = "xor?" wide fullword xor
     $no_xor1 = "no xor :(" wide
     $no_xor2 = "no xor >:(" ascii nocase
+    $no_xor3 = /xor_/
 condition:
     any of them
+}
+
+rule XOR_RANGE {
+strings:
+    $xor1 = "xor!" xor(0)
+    $xor2 = "xor?" ascii xor(0x5d)
+    $xor3 = "^xor_$!" xor(0xde-0xff)
+    $xor4 = "xor?" xor(132-0xff) private
+    $no_xor1 = "no xor :(" wide
+    $no_xor2 = "no xor >:(" ascii nocase
+    $no_xor3 = /xor_/ ascii
+condition:
+    any of them
+}
+
+rule PRIVATE_STRING {
+strings:
+    $private1 = "private!" private
+    $private2 = "private?" wide private
+    $private3 = /private_/ wide nocase private
+    $no_private1 = "no private :(" wide xor
+    $no_private2 = "no private >:(" ascii nocase
+condition:
+    all of them
 }

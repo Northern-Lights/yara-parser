@@ -80,8 +80,15 @@ func (m StringModifiers) String() string {
 	if m.Fullword {
 		mods = append(mods, "fullword")
 	}
+	if m.Private {
+		mods = append(mods, "private")
+	}
 	if m.Xor {
-		mods = append(mods, "xor")
+		if m.XorRange.Min != nil {
+			mods = append(mods, fmt.Sprintf("xor%s", m.XorRange))
+		} else {
+			mods = append(mods, "xor")
+		}
 	}
 	if m.I {
 		mods = append(mods, "insensitive")
@@ -105,4 +112,19 @@ func (o Oct) String() string {
 // String returns the base-16 representation of the underlying int64
 func (h Hex) String() string {
 	return fmt.Sprintf("0x%x", h.Value())
+}
+
+func (x XorRange) String() string {
+	if x.Min == nil || x.Max == nil {
+		return ""
+	}
+
+	if x.Max.Value() == x.Min.Value() && x.Max.Value() != 0 {
+		return fmt.Sprintf("(%s)", x.Min)
+	}
+	if x.Max.Value() != x.Min.Value() {
+		return fmt.Sprintf("(%s-%s)", x.Min, x.Max)
+	}
+
+	return ""
 }
