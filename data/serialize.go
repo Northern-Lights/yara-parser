@@ -209,8 +209,9 @@ func (s *String) Serialize() (out string, err error) {
 // Serialize for StringModifiers creates a space-sparated list of
 // string modifiers, excluding the i and s which are appended to /regex/
 // The returned error must be nil.
-func (m *StringModifiers) Serialize() (out string, _ error) {
-	const modsAvailable = 4
+func (m *StringModifiers) Serialize() (out string, err error) {
+	// TODO: validate combination of modifiers
+	const modsAvailable = 4 // TODO: update
 	modifiers := make([]string, 0, modsAvailable)
 	if m.ASCII {
 		modifiers = append(modifiers, "ascii")
@@ -227,11 +228,44 @@ func (m *StringModifiers) Serialize() (out string, _ error) {
 	if m.Private {
 		modifiers = append(modifiers, "private")
 	}
-	if m.Xor {
-		xor := fmt.Sprintf("xor%s", m.XorRange)
-		modifiers = append(modifiers, xor)
+	if m.Xor != nil {
+		var xor string
+		xor, err = m.Xor.Serialize()
+		if xor != "" && err == nil {
+			modifiers = append(modifiers, xor)
+		}
 	}
 
 	out = strings.Join(modifiers, " ")
+	return
+}
+
+// Serialize for Xor outputs the correct form of the xor modifier and verifies
+// that any specified values are in range
+func (xor Xor) Serialize() (out string, err error) {
+	if xor == nil {
+		// no action: blank string, no error
+		return
+	}
+
+	switch len(xor) {
+	case 0:
+		out = "xor"
+	case 1:
+		out = fmt.Sprintf("xor(%s)", xor[0])
+	case 2:
+		out = fmt.Sprintf("xor(%s-%s)", xor[0], xor[1])
+	default:
+		err = fmt.Errorf(`"xor" modifier expects 0, 1, or 2 values; got %d"`, len(xor))
+	}
+
+	if err == nil {
+		for _, val := range xor {
+			if val.Value() < 0 || val.Value() > 255 {
+				err = fmt.Errorf(`"xor" modifier value must be in [0,255]; got %s`, val)
+			}
+		}
+	}
+
 	return
 }

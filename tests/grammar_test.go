@@ -143,12 +143,12 @@ func TestXor(t *testing.T) {
 			for _, s := range rule.Strings {
 				const strNamePrefix = "$xor"
 				if strings.HasPrefix(s.ID, strNamePrefix) {
-					if !s.Modifiers.Xor {
+					if s.Modifiers.Xor == nil {
 						t.Errorf(`Ruleset "%s" rule "%s" string "%s" xor modifier not found`,
 							testfile, rule.Identifier, s.ID)
 					}
 				} else {
-					if s.Modifiers.Xor {
+					if s.Modifiers.Xor != nil {
 						t.Errorf(`Ruleset "%s" rule "%s" string "%s" has unexpected xor modifier`,
 							testfile, rule.Identifier, s.ID)
 					}

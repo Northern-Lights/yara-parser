@@ -58,22 +58,20 @@ const (
 
 // StringModifiers denote the status of the possible modifiers for strings
 type StringModifiers struct {
-	Nocase   bool     `json:"nocase"`
-	ASCII    bool     `json:"ascii"`
-	Wide     bool     `json:"wide"`
-	Fullword bool     `json:"fullword"`
-	Private  bool     `json:"private"`
-	Xor      bool     `json:"xor"`
-	XorRange XorRange `json:"xor_range"` // makes sense only with XOR modifier
-	I        bool     `json:"i"`         // for regex
-	S        bool     `json:"s"`         // for regex
+	Nocase   bool `json:"nocase"`
+	ASCII    bool `json:"ascii"`
+	Wide     bool `json:"wide"`
+	Fullword bool `json:"fullword"`
+	Private  bool `json:"private"`
+	Xor      Xor  `json:"xor"`
+	I        bool `json:"i"` // for regex
+	S        bool `json:"s"` // for regex
 }
 
-// XorRange contains upper and lower bounds of the XOR modifier
-type XorRange struct {
-	Min Int `json:"min"`
-	Max Int `json:"max"`
-}
+// Xor represents the xor modifier. Xor can have 0-2 members, representing
+// respectively: xor, xor(val), xor(min-max). A nil Xor indicates absence of the
+// xor modifier
+type Xor []Int
 
 // An Int can return its underlying value as int64
 type Int interface {
