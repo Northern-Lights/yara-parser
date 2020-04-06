@@ -79,6 +79,8 @@ type regexPair struct {
 %token <mod> _ASCII_
 %token <mod> _WIDE_
 %token _XOR_
+%token _BASE64_
+%token _BASE64_WIDE_
 %token <mod> _NOCASE_
 %token <mod> _FULLWORD_
 %token _AT_
@@ -455,6 +457,30 @@ string_modifier
           Min: $3,
           Max: $5,
         }
+      }
+    | _BASE64_
+      {
+          $$.Base64 = data.Base64{}
+      }
+    | _BASE64_ '(' _TEXT_STRING_ ')'
+      {
+          if len($3) != 64 {
+              err := fmt.Errorf(`base64 value must be 64 characters; got %d`, len($3))
+              panic(err)
+          }
+          $$.Base64 = data.Base64($3)
+      }
+    | _BASE64_WIDE_
+      {
+          $$.Base64Wide = data.Base64{}
+      }
+    | _BASE64_WIDE_ '(' _TEXT_STRING_ ')'
+      {
+          if len($3) != 64 {
+              err := fmt.Errorf(`base64wide value must be 64 characters; got %d`, len($3))
+              panic(err)
+          }
+          $$.Base64Wide = data.Base64($3)
       }
     ;
 
