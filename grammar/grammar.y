@@ -402,7 +402,7 @@ string_modifiers
           if xor == nil {
               xor = $2.Xor
           } else if $2.Xor != nil {
-              panic(fmt.Errorf(`repeated "xor" modifier`))
+              panic(fmt.Errorf(`%w: repeated "xor" modifier`, data.ErrInvalidStringModifierCombo))
           }
 
           $$ = data.StringModifiers {
@@ -415,7 +415,7 @@ string_modifiers
           }
 
           if $$.Xor != nil && $$.Nocase {
-              panic(`invalid modifier combination "xor nocase"`)
+              panic(fmt.Errorf(`%w: invalid modifier combination "xor nocase"`, data.ErrInvalidStringModifierCombo))
           }
     }
     ;

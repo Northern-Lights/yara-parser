@@ -1026,7 +1026,7 @@ xxdefault:
 			if xor == nil {
 				xor = xxDollar[2].mod.Xor
 			} else if xxDollar[2].mod.Xor != nil {
-				panic(fmt.Errorf(`repeated "xor" modifier`))
+				panic(fmt.Errorf(`%w: repeated "xor" modifier`, data.ErrInvalidStringModifierCombo))
 			}
 
 			xxVAL.mod = data.StringModifiers{
@@ -1039,7 +1039,7 @@ xxdefault:
 			}
 
 			if xxVAL.mod.Xor != nil && xxVAL.mod.Nocase {
-				panic(`invalid modifier combination "xor nocase"`)
+				panic(fmt.Errorf(`%w: invalid modifier combination "xor nocase"`, data.ErrInvalidStringModifierCombo))
 			}
 		}
 	case 39:
