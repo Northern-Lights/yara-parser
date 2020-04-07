@@ -207,7 +207,7 @@ func (s *String) Serialize() (out string, err error) {
 		return
 	}
 
-	mods, _ := s.Modifiers.Serialize()
+	mods, err := s.Modifiers.Serialize()
 
 	out = fmt.Sprintf(format, s.ID, encapsOpen, s.Text, encapsClose, mods)
 
@@ -277,14 +277,20 @@ func (xor Xor) Serialize() (out string, err error) {
 		out = fmt.Sprintf("xor(%s)", xor[0])
 	case 2:
 		out = fmt.Sprintf("xor(%s-%s)", xor[0], xor[1])
+		if xor[0].Value() > xor[1].Value() {
+			err = fmt.Errorf(`%w: bad xor range (%s-%s)`,
+				ErrInvalidStringModifierCombo, xor[0], xor[1])
+		}
 	default:
-		err = fmt.Errorf(`"xor" modifier expects 0, 1, or 2 values; got %d"`, len(xor))
+		err = fmt.Errorf(`%w: "xor" modifier expects 0, 1, or 2 values; got %d"`,
+			ErrInvalidStringModifierCombo, (xor))
 	}
 
 	if err == nil {
 		for _, val := range xor {
 			if val.Value() < 0 || val.Value() > 255 {
-				err = fmt.Errorf(`"xor" modifier value must be in [0,255]; got %s`, val)
+				err = fmt.Errorf(`%w: "xor" modifier value must be in [0,255]; got %s`,
+					ErrInvalidStringModifierCombo, val)
 			}
 		}
 	}
