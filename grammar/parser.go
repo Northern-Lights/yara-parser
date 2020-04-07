@@ -1083,8 +1083,8 @@ xxdefault:
 //line /grammar/grammar.y:435
 		{
 			if xxDollar[3].i64.Value() < 0 || xxDollar[3].i64.Value() > 255 {
-				msg := fmt.Sprintf("XOR value %d outside of [0, 255]", xxDollar[3].i64)
-				panic(msg)
+				err := fmt.Errorf("%w: XOR value %d outside of [0, 255]", data.ErrInvalidStringModifierCombo, xxDollar[3].i64)
+				panic(err)
 			}
 
 			xxVAL.mod.Xor = data.Xor{xxDollar[3].i64}
@@ -1094,8 +1094,8 @@ xxdefault:
 //line /grammar/grammar.y:444
 		{
 			if xxDollar[3].i64.Value() < 0 || xxDollar[5].i64.Value() > 255 || xxDollar[3].i64.Value() > xxDollar[5].i64.Value() {
-				msg := fmt.Sprintf("XOR values %d or %d outside of [0, 255]", xxDollar[3].i64, xxDollar[5].i64)
-				panic(msg)
+				err := fmt.Errorf("%w: XOR values %d or %d outside of [0, 255]", data.ErrInvalidStringModifierCombo, xxDollar[3].i64, xxDollar[5].i64)
+				panic(err)
 			}
 
 			xxVAL.mod.Xor = data.Xor{xxDollar[3].i64, xxDollar[5].i64}

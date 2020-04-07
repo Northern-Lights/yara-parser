@@ -434,8 +434,8 @@ string_modifier
     | _XOR_ '(' _NUMBER_ ')'
       {
         if $3.Value() < 0 || $3.Value() > 255 {
-          msg := fmt.Sprintf("XOR value %d outside of [0, 255]", $3)
-          panic(msg)
+          err := fmt.Errorf("%w: XOR value %d outside of [0, 255]", data.ErrInvalidStringModifierCombo, $3)
+          panic(err)
         }
 
         $$.Xor = data.Xor{$3}
@@ -443,8 +443,8 @@ string_modifier
     | _XOR_ '(' _NUMBER_ '-' _NUMBER_ ')'
       {
         if $3.Value() < 0 || $5.Value() > 255 || $3.Value() > $5.Value() {
-          msg := fmt.Sprintf("XOR values %d or %d outside of [0, 255]", $3, $5)
-          panic(msg)
+          err := fmt.Errorf("%w: XOR values %d or %d outside of [0, 255]", data.ErrInvalidStringModifierCombo, $3, $5)
+          panic(err)
         }
   
         $$.Xor = data.Xor{$3, $5}

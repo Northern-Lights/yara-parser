@@ -33,7 +33,11 @@ condition:
 		_, err := parseRuleStr(rstr)
 		if err == nil {
 			t.Errorf(`rule "%s" passed but should have failed`, ruleName)
-		} /* else if !errors.Is(err, data.ErrInvalidStringModifierCombo) {
+		}
+		// xor in regex and some others cause errors in lexical scanning, not
+		// modifier identification, therefore we cannot identify use of xor as
+		// invalid modifier
+		/* else if !errors.Is(err, data.ErrInvalidStringModifierCombo) {
 			t.Errorf(`rule %s failed with "%s"; should have failed with "%s"`,
 				ruleName, err, data.ErrInvalidStringModifierCombo)
 		}*/
