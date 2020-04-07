@@ -180,9 +180,17 @@ func (s *String) Serialize() (out string, err error) {
 		encapsOpen, encapsClose = `"`, `"`
 
 	case TypeHexString:
+		if s.Modifiers.Xor != nil {
+			err = fmt.Errorf(`%w: hex string with xor`, ErrInvalidStringModifierCombo)
+			return
+		}
 		encapsOpen, encapsClose = "{", "}"
 
 	case TypeRegex:
+		if s.Modifiers.Xor != nil {
+			err = fmt.Errorf(`%w: regex with xor`, ErrInvalidStringModifierCombo)
+			return
+		}
 		encapsOpen = "/"
 		var closeBuilder strings.Builder
 		closeBuilder.WriteRune('/')
@@ -210,7 +218,10 @@ func (s *String) Serialize() (out string, err error) {
 // string modifiers, excluding the i and s which are appended to /regex/
 // The returned error must be nil.
 func (m *StringModifiers) Serialize() (out string, err error) {
-	// TODO: validate combination of modifiers
+	if err = m.Validate(); err != nil {
+		return
+	}
+
 	const modsAvailable = 4 // TODO: update
 	modifiers := make([]string, 0, modsAvailable)
 	if m.ASCII {
@@ -238,6 +249,17 @@ func (m *StringModifiers) Serialize() (out string, err error) {
 
 	out = strings.Join(modifiers, " ")
 	return
+}
+
+// Validate returns an error that can be unwrapped to
+// ErrInvalidStringModifierCombo if an illegal combination of string modifiers
+// is present
+func (m *StringModifiers) Validate() error {
+	if m.Nocase && m.Xor != nil {
+		return fmt.Errorf("%w: xor, nocase", ErrInvalidStringModifierCombo)
+	}
+
+	return nil
 }
 
 // Serialize for Xor outputs the correct form of the xor modifier and verifies

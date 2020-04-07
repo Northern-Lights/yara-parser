@@ -1,5 +1,7 @@
 package data
 
+import "fmt"
+
 // RuleSet represents the contents of a yara file
 type RuleSet struct {
 	File     string   `json:"file"` // Name of the yara file
@@ -67,6 +69,10 @@ type StringModifiers struct {
 	I        bool `json:"i"` // for regex
 	S        bool `json:"s"` // for regex
 }
+
+// ErrInvalidStringModifierCombo denotes when an invalid combination of string
+// modifiers is used
+var ErrInvalidStringModifierCombo = fmt.Errorf(`invalid string modifier combination`)
 
 // Xor represents the xor modifier. Xor can have 0-2 members, representing
 // respectively: xor, xor(val), xor(min-max). A nil Xor indicates absence of the
