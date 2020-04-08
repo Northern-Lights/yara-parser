@@ -83,11 +83,10 @@ func (m StringModifiers) String() string {
 	if m.Private {
 		mods = append(mods, "private")
 	}
-	if m.Xor {
-		if m.XorRange.Min != nil {
-			mods = append(mods, fmt.Sprintf("xor%s", m.XorRange))
-		} else {
-			mods = append(mods, "xor")
+	if m.Xor != nil {
+		xor := m.Xor.String()
+		if xor != "" {
+			mods = append(mods, xor)
 		}
 	}
 	if m.I {
@@ -114,17 +113,10 @@ func (h Hex) String() string {
 	return fmt.Sprintf("0x%x", h.Value())
 }
 
-func (x XorRange) String() string {
-	if x.Min == nil || x.Max == nil {
+func (xor Xor) String() string {
+	s, err := xor.Serialize()
+	if err != nil {
 		return ""
 	}
-
-	if x.Max.Value() == x.Min.Value() && x.Max.Value() != 0 {
-		return fmt.Sprintf("(%s)", x.Min)
-	}
-	if x.Max.Value() != x.Min.Value() {
-		return fmt.Sprintf("(%s-%s)", x.Min, x.Max)
-	}
-
-	return ""
+	return s
 }
