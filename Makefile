@@ -19,3 +19,5 @@ release: parser lexer
 
 clean:
 	rm grammar/lexer.go grammar/parser.go y.output y2j
+
+.PHONY: grammar

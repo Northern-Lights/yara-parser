@@ -26,6 +26,9 @@ message StringModifiers {
     bool fullword = 4;
     bool i = 5;
     bool s = 6;
+    bool xor = 7;
+    XorRange xor_range = 8;
+    bool private = 9;
 }
 
 message String {
@@ -38,6 +41,11 @@ message String {
     Type type = 2;
     string text = 3;
     StringModifiers modifiers = 4;
+}
+
+message XorRange {
+    int64 min = 1;
+    int64 max = 2;
 }
 
 message Rule {

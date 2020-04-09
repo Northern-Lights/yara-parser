@@ -124,6 +124,10 @@ type regexPair struct {
 %type <ys>  string_declaration
 %type <mod> string_modifier
 %type <mod> string_modifiers
+%type <mod> regexp_modifier
+%type <mod> regexp_modifiers
+%type <mod> hex_modifier
+%type <mod> hex_modifiers
 %type <rm>  rule_modifier
 %type <rm>  rule_modifiers
 
@@ -368,7 +372,7 @@ string_declaration
           $$.Type = data.TypeRegex
           $$.ID = $1
       }
-      _REGEXP_ string_modifiers
+      _REGEXP_ regexp_modifiers
       {
           $<ys>3.Text = $4.text
 
@@ -379,11 +383,12 @@ string_declaration
 
           $$ = $<ys>3
       }
-    | _STRING_IDENTIFIER_ '=' _HEX_STRING_
+    | _STRING_IDENTIFIER_ '=' _HEX_STRING_ hex_modifiers
       {
           $$.Type = data.TypeHexString
           $$.ID = $1
           $$.Text = $3
+          $$.Modifiers = $4
       }
     ;
 
@@ -393,12 +398,24 @@ string_modifiers
       $$ = data.StringModifiers{}
     }
     | string_modifiers string_modifier    {
+          xor := $1.Xor
+          if xor == nil {
+              xor = $2.Xor
+          } else if $2.Xor != nil {
+              panic(fmt.Errorf(`%w: repeated "xor" modifier`, data.ErrInvalidStringModifierCombo))
+          }
+
           $$ = data.StringModifiers {
               Wide: $1.Wide || $2.Wide,
               ASCII: $1.ASCII || $2.ASCII,
               Nocase: $1.Nocase || $2.Nocase,
               Fullword: $1.Fullword || $2.Fullword,
-              Xor: $1.Xor || $2.Xor,
+              Private: $1.Private || $2.Private,
+              Xor: xor,
+          }
+
+          if $$.Xor != nil && $$.Nocase {
+              panic(fmt.Errorf(`%w: invalid modifier combination "xor nocase"`, data.ErrInvalidStringModifierCombo))
           }
     }
     ;
@@ -409,7 +426,74 @@ string_modifier
     | _ASCII_       { $$.ASCII = true }
     | _NOCASE_      { $$.Nocase = true }
     | _FULLWORD_    { $$.Fullword = true }
-    | _XOR_         { $$.Xor = true }
+    | _PRIVATE_     { $$.Private = true }
+    | _XOR_         
+      {
+          $$.Xor = data.Xor{}
+      }
+    | _XOR_ '(' _NUMBER_ ')'
+      {
+        if $3.Value() < 0 || $3.Value() > 255 {
+          err := fmt.Errorf("%w: XOR value %d outside of [0, 255]", data.ErrInvalidStringModifierCombo, $3)
+          panic(err)
+        }
+
+        $$.Xor = data.Xor{$3}
+      }
+    | _XOR_ '(' _NUMBER_ '-' _NUMBER_ ')'
+      {
+        if $3.Value() < 0 || $5.Value() > 255 || $3.Value() > $5.Value() {
+          err := fmt.Errorf("%w: XOR values %d or %d outside of [0, 255]", data.ErrInvalidStringModifierCombo, $3, $5)
+          panic(err)
+        }
+  
+        $$.Xor = data.Xor{$3, $5}
+      }
+    ;
+
+
+regexp_modifiers
+    : /* empty */
+    {
+      $$ = data.StringModifiers{}
+    }
+    | regexp_modifiers regexp_modifier    {
+          $$ = data.StringModifiers {
+              Wide: $1.Wide || $2.Wide,
+              ASCII: $1.ASCII || $2.ASCII,
+              Nocase: $1.Nocase || $2.Nocase,
+              Fullword: $1.Fullword || $2.Fullword,
+              Private: $1.Private || $2.Private,
+          }
+    }
+    ;
+
+
+regexp_modifier
+    : _WIDE_        { $$.Wide = true }
+    | _ASCII_       { $$.ASCII = true }
+    | _NOCASE_      { $$.Nocase = true }
+    | _FULLWORD_    { $$.Fullword = true }
+    | _PRIVATE_     { $$.Private = true }
+    ;
+
+
+hex_modifiers
+    : /* empty */
+    {
+      $$ = data.StringModifiers{}
+    }
+    | hex_modifiers hex_modifier
+      {
+        $$ = data.StringModifiers {
+          Private: $1.Private || $2.Private,
+        }
+      }
+    ;
+
+
+hex_modifier
+    : _PRIVATE_   { $$.Private = true }
     ;
 
 

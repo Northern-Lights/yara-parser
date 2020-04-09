@@ -143,15 +143,115 @@ func TestXor(t *testing.T) {
 			for _, s := range rule.Strings {
 				const strNamePrefix = "$xor"
 				if strings.HasPrefix(s.ID, strNamePrefix) {
-					if !s.Modifiers.Xor {
+					if s.Modifiers.Xor == nil {
 						t.Errorf(`Ruleset "%s" rule "%s" string "%s" xor modifier not found`,
 							testfile, rule.Identifier, s.ID)
 					}
 				} else {
-					if s.Modifiers.Xor {
+					if s.Modifiers.Xor != nil {
 						t.Errorf(`Ruleset "%s" rule "%s" string "%s" has unexpected xor modifier`,
 							testfile, rule.Identifier, s.ID)
 					}
+				}
+			}
+		}
+	}
+}
+
+type xorRangeTest struct {
+	Xor  data.Xor
+	Text string
+}
+
+// TestXorRange verifies that the xor string modifier works with bytes range
+func TestXorRange(t *testing.T) {
+	tests := map[string]xorRangeTest{
+		"$xor1": xorRangeTest{
+			Xor:  data.Xor{data.Dec(0)},
+			Text: `$xor1 = "xor!" xor(0)`,
+		},
+		"$xor2": xorRangeTest{
+			Xor:  data.Xor{data.Hex(0x5d)},
+			Text: `$xor2 = "xor?" ascii xor(0x5d)`,
+		},
+		"$xor3": xorRangeTest{
+			Xor:  data.Xor{data.Hex(0xde), data.Hex(0xff)},
+			Text: `$xor3 = "^xor_$!" xor(0xde-0xff)`,
+		},
+		"$xor4": xorRangeTest{
+			Xor:  data.Xor{data.Dec(132), data.Hex(0xff)},
+			Text: `$xor4 = "xor?" private xor(132-0xff)`,
+		},
+		"$no_xor1": xorRangeTest{
+			Xor:  nil,
+			Text: `$no_xor1 = "no xor :(" wide`,
+		},
+		"$no_xor2": xorRangeTest{
+			Xor:  nil,
+			Text: `$no_xor2 = "no xor >:(" ascii nocase`,
+		},
+		"$no_xor3": xorRangeTest{
+			Xor:  nil,
+			Text: `$no_xor3 = /xor_/ ascii`,
+		},
+	}
+	const ruleName = "XOR_RANGE"
+	for _, rule := range ruleset.Rules {
+		if rule.Identifier == ruleName {
+			for _, s := range rule.Strings {
+				test := tests[s.ID]
+				serialized, _ := s.Serialize()
+				if serialized != test.Text {
+					t.Errorf(`Ruleset "%s" rule "%s" got strings "%s"; expected "%s"`,
+						testfile, rule.Identifier, serialized, test.Text)
+				}
+				bothNil := s.Modifiers.Xor == nil && test.Xor == nil
+				bothPresent := s.Modifiers.Xor != nil && test.Xor != nil
+				if !(bothNil || bothPresent) {
+					t.Errorf(`Ruleset "%s" rule "%s" xor = %v; want %v`,
+						testfile, rule.Identifier, s.Modifiers.Xor, test.Xor)
+				} else if len(s.Modifiers.Xor) != len(test.Xor) {
+					t.Errorf(`Ruleset "%s" rule "%s" xor = %v; expected %v`,
+						testfile, rule.Identifier, s.Modifiers.Xor, test.Xor)
+				} else {
+					for i := range test.Xor {
+						if test.Xor[i] != s.Modifiers.Xor[i] {
+							t.Errorf(`Ruleset "%s" rule "%s" xor arg %d = %s (%T); expected %s (%T)`,
+								testfile, rule.Identifier, i,
+								s.Modifiers.Xor[i], s.Modifiers.Xor[i], test.Xor[i], test.Xor[i])
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+type privateStrTest struct {
+	IsPrivate bool
+	Text      string
+}
+
+// TestPrivateString verifies that the private string modifier works
+func TestPrivateString(t *testing.T) {
+	tests := map[string]privateStrTest{
+		"$private1":    privateStrTest{true, `$private1 = "private!" private`},
+		"$private2":    privateStrTest{true, `$private2 = "private?" wide private`},
+		"$private3":    privateStrTest{true, `$private3 = /private_/ wide nocase private`},
+		"$no_private1": privateStrTest{false, `$no_private1 = "no private :(" wide xor`},
+		"$no_private2": privateStrTest{false, `$no_private2 = "no private >:(" ascii nocase`},
+	}
+	const ruleName = "PRIVATE_STRING"
+	for _, rule := range ruleset.Rules {
+		if rule.Identifier == ruleName {
+			for _, s := range rule.Strings {
+				test := tests[s.ID]
+				serialized, _ := s.Serialize()
+				if s.Modifiers.Private != test.IsPrivate || serialized != test.Text {
+					t.Errorf(
+						`Ruleset "%s" rule "%s" string "%s" ranged private modifier incorrectly parsed, got - %v, want -%v`,
+						testfile, rule.Identifier, s.ID, privateStrTest{s.Modifiers.Private, serialized}, test,
+					)
 				}
 			}
 		}
