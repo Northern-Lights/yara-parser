@@ -1,7 +1,6 @@
 package tests
 
 import (
-	"errors"
 	"fmt"
 	"testing"
 
@@ -141,9 +140,18 @@ func TestBadXorSerialization(t *testing.T) {
 		s, err := rule.Serialize()
 		if err == nil {
 			t.Errorf(`%s successfully serialized: %s`, rule.Identifier, s)
-		} else if !errors.Is(err, data.ErrInvalidStringModifierCombo) {
-			t.Errorf(`%s failed with "%s"; expected to fail with "%s"`,
-				rule.Identifier, err, data.ErrInvalidStringModifierCombo)
+
+		} else if e, ok := err.(data.YARAError); ok {
+			if e.Unwrap() != data.ErrInvalidStringModifierCombo {
+				t.Errorf(
+					`%s failed with "%s"; expected to fail with "%s"`,
+					rule.Identifier,
+					err,
+					data.ErrInvalidStringModifierCombo)
+			}
+
+		} else {
+			t.Errorf(`%s failed with error %s`, rule.Identifier, err)
 		}
 	}
 }

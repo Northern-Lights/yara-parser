@@ -181,14 +181,14 @@ func (s *String) Serialize() (out string, err error) {
 
 	case TypeHexString:
 		if s.Modifiers.Xor != nil {
-			err = fmt.Errorf(`%w: hex string with xor`, ErrInvalidStringModifierCombo)
+			err = NewYARAError(ErrInvalidStringModifierCombo, "hex string with xor")
 			return
 		}
 		encapsOpen, encapsClose = "{", "}"
 
 	case TypeRegex:
 		if s.Modifiers.Xor != nil {
-			err = fmt.Errorf(`%w: regex with xor`, ErrInvalidStringModifierCombo)
+			err = NewYARAError(ErrInvalidStringModifierCombo, "regex with xor")
 			return
 		}
 		encapsOpen = "/"
@@ -256,7 +256,7 @@ func (m *StringModifiers) Serialize() (out string, err error) {
 // is present
 func (m *StringModifiers) Validate() error {
 	if m.Nocase && m.Xor != nil {
-		return fmt.Errorf("%w: xor, nocase", ErrInvalidStringModifierCombo)
+		return NewYARAError(ErrInvalidStringModifierCombo, "xor, nocase")
 	}
 
 	return nil
@@ -278,19 +278,19 @@ func (xor Xor) Serialize() (out string, err error) {
 	case 2:
 		out = fmt.Sprintf("xor(%s-%s)", xor[0], xor[1])
 		if xor[0].Value() > xor[1].Value() {
-			err = fmt.Errorf(`%w: bad xor range (%s-%s)`,
-				ErrInvalidStringModifierCombo, xor[0], xor[1])
+			msg := fmt.Sprintf(`bad xor range (%s-%s)`, xor[0], xor[1])
+			err = NewYARAError(ErrInvalidStringModifierCombo, msg)
 		}
 	default:
-		err = fmt.Errorf(`%w: "xor" modifier expects 0, 1, or 2 values; got %d"`,
-			ErrInvalidStringModifierCombo, (xor))
+		msg := fmt.Sprintf(`"xor" modifier expects 0, 1, or 2 values; got %d`, xor)
+		err = NewYARAError(err, msg)
 	}
 
 	if err == nil {
 		for _, val := range xor {
 			if val.Value() < 0 || val.Value() > 255 {
-				err = fmt.Errorf(`%w: "xor" modifier value must be in [0,255]; got %s`,
-					ErrInvalidStringModifierCombo, val)
+				msg := fmt.Sprintf(`"xor" modifier value must be in [0,255]; got %s`, val)
+				err = NewYARAError(ErrInvalidStringModifierCombo, msg)
 			}
 		}
 	}

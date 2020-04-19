@@ -402,7 +402,9 @@ string_modifiers
           if xor == nil {
               xor = $2.Xor
           } else if $2.Xor != nil {
-              panic(fmt.Errorf(`%w: repeated "xor" modifier`, data.ErrInvalidStringModifierCombo))
+              panic(data.NewYARAError(
+                  data.ErrInvalidStringModifierCombo,
+                  `repeated "xor" modifier`))
           }
 
           $$ = data.StringModifiers {
@@ -415,7 +417,9 @@ string_modifiers
           }
 
           if $$.Xor != nil && $$.Nocase {
-              panic(fmt.Errorf(`%w: invalid modifier combination "xor nocase"`, data.ErrInvalidStringModifierCombo))
+              panic(data.NewYARAError(
+                  data.ErrInvalidStringModifierCombo,
+                  `xor nocase`))
           }
     }
     ;
@@ -434,8 +438,8 @@ string_modifier
     | _XOR_ '(' _NUMBER_ ')'
       {
         if $3.Value() < 0 || $3.Value() > 255 {
-          err := fmt.Errorf("%w: XOR value %d outside of [0, 255]", data.ErrInvalidStringModifierCombo, $3)
-          panic(err)
+          msg := fmt.Sprintf(`xor value %s outside of [0,255]`, $3)
+          panic(data.NewYARAError(data.ErrInvalidStringModifierCombo, msg))
         }
 
         $$.Xor = data.Xor{$3}
@@ -443,8 +447,8 @@ string_modifier
     | _XOR_ '(' _NUMBER_ '-' _NUMBER_ ')'
       {
         if $3.Value() < 0 || $5.Value() > 255 || $3.Value() > $5.Value() {
-          err := fmt.Errorf("%w: XOR values %d or %d outside of [0, 255]", data.ErrInvalidStringModifierCombo, $3, $5)
-          panic(err)
+          msg := fmt.Sprintf(`xor value %s or %s outside of [0,255]`, $3, $5)
+          panic(data.NewYARAError(data.ErrInvalidStringModifierCombo, msg))
         }
   
         $$.Xor = data.Xor{$3, $5}
