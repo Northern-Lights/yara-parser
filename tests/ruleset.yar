@@ -124,3 +124,31 @@ strings:
 condition:
     all of them
 }
+
+rule BASE64_NO_ALPHABET {
+strings:
+  $s1 = "abcdefg" base64
+condition:
+  any of them
+}
+
+rule BASE64_ALPHABET {
+strings:
+  $s1 = "abcdefg" base64("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+/")
+condition:
+  any of them
+}
+
+rule BASE64WIDE_NO_ALPHABET {
+strings:
+  $s1 = "abcdefg" base64wide
+condition:
+  any of them
+}
+
+rule BASE64WIDE_ALPHABET {
+strings:
+  $s1 = "abcdefg" base64wide("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+/")
+condition:
+  any of them
+}
