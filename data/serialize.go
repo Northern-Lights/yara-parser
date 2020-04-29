@@ -246,6 +246,13 @@ func (m *StringModifiers) Serialize() (out string, err error) {
 			modifiers = append(modifiers, xor)
 		}
 	}
+	if m.Base64 != nil {
+		var b64 string
+		b64, err = m.Base64.Serialize()
+		if b64 != "" && err == nil {
+			modifiers = append(modifiers, b64)
+		}
+	}
 
 	out = strings.Join(modifiers, " ")
 	return
@@ -270,7 +277,7 @@ func (b64 Base64) Serialize() (out string, err error) {
 		if len(alphabet) != 64 {
 			err = fmt.Errorf(`base64 alphabet must be 64 chars`)
 		} else {
-			out = fmt.Sprintf("base64(%s)", string(b64))
+			out = fmt.Sprintf(`base64("%s")`, string(b64))
 		}
 		// should we be checking for 64 unique, printable ASCII chars?
 	default:
