@@ -1,5 +1,7 @@
 package data
 
+import "fmt"
+
 // RuleSet represents the contents of a yara file
 type RuleSet struct {
 	File     string   `json:"file"` // Name of the yara file
@@ -58,24 +60,26 @@ const (
 
 // StringModifiers denote the status of the possible modifiers for strings
 type StringModifiers struct {
-	Nocase     bool     `json:"nocase"`
-	ASCII      bool     `json:"ascii"`
-	Wide       bool     `json:"wide"`
-	Fullword   bool     `json:"fullword"`
-	Private    bool     `json:"private"`
-	Xor        bool     `json:"xor"`
-	XorRange   XorRange `json:"xor_range"` // makes sense only with XOR modifier
-	Base64     Base64   `json:"base64"`
-	Base64Wide Base64   `json:"base64wide"`
-	I          bool     `json:"i"` // for regex
-	S          bool     `json:"s"` // for regex
+	Nocase     bool   `json:"nocase"`
+	ASCII      bool   `json:"ascii"`
+	Wide       bool   `json:"wide"`
+	Fullword   bool   `json:"fullword"`
+	Private    bool   `json:"private"`
+	Xor        Xor    `json:"xor"`
+	Base64     Base64 `json:"base64"`
+	Base64Wide Base64 `json:"base64wide"`
+	I          bool   `json:"i"` // for regex
+	S          bool   `json:"s"` // for regex
 }
 
-// XorRange contains upper and lower bounds of the XOR modifier
-type XorRange struct {
-	Min Int `json:"min"`
-	Max Int `json:"max"`
-}
+// ErrInvalidStringModifierCombo denotes when an invalid combination of string
+// modifiers is used
+var ErrInvalidStringModifierCombo = fmt.Errorf(`invalid string modifier combination`)
+
+// Xor represents the xor modifier. Xor can have 0-2 members, representing
+// respectively: xor, xor(val), xor(min-max). A nil Xor indicates absence of the
+// xor modifier
+type Xor []Int
 
 // Base64 represents the base64 modifier that may or may not contain an
 // alphabet. Alphabets must contain exactly 64 bytes.

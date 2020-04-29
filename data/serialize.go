@@ -180,9 +180,17 @@ func (s *String) Serialize() (out string, err error) {
 		encapsOpen, encapsClose = `"`, `"`
 
 	case TypeHexString:
+		if s.Modifiers.Xor != nil {
+			err = NewYARAError(ErrInvalidStringModifierCombo, "hex string with xor")
+			return
+		}
 		encapsOpen, encapsClose = "{", "}"
 
 	case TypeRegex:
+		if s.Modifiers.Xor != nil {
+			err = NewYARAError(ErrInvalidStringModifierCombo, "regex with xor")
+			return
+		}
 		encapsOpen = "/"
 		var closeBuilder strings.Builder
 		closeBuilder.WriteRune('/')
@@ -199,7 +207,7 @@ func (s *String) Serialize() (out string, err error) {
 		return
 	}
 
-	mods, _ := s.Modifiers.Serialize()
+	mods, err := s.Modifiers.Serialize()
 
 	out = fmt.Sprintf(format, s.ID, encapsOpen, s.Text, encapsClose, mods)
 
@@ -209,8 +217,12 @@ func (s *String) Serialize() (out string, err error) {
 // Serialize for StringModifiers creates a space-sparated list of
 // string modifiers, excluding the i and s which are appended to /regex/
 // The returned error must be nil.
-func (m *StringModifiers) Serialize() (out string, _ error) {
-	const modsAvailable = 4
+func (m *StringModifiers) Serialize() (out string, err error) {
+	if err = m.Validate(); err != nil {
+		return
+	}
+
+	const modsAvailable = 4 // TODO: update
 	modifiers := make([]string, 0, modsAvailable)
 	if m.ASCII {
 		modifiers = append(modifiers, "ascii")
@@ -227,9 +239,12 @@ func (m *StringModifiers) Serialize() (out string, _ error) {
 	if m.Private {
 		modifiers = append(modifiers, "private")
 	}
-	if m.Xor {
-		xor := fmt.Sprintf("xor%s", m.XorRange)
-		modifiers = append(modifiers, xor)
+	if m.Xor != nil {
+		var xor string
+		xor, err = m.Xor.Serialize()
+		if xor != "" && err == nil {
+			modifiers = append(modifiers, xor)
+		}
 	}
 
 	out = strings.Join(modifiers, " ")
@@ -260,6 +275,53 @@ func (b64 Base64) Serialize() (out string, err error) {
 		// should we be checking for 64 unique, printable ASCII chars?
 	default:
 		err = fmt.Errorf(`base64 modifier requires no alphabet or a 64-char alphabet`)
+	}
+
+	return
+}
+
+// Validate returns an error that can be unwrapped to
+// ErrInvalidStringModifierCombo if an illegal combination of string modifiers
+// is present
+func (m *StringModifiers) Validate() error {
+	if m.Nocase && m.Xor != nil {
+		return NewYARAError(ErrInvalidStringModifierCombo, "xor, nocase")
+	}
+
+	return nil
+}
+
+// Serialize for Xor outputs the correct form of the xor modifier and verifies
+// that any specified values are in range
+func (xor Xor) Serialize() (out string, err error) {
+	if xor == nil {
+		// no action: blank string, no error
+		return
+	}
+
+	switch len(xor) {
+	case 0:
+		out = "xor"
+	case 1:
+		out = fmt.Sprintf("xor(%s)", xor[0])
+	case 2:
+		out = fmt.Sprintf("xor(%s-%s)", xor[0], xor[1])
+		if xor[0].Value() > xor[1].Value() {
+			msg := fmt.Sprintf(`bad xor range (%s-%s)`, xor[0], xor[1])
+			err = NewYARAError(ErrInvalidStringModifierCombo, msg)
+		}
+	default:
+		msg := fmt.Sprintf(`"xor" modifier expects 0, 1, or 2 values; got %d`, xor)
+		err = NewYARAError(err, msg)
+	}
+
+	if err == nil {
+		for _, val := range xor {
+			if val.Value() < 0 || val.Value() > 255 {
+				msg := fmt.Sprintf(`"xor" modifier value must be in [0,255]; got %s`, val)
+				err = NewYARAError(ErrInvalidStringModifierCombo, msg)
+			}
+		}
 	}
 
 	return

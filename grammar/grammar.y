@@ -400,9 +400,13 @@ string_modifiers
       $$ = data.StringModifiers{}
     }
     | string_modifiers string_modifier    {
-          xorRange := $2.XorRange
-          if $1.Xor {
-            xorRange = $1.XorRange
+          xor := $1.Xor
+          if xor == nil {
+              xor = $2.Xor
+          } else if $2.Xor != nil {
+              panic(data.NewYARAError(
+                  data.ErrInvalidStringModifierCombo,
+                  `repeated "xor" modifier`))
           }
 
           $$ = data.StringModifiers {
@@ -411,12 +415,13 @@ string_modifiers
               Nocase: $1.Nocase || $2.Nocase,
               Fullword: $1.Fullword || $2.Fullword,
               Private: $1.Private || $2.Private,
-              Xor: $1.Xor || $2.Xor,
-              XorRange: xorRange,
+              Xor: xor,
           }
 
-          if $$.Xor && $$.Nocase {
-            panic(`invalid modifier combination "xor nocase"`)
+          if $$.Xor != nil && $$.Nocase {
+              panic(data.NewYARAError(
+                  data.ErrInvalidStringModifierCombo,
+                  `xor nocase`))
           }
     }
     ;
@@ -430,33 +435,25 @@ string_modifier
     | _PRIVATE_     { $$.Private = true }
     | _XOR_         
       {
-        $$.Xor = true
+          $$.Xor = data.Xor{}
       }
     | _XOR_ '(' _NUMBER_ ')'
       {
         if $3.Value() < 0 || $3.Value() > 255 {
-          msg := fmt.Sprintf("XOR value %d outside of [0, 255]", $3)
-          panic(msg)
+          msg := fmt.Sprintf(`xor value %s outside of [0,255]`, $3)
+          panic(data.NewYARAError(data.ErrInvalidStringModifierCombo, msg))
         }
 
-        $$.Xor = true
-        $$.XorRange = data.XorRange{
-          Min: $3,
-          Max: $3,
-        }
+        $$.Xor = data.Xor{$3}
       }
     | _XOR_ '(' _NUMBER_ '-' _NUMBER_ ')'
       {
         if $3.Value() < 0 || $5.Value() > 255 || $3.Value() > $5.Value() {
-          msg := fmt.Sprintf("XOR values %d or %d outside of [0, 255]", $3, $5)
-          panic(msg)
+          msg := fmt.Sprintf(`xor value %s or %s outside of [0,255]`, $3, $5)
+          panic(data.NewYARAError(data.ErrInvalidStringModifierCombo, msg))
         }
   
-        $$.Xor = true
-        $$.XorRange = data.XorRange{
-          Min: $3,
-          Max: $5,
-        }
+        $$.Xor = data.Xor{$3, $5}
       }
     | _BASE64_
       {
