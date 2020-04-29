@@ -409,6 +409,24 @@ string_modifiers
                   `repeated "xor" modifier`))
           }
 
+          b64 := $1.Base64
+          if b64 == nil {
+              b64 = $2.Base64
+          } else if $2.Base64 != nil {
+              panic(data.NewYARAError(
+                data.ErrInvalidStringModifierCombo,
+                `repeated "base64" modifier`))
+          }
+
+          b64w := $1.Base64Wide
+          if b64w == nil {
+              b64w = $2.Base64Wide
+          } else if $2.Base64Wide != nil {
+              panic(data.NewYARAError(
+                data.ErrInvalidStringModifierCombo,
+                `repeated "base64wide" modifier`))
+          }
+
           $$ = data.StringModifiers {
               Wide: $1.Wide || $2.Wide,
               ASCII: $1.ASCII || $2.ASCII,
@@ -416,6 +434,8 @@ string_modifiers
               Fullword: $1.Fullword || $2.Fullword,
               Private: $1.Private || $2.Private,
               Xor: xor,
+              Base64: b64,
+              Base64Wide: b64w,
           }
 
           if $$.Xor != nil && $$.Nocase {
