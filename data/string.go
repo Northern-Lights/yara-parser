@@ -98,6 +98,15 @@ func (m StringModifiers) String() string {
 	return fmt.Sprintf("%v", mods)
 }
 
+// String returns the string representation of the base64 modifier
+func (b64 Base64) String() string {
+	s, err := b64.Serialize()
+	if err != nil {
+		return ""
+	}
+	return s
+}
+
 // String returns the base-10 representation of the underlying int64
 func (d Dec) String() string {
 	return fmt.Sprintf("%d", d.Value())

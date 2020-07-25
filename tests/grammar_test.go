@@ -257,3 +257,84 @@ func TestPrivateString(t *testing.T) {
 		}
 	}
 }
+
+func TestB64(t *testing.T) {
+	ruleName := "BASE64_NO_ALPHABET"
+	rule := getRule(ruleName)
+	if rule.Identifier == "" {
+		t.Fatalf(`rule "%s" not found`, ruleName)
+	}
+	if len(rule.Strings) != 1 {
+		t.Fatalf(`Expected 1 string; got %d`, len(rule.Strings))
+	}
+	s := rule.Strings[0]
+	if s.Modifiers.Base64 == nil {
+		t.Fatalf(`nil base64 modifier for %s`, ruleName)
+	}
+	if len(s.Modifiers.Base64) != 0 {
+		t.Errorf(`Expected no alphabet; got alphabet of size %d`, len(s.Modifiers.Base64))
+	}
+}
+
+func TestB64Alphabet(t *testing.T) {
+	ruleName := "BASE64_ALPHABET"
+	rule := getRule(ruleName)
+	if rule.Identifier == "" {
+		t.Fatalf(`rule "%s" not found`, ruleName)
+	}
+	if len(rule.Strings) != 1 {
+		t.Fatalf(`Expected 1 string; got %d`, len(rule.Strings))
+	}
+	s := rule.Strings[0]
+	if s.Modifiers.Base64 == nil {
+		t.Fatalf(`nil base64 modifier for %s`, ruleName)
+	}
+	if len(s.Modifiers.Base64) != 64 {
+		t.Errorf(`Expected alphabet of size 64; got size %d`, len(s.Modifiers.Base64))
+	}
+}
+
+func TestB64Wide(t *testing.T) {
+	ruleName := "BASE64WIDE_NO_ALPHABET"
+	rule := getRule(ruleName)
+	if rule.Identifier == "" {
+		t.Fatalf(`rule "%s" not found`, ruleName)
+	}
+	if len(rule.Strings) != 1 {
+		t.Fatalf(`Expected 1 string; got %d`, len(rule.Strings))
+	}
+	s := rule.Strings[0]
+	if s.Modifiers.Base64Wide == nil {
+		t.Fatalf(`nil base64 modifier for %s`, ruleName)
+	}
+	if len(s.Modifiers.Base64Wide) != 0 {
+		t.Errorf(`Expected no alphabet; got alphabet of size %d`, len(s.Modifiers.Base64Wide))
+	}
+}
+
+func TestB64WideAlphabet(t *testing.T) {
+	ruleName := "BASE64WIDE_ALPHABET"
+	rule := getRule(ruleName)
+	if rule.Identifier == "" {
+		t.Fatalf(`rule "%s" not found`, ruleName)
+	}
+	if len(rule.Strings) != 1 {
+		t.Fatalf(`Expected 1 string; got %d`, len(rule.Strings))
+	}
+	s := rule.Strings[0]
+	if s.Modifiers.Base64Wide == nil {
+		t.Fatalf(`nil base64 modifier for %s`, ruleName)
+	}
+	if len(s.Modifiers.Base64Wide) != 64 {
+		t.Errorf(`Expected alphabet of size 64; got size %d`, len(s.Modifiers.Base64Wide))
+	}
+}
+
+func getRule(name string) data.Rule {
+	for _, rule := range ruleset.Rules {
+		if rule.Identifier == name {
+			return rule
+		}
+	}
+	return data.Rule{}
+}

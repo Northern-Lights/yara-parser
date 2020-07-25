@@ -246,8 +246,44 @@ func (m *StringModifiers) Serialize() (out string, err error) {
 			modifiers = append(modifiers, xor)
 		}
 	}
+	if m.Base64 != nil {
+		var b64 string
+		b64, err = m.Base64.Serialize()
+		if b64 != "" && err == nil {
+			modifiers = append(modifiers, b64)
+		}
+	}
 
 	out = strings.Join(modifiers, " ")
+	return
+}
+
+// Serialize for the base64 string modifier returns a representation depending
+// on the provided alphabet. If the Base64 is nil, then the modifier is assumed
+// to be not present, and an empty string is output. If the Base64 is
+// zero-length, then the form of the modifier is assumed to be base64 without
+// an alphabet. If the Base64 is not zero-length, it must be 64 bytes
+// representing a 64-character alphabet
+func (b64 Base64) Serialize() (out string, err error) {
+	if b64 == nil {
+		return
+	}
+
+	switch len(b64) {
+	case 0:
+		out = "base64"
+	case 64:
+		alphabet := string(b64)
+		if len(alphabet) != 64 {
+			err = fmt.Errorf(`base64 alphabet must be 64 chars`)
+		} else {
+			out = fmt.Sprintf(`base64("%s")`, string(b64))
+		}
+		// should we be checking for 64 unique, printable ASCII chars?
+	default:
+		err = fmt.Errorf(`base64 modifier requires no alphabet or a 64-char alphabet`)
+	}
+
 	return
 }
 

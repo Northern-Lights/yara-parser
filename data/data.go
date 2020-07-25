@@ -60,14 +60,16 @@ const (
 
 // StringModifiers denote the status of the possible modifiers for strings
 type StringModifiers struct {
-	Nocase   bool `json:"nocase"`
-	ASCII    bool `json:"ascii"`
-	Wide     bool `json:"wide"`
-	Fullword bool `json:"fullword"`
-	Private  bool `json:"private"`
-	Xor      Xor  `json:"xor"`
-	I        bool `json:"i"` // for regex
-	S        bool `json:"s"` // for regex
+	Nocase     bool   `json:"nocase"`
+	ASCII      bool   `json:"ascii"`
+	Wide       bool   `json:"wide"`
+	Fullword   bool   `json:"fullword"`
+	Private    bool   `json:"private"`
+	Xor        Xor    `json:"xor"`
+	Base64     Base64 `json:"base64"`
+	Base64Wide Base64 `json:"base64wide"`
+	I          bool   `json:"i"` // for regex
+	S          bool   `json:"s"` // for regex
 }
 
 // ErrInvalidStringModifierCombo denotes when an invalid combination of string
@@ -78,6 +80,13 @@ var ErrInvalidStringModifierCombo = fmt.Errorf(`invalid string modifier combinat
 // respectively: xor, xor(val), xor(min-max). A nil Xor indicates absence of the
 // xor modifier
 type Xor []Int
+
+// Base64 represents the base64 modifier that may or may not contain an
+// alphabet. Alphabets must contain exactly 64 bytes.
+type Base64 []byte
+
+// DefaultAlphabet is the default alphabet used for the base64 modifier
+const DefaultAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
 
 // An Int can return its underlying value as int64
 type Int interface {

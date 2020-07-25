@@ -79,6 +79,8 @@ type regexPair struct {
 %token <mod> _ASCII_
 %token <mod> _WIDE_
 %token _XOR_
+%token _BASE64_
+%token _BASE64_WIDE_
 %token <mod> _NOCASE_
 %token <mod> _FULLWORD_
 %token _AT_
@@ -407,6 +409,24 @@ string_modifiers
                   `repeated "xor" modifier`))
           }
 
+          b64 := $1.Base64
+          if b64 == nil {
+              b64 = $2.Base64
+          } else if $2.Base64 != nil {
+              panic(data.NewYARAError(
+                data.ErrInvalidStringModifierCombo,
+                `repeated "base64" modifier`))
+          }
+
+          b64w := $1.Base64Wide
+          if b64w == nil {
+              b64w = $2.Base64Wide
+          } else if $2.Base64Wide != nil {
+              panic(data.NewYARAError(
+                data.ErrInvalidStringModifierCombo,
+                `repeated "base64wide" modifier`))
+          }
+
           $$ = data.StringModifiers {
               Wide: $1.Wide || $2.Wide,
               ASCII: $1.ASCII || $2.ASCII,
@@ -414,6 +434,8 @@ string_modifiers
               Fullword: $1.Fullword || $2.Fullword,
               Private: $1.Private || $2.Private,
               Xor: xor,
+              Base64: b64,
+              Base64Wide: b64w,
           }
 
           if $$.Xor != nil && $$.Nocase {
@@ -452,6 +474,30 @@ string_modifier
         }
   
         $$.Xor = data.Xor{$3, $5}
+      }
+    | _BASE64_
+      {
+          $$.Base64 = data.Base64{}
+      }
+    | _BASE64_ '(' _TEXT_STRING_ ')'
+      {
+          if len($3) != 64 {
+              err := fmt.Errorf(`base64 value must be 64 characters; got %d`, len($3))
+              panic(err)
+          }
+          $$.Base64 = data.Base64($3)
+      }
+    | _BASE64_WIDE_
+      {
+          $$.Base64Wide = data.Base64{}
+      }
+    | _BASE64_WIDE_ '(' _TEXT_STRING_ ')'
+      {
+          if len($3) != 64 {
+              err := fmt.Errorf(`base64wide value must be 64 characters; got %d`, len($3))
+              panic(err)
+          }
+          $$.Base64Wide = data.Base64($3)
       }
     ;
 
