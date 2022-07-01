@@ -88,12 +88,19 @@ type regexPair struct {
 %token _ENTRYPOINT_
 %token _ALL_
 %token _ANY_
+%token _NONE_
 %token _IN_
 %token _OF_
 %token _FOR_
 %token _THEM_
 %token _MATCHES_
 %token _CONTAINS_
+%token _STARTSWITH_
+%token _ENDSWITH_
+%token _ICONTAINS_
+%token _ISTARTSWITH_
+%token _IENDSWITH_
+%token _IEQUALS_
 %token _IMPORT_
 
 %token _TRUE_
@@ -112,7 +119,7 @@ type regexPair struct {
 %left _SHIFT_LEFT_ _SHIFT_RIGHT_
 %left '+' '-'
 %left '*' '\\' '%'
-%right _NOT_ '~' UNARY_MINUS
+%right _NOT_ _DEFINED_ '~' UNARY_MINUS
 
 %type <s>   import
 %type <yr>  rule
@@ -617,6 +624,30 @@ expression
       {
         
       }
+    | primary_expression _ICONTAINS_ primary_expression
+      {
+        
+      }
+    | primary_expression _STARTSWITH_ primary_expression
+      {
+        
+      }
+    | primary_expression _ISTARTSWITH_ primary_expression
+      {
+        
+      }
+    | primary_expression _ENDSWITH_ primary_expression
+      {
+        
+      }
+    | primary_expression _IENDSWITH_ primary_expression
+      {
+        
+      }
+    | primary_expression _IEQUALS_ primary_expression
+      {
+        
+      }
     | _STRING_IDENTIFIER_
       {
         
@@ -633,23 +664,7 @@ expression
       {
         
       }
-    | _FOR_ for_expression _IDENTIFIER_ _IN_
-      {
-        
-      }
-      integer_set ':'
-      {
-        
-      }
-      '(' boolean_expression ')'
-      {
-        
-      }
-    | _FOR_ for_expression _OF_ string_set ':'
-      {
-        
-      }
-      '(' boolean_expression ')'
+    | _FOR_ for_expression for_iteration ':' '(' boolean_expression ')'
       {
         
       }
@@ -657,7 +672,27 @@ expression
       {
         
       }
+    | for_expression _OF_ rule_set
+      {
+        
+      }
+    | primary_expression '%' _OF_ string_set
+      {
+        
+      }
+    | primary_expression '%' _OF_ rule_set
+      {
+        
+      }
+    | for_expression _OF_ string_set _IN_ range
+      {
+
+      }
     | _NOT_ boolean_expression
+      {
+        
+      }
+    | _DEFINED_ boolean_expression
       {
         
       }
@@ -712,6 +747,42 @@ expression
     ;
 
 
+for_iteration
+    : for_variables _IN_ iterator
+      {
+
+      }
+    | _OF_ string_iterator
+      {
+
+      }
+    ;
+
+
+for_variables
+    : _IDENTIFIER_
+      {
+
+      }
+    | for_variables ',' _IDENTIFIER_
+      {
+
+      }
+    ;
+
+
+iterator
+    : identifier
+      {
+
+      }
+    | integer_set
+      {
+
+      }
+    ;
+
+
 integer_set
     : '(' integer_enumeration ')'  { }
     | range                        { }
@@ -734,6 +805,14 @@ integer_enumeration
     | integer_enumeration ',' primary_expression
       {
         
+      }
+    ;
+
+
+string_iterator
+    : string_set
+      {
+
       }
     ;
 
@@ -769,15 +848,59 @@ string_enumeration_item
     ;
 
 
+rule_set
+    : '(' rule_enumeration ')'
+      {
+
+      }
+    ;
+
+
+rule_enumeration
+    : rule_enumeration_item
+      {
+
+      }
+    | rule_enumeration ',' rule_enumeration_item
+      {
+
+      }
+    ;
+
+
+rule_enumeration_item
+    : _IDENTIFIER_
+      {
+
+      }
+    | _IDENTIFIER_ '*'
+      {
+
+      }
+    ;
+
+
 for_expression
     : primary_expression
-    | _ALL_
+    | for_quantifier
       {
         
       }
+    ;
+
+
+for_quantifier
+    : _ALL_
+      {
+
+      }
     | _ANY_
       {
-        
+
+      }
+    | _NONE_
+      {
+
       }
     ;
 
@@ -808,6 +931,10 @@ primary_expression
         
       }
     | _TEXT_STRING_
+      {
+        
+      }
+    | _STRING_COUNT_ _IN_ range
       {
         
       }

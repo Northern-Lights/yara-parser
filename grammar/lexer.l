@@ -153,11 +153,19 @@ octdigit      [0-7]
 "for"                   { return _FOR_;         }
 "all"                   { return _ALL_;         }
 "any"                   { return _ANY_;         }
+"none"                  { return _NONE_;        }
 "entrypoint"            { return _ENTRYPOINT_;  }
 "filesize"              { return _FILESIZE_;    }
 "matches"               { return _MATCHES_;     }
 "contains"              { return _CONTAINS_;    }
+"startswith"            { return _STARTSWITH_;  }
+"endswith"              { return _ENDSWITH_;    }
+"icontains"             { return _ICONTAINS_;   }
+"istartswith"           { return _ISTARTSWITH_; }
+"iendswith"             { return _IENDSWITH_;   }
+"iequals"               { return _IEQUALS_;     }
 "import"                { return _IMPORT_;      }
+"defined"               { return _DEFINED_;     }
 
 "{"                     { return _LBRACE_; }
 "}"                     { 
