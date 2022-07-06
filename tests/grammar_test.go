@@ -338,3 +338,70 @@ func getRule(name string) data.Rule {
 	}
 	return data.Rule{}
 }
+
+func TestStringsSetInRange(t *testing.T) {
+	ruleName := "STRINGS_SET_IN_RANGE"
+	rule := getRule(ruleName)
+	if rule.Identifier == "" {
+		t.Fatalf(`rule "%s" not found`, ruleName)
+	}
+	if len(rule.Strings) != 1 {
+		t.Fatalf(`Expected 1 string; got %d`, len(rule.Strings))
+	}
+	if len(rule.Condition) == 0 {
+		t.Errorf(`Condition parsing has failed`)
+	}
+}
+
+func TestAnyOfRulesSet(t *testing.T) {
+	ruleName := "ANY_OF_RULES_SET"
+	rule := getRule(ruleName)
+	if rule.Identifier == "" {
+		t.Fatalf(`rule "%s" not found`, ruleName)
+	}
+	if len(rule.Condition) == 0 {
+		t.Errorf(`Condition parsing has failed`)
+	}
+}
+
+func TestAnyOfStringsSet(t *testing.T) {
+	ruleName := "ANY_OF_STRINGS_SET"
+	rule := getRule(ruleName)
+	if rule.Identifier == "" {
+		t.Fatalf(`rule "%s" not found`, ruleName)
+	}
+	if len(rule.Strings) != 4 {
+		t.Fatalf(`Expected 4 string; got %d`, len(rule.Strings))
+	}
+	if len(rule.Condition) == 0 {
+		t.Errorf(`Condition parsing has failed`)
+	}
+}
+
+func TestInDotDotRange(t *testing.T) {
+	ruleName := "IN_DOTDOT_RANGE"
+	rule := getRule(ruleName)
+	if rule.Identifier == "" {
+		t.Fatalf(`rule "%s" not found`, ruleName)
+	}
+	if len(rule.Strings) != 1 {
+		t.Fatalf(`Expected 1 string; got %d`, len(rule.Strings))
+	}
+	if len(rule.Condition) == 0 {
+		t.Errorf(`Condition parsing has failed`)
+	}
+}
+
+func TestAnyInDotDotRange(t *testing.T) {
+	ruleName := "ANY_IN_DOTDOT_RANGE"
+	rule := getRule(ruleName)
+	if rule.Identifier == "" {
+		t.Fatalf(`rule "%s" not found`, ruleName)
+	}
+	if len(rule.Strings) != 2 {
+		t.Fatalf(`Expected 2 string; got %d`, len(rule.Strings))
+	}
+	if len(rule.Condition) == 0 {
+		t.Errorf(`Condition parsing has failed`)
+	}
+}
