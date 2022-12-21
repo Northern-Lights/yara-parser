@@ -230,3 +230,40 @@ rule DEFINED_NOT_DEFINED {
 condition:
   defined pe.checksum or not defined pe.characteristics
 }
+
+rule STARTS_WITH {
+condition:
+  pe.sections[i].name startswith "abc"
+}
+
+rule ENDS_WITH {
+condition:
+  pe.sections[i].name endswith "abc"
+}
+
+rule ICONTAINS {
+condition:
+  pe.sections[i].name icontains "abc"
+}
+
+rule ISTARTS_WITH {
+condition:
+  pe.sections[i].name istartswith "abc"
+}
+
+rule IENDS_WITH {
+condition:
+  pe.sections[i].name iendswith "abc"
+}
+
+rule IEQUALS {
+condition:
+  pe.sections[i].name iequals "abc"
+}
+
+rule NONE {
+strings:
+  $ = "abc"
+condition:
+  none of them
+}

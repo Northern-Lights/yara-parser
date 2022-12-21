@@ -407,7 +407,39 @@ func TestAnyInDotDotRange(t *testing.T) {
 }
 
 func TestDefinedNotDefined(t *testing.T) {
-	const ruleName = "DEFINED_NOT_DEFINED"
+	verifyConditionParses(t, "DEFINED_NOT_DEFINED")
+}
+
+func TestStartsWith(t *testing.T) {
+	verifyConditionParses(t, "STARTS_WITH")
+}
+
+func TestEndsWith(t *testing.T) {
+	verifyConditionParses(t, "ENDS_WITH")
+}
+
+func TestIContains(t *testing.T) {
+	verifyConditionParses(t, "ICONTAINS")
+}
+
+func TestIStartsWith(t *testing.T) {
+	verifyConditionParses(t, "ISTARTS_WITH")
+}
+
+func TestIEndsWith(t *testing.T) {
+	verifyConditionParses(t, "IENDS_WITH")
+}
+
+func TestIEquals(t *testing.T) {
+	verifyConditionParses(t, "IEQUALS")
+}
+
+func TestNone(t *testing.T) {
+	verifyConditionParses(t, "NONE")
+}
+
+func verifyConditionParses(t *testing.T, ruleName string) {
+	t.Helper()
 	rule := getRule(ruleName)
 	if rule.Identifier == "" {
 		t.Errorf(`rule "%s" not found`, ruleName)
