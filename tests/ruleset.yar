@@ -225,3 +225,8 @@ condition:
   (uint16(0) == 0x5A4D and uint32(uint32(0x3C)) == 0x00001111) and
   not any of ($s*) in (0x01 .. uint32(0x11))
 }
+
+rule DEFINED_NOT_DEFINED {
+condition:
+  defined pe.checksum or not defined pe.characteristics
+}

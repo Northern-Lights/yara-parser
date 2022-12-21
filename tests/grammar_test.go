@@ -405,3 +405,14 @@ func TestAnyInDotDotRange(t *testing.T) {
 		t.Errorf(`Condition parsing has failed`)
 	}
 }
+
+func TestDefinedNotDefined(t *testing.T) {
+	const ruleName = "DEFINED_NOT_DEFINED"
+	rule := getRule(ruleName)
+	if rule.Identifier == "" {
+		t.Errorf(`rule "%s" not found`, ruleName)
+	}
+	if len(rule.Condition) == 0 {
+		t.Error("failed to parse condition")
+	}
+}
