@@ -36,8 +36,7 @@ func Parse(input io.Reader, output io.Writer) (rs data.RuleSet, err error) {
 
 	result := xxParse(&lexer)
 	if result != 0 {
-
-		err = fmt.Errorf(`Parser result: "%d" %s`, result, errParser)
+		err = errParser
 	}
 
 	rs = ParsedRuleset
@@ -59,6 +58,5 @@ func (l *goyaccLexerAdapter) Lex(lval *xxSymType) int {
 
 // Error satisfies the interface expected by the goyacc parser
 func (l *goyaccLexerAdapter) Error(e string) {
-	errParser = fmt.Errorf(`grammar: lexical error @%d: "%s"`,
-		l.scanner.Lineno, e)
+	errParser = fmt.Errorf("line %d: %s", l.scanner.Lineno, e)
 }
